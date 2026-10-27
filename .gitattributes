@@ -1,0 +1,4 @@
+# Preserve generated documents byte-for-byte.
+*.pdf binary
+*.zip binary
+*.csv -text whitespace=cr-at-eol

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+playwright-report/
+test-results/
+artifacts/
+*.log
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+.venv/
+__pycache__/

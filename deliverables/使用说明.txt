@@ -1,0 +1,7 @@
+防火材料 / THERMA CLEAR 网站初稿
+
+查看：在电脑上用 Chrome 或 Edge 打开 website-preview.html。
+修改：回到这次聊天，让助手先读 /workspace/WWW/docs/CONTINUE.md，再说明修改要求。
+离线预览不会自动更新，改完源代码后需重新生成。
+视频与真实产品资料尚未接入；表单只生成本地咨询单。
+请同时保留自己的原始 PPT、MP4 和电脑上已修复的预览文件。
