@@ -1,63 +1,69 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import type { FormEvent, MouseEvent, ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import {
   BrowserRouter,
   Link,
   NavLink,
+  Navigate,
   Route,
   Routes,
   useLocation,
-  useSearchParams,
 } from "react-router-dom";
 import {
-  ArrowUpRight,
-  ArrowRight,
   ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Building2,
   Check,
-  CheckCircle2,
-  ChevronDown,
   Download,
+  Expand,
   FileText,
-  Film,
-  Flame,
   Globe2,
   Layers3,
-  Mail,
-  MapPin,
+  Leaf,
   Menu,
-  Plus,
+  Package,
   ShieldCheck,
-  X,
-  Clock3,
-  Building2,
-  Factory,
   TrainFront,
-  TreePine,
+  X,
+  Droplets,
 } from "lucide-react";
 import {
-  brand,
-  categories,
-  products,
-  scenes,
-  coating,
-  referenceMaterials,
+  applications,
+  company,
+  features,
+  materials,
+  metrics,
+  sourceNote,
+  sourceSlides,
+  technicalData,
 } from "./data";
-import type { Lang, Product } from "./data";
+import type { Lang } from "./data";
 import "./styles.css";
 
-const Language = createContext<{
+type LanguageValue = {
   lang: Lang;
   toggle: () => void;
   t: (zh: string, en: string) => string;
-}>({ lang: "zh", toggle: () => {}, t: (zh) => zh });
+};
+const Language = createContext<LanguageValue>({
+  lang: "zh",
+  toggle: () => {},
+  t: (zh) => zh,
+});
+const Viewer = createContext<(id: number) => void>(() => {});
 function useLang() {
   return useContext(Language);
 }
 function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Lang>(() => {
     try {
-      return localStorage.getItem("fireproof-language") === "en" ? "en" : "zh";
+      return (localStorage.getItem("acs-language") ||
+        localStorage.getItem("fireproof-language")) === "en"
+        ? "en"
+        : "zh";
     } catch {
       return "zh";
     }
@@ -65,16 +71,16 @@ function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
     try {
-      localStorage.setItem("fireproof-language", lang);
+      localStorage.setItem("acs-language", lang);
     } catch {
-      /* Storage can be unavailable in private browsing. */
+      /* Storage is optional for a local preview. */
     }
   }, [lang]);
   return (
     <Language.Provider
       value={{
         lang,
-        toggle: () => setLang((v) => (v === "zh" ? "en" : "zh")),
+        toggle: () => setLang((value) => (value === "zh" ? "en" : "zh")),
         t: (zh, en) => (lang === "zh" ? zh : en),
       }}
     >
@@ -82,31 +88,13 @@ function LanguageProvider({ children }: { children: ReactNode }) {
     </Language.Provider>
   );
 }
-const nav = [
+const navigation = [
   ["/", "首页", "Home"],
-  ["/products", "产品展示", "Products"],
-  ["/technology", "演示与资料", "Resources"],
-  ["/applications", "应用场景", "Applications"],
-  ["/contact", "联系我们", "Contact"],
+  ["/products", "产品介绍", "Product"],
+  ["/technology", "技术与性能", "Technology"],
+  ["/applications", "应用领域", "Applications"],
+  ["/about", "关于卓界", "Company"],
 ];
-function Logo({ footer = false }: { footer?: boolean }) {
-  const { t } = useLang();
-  return (
-    <Link
-      to="/"
-      className={`brand ${footer ? "brand-footer" : ""}`}
-      aria-label={t("防火材料首页", "Fireproof Materials home")}
-    >
-      <span className="brand-symbol">
-        <Flame size={29} strokeWidth={1.7} />
-      </span>
-      <span>
-        <strong>{t(brand.zh, brand.en)}</strong>
-        <small>{t("FIREPROOF MATERIALS", "PASSIVE FIRE PROTECTION")}</small>
-      </span>
-    </Link>
-  );
-}
 function handleSectionLink(event: MouseEvent<HTMLAnchorElement>) {
   event.preventDefault();
   const id = event.currentTarget.getAttribute("href")?.slice(1) || "main";
@@ -114,24 +102,48 @@ function handleSectionLink(event: MouseEvent<HTMLAnchorElement>) {
   target?.scrollIntoView();
   if (id === "main") target?.focus({ preventScroll: true });
 }
+function Logo() {
+  const { lang, t } = useLang();
+  return (
+    <Link
+      className="brand"
+      to="/"
+      aria-label={t(
+        "卓界科技有限公司首页",
+        "Advanced Composites Studio Limited home",
+      )}
+    >
+      <span className="brand-mark" aria-hidden="true">
+        A<span />
+        <i />
+      </span>
+      <span className="brand-wordmark">
+        <strong>{company.name[lang]}</strong>
+        <small>
+          {lang === "zh" ? company.englishName : "卓界科技有限公司"}
+        </small>
+      </span>
+    </Link>
+  );
+}
 function Header() {
-  const { t, toggle, lang } = useLang();
+  const { lang, t, toggle } = useLang();
   const [open, setOpen] = useState(false);
-  const loc = useLocation();
+  const location = useLocation();
   useEffect(() => {
     setOpen(false);
-  }, [loc.pathname, loc.search]);
+  }, [location.pathname, location.hash]);
   return (
     <header className="site-header">
       <div className="header-inner">
         <Logo />
         <nav
-          className={`main-nav ${open ? "is-open" : ""}`}
           id="main-navigation"
+          className={`main-nav ${open ? "is-open" : ""}`}
           aria-label={t("主导航", "Main navigation")}
         >
-          {nav.map(([path, zh, en]) => (
-            <NavLink key={path} to={path} end={path === "/"}>
+          {navigation.map(([path, zh, en]) => (
+            <NavLink end={path === "/"} to={path} key={path}>
               {t(zh, en)}
             </NavLink>
           ))}
@@ -142,24 +154,20 @@ function Header() {
             onClick={toggle}
             aria-label={t("Switch to English", "切换到中文")}
           >
-            <Globe2 size={15} />
+            <Globe2 size={16} />
             <span>{lang === "zh" ? "EN" : "中文"}</span>
           </button>
-          <Link className="button small header-cta" to="/contact">
-            {t("获取解决方案", "Let’s talk")}
-            <ArrowUpRight size={16} />
-          </Link>
           <button
             className="menu-toggle icon-button"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
             aria-controls="main-navigation"
+            aria-expanded={open}
             aria-label={t(
               open ? "关闭导航" : "打开导航",
               open ? "Close menu" : "Open menu",
             )}
+            onClick={() => setOpen((value) => !value)}
           >
-            {open ? <X /> : <Menu />}
+            {open ? <X size={23} /> : <Menu size={23} />}
           </button>
         </div>
       </div>
@@ -167,60 +175,37 @@ function Header() {
   );
 }
 function Footer() {
-  const { t } = useLang();
+  const { lang, t } = useLang();
   return (
     <footer className="site-footer">
       <div className="container footer-main">
-        <div className="footer-brand">
-          <Logo footer />
+        <div>
+          <Logo />
           <p>
-            {t(
-              "让防护融入建筑，让安全经得起时间。",
-              "Protection, built in. Confidence, built to last.",
-            )}
+            {company.product}
+            <span> / </span>
+            {company.tagline[lang]}
           </p>
-          <span className="footer-status">
-            <i />
-            {t("专注被动防火保护", "Focused on passive fire protection")}
-          </span>
         </div>
-        <div className="footer-links">
-          <span className="overline">{t("探索更多", "EXPLORE")}</span>
-          {nav.slice(1).map(([p, zh, en]) => (
-            <Link to={p} key={p}>
+        <nav aria-label={t("页脚导航", "Footer navigation")}>
+          {navigation.slice(1).map(([path, zh, en]) => (
+            <Link to={path} key={path}>
               {t(zh, en)}
               <ArrowUpRight size={13} />
             </Link>
           ))}
-        </div>
-        <div className="footer-contact">
-          <span className="overline">{t("保持联系", "GET IN TOUCH")}</span>
-          <p>hello@fireproof.example</p>
-          <span>
-            {t("示例邮箱 · 尚未开通", "Example address · Not connected")}
-          </span>
-          <Link to="/contact" className="text-link light">
-            {t("聊聊你的项目", "Tell us about your project")}
-            <ArrowUpRight size={18} />
+          <Link to="/about#contact">
+            {t("联系方式", "Contact")}
+            <ArrowUpRight size={13} />
           </Link>
-        </div>
+        </nav>
       </div>
       <div className="container footer-bottom">
         <span>
-          © {new Date().getFullYear()} {t("防火材料", "FIREPROOF MATERIALS")}
+          © {new Date().getFullYear()} {company.name[lang]}
         </span>
-        <span>
-          {t(
-            "演示网站 · 产品、参数及场景均为示例，不构成认证或工程承诺。",
-            "Demo website · Products, data and scenes are illustrative, not certified claims.",
-          )}
-        </span>
-        <a
-          href="#main"
-          onClick={handleSectionLink}
-          aria-label={t("返回顶部", "Back to top")}
-        >
-          {t("回到顶部", "Back to top")} ↑
+        <a href="#main" onClick={handleSectionLink}>
+          {t("返回顶部", "Back to top")} ↑
         </a>
       </div>
     </footer>
@@ -235,1409 +220,903 @@ function Eyebrow({
 }) {
   return (
     <div className={`eyebrow ${dark ? "on-dark" : ""}`}>
-      <span />
+      <i />
       {children}
     </div>
   );
 }
-function Notice({ compact = false }: { compact?: boolean }) {
-  const { t } = useLang();
+function SourceImage({
+  id,
+  className = "",
+  priority = false,
+}: {
+  id: number;
+  className?: string;
+  priority?: boolean;
+}) {
+  const { lang, t } = useLang();
+  const open = useContext(Viewer);
+  const slide = sourceSlides.find((item) => item.id === id)!;
   return (
-    <div className={`demo-notice ${compact ? "compact" : ""}`}>
-      <ShieldCheck size={17} />
-      <span>
-        {t(
-          "以下产品与性能参数均为演示数据。实际选型须以有效检测报告、适用标准及项目设计为准。",
-          "Products and performance figures are illustrative. Actual selection requires valid test reports, applicable standards and project-specific design.",
-        )}
+    <button
+      type="button"
+      className={`source-image ${className}`}
+      onClick={() => open(id)}
+      aria-label={t(
+        `查看图片：${slide.title.zh}`,
+        `View image: ${slide.title.en}`,
+      )}
+    >
+      <img
+        src={slide.image}
+        alt={slide.alt[lang]}
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : "auto"}
+      />
+      <span className="image-expand">
+        <Expand size={15} />
+        <span>{t("查看图文", "View material")}</span>
       </span>
+    </button>
+  );
+}
+function ImageDialog({
+  id,
+  onClose,
+  onChange,
+}: {
+  id: number;
+  onClose: () => void;
+  onChange: (id: number) => void;
+}) {
+  const { lang, t } = useLang();
+  const ref = useRef<HTMLDialogElement>(null);
+  const slide = sourceSlides.find((item) => item.id === id)!;
+  useEffect(() => {
+    const dialog = ref.current;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    dialog?.showModal();
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      dialog?.close();
+      document.body.style.overflow = previous;
+      requestAnimationFrame(() => {
+        if (previousFocus?.isConnected)
+          previousFocus.focus({ preventScroll: true });
+      });
+    };
+  }, []);
+  function cycle(delta: number) {
+    onChange(
+      ((id - 1 + delta + sourceSlides.length) % sourceSlides.length) + 1,
+    );
+  }
+  return (
+    <dialog
+      ref={ref}
+      className="image-dialog"
+      aria-labelledby="image-dialog-title"
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          cycle(1);
+        }
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          cycle(-1);
+        }
+      }}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) {
+          const r = event.currentTarget.getBoundingClientRect();
+          if (
+            event.clientX < r.left ||
+            event.clientX > r.right ||
+            event.clientY < r.top ||
+            event.clientY > r.bottom
+          )
+            onClose();
+        }
+      }}
+    >
+      <div className="dialog-heading">
+        <div>
+          <span>{String(id).padStart(2, "0")} / 06</span>
+          <h2 id="image-dialog-title">{slide.title[lang]}</h2>
+        </div>
+        <button
+          className="icon-button"
+          aria-label={t("关闭图片", "Close image")}
+          onClick={onClose}
+        >
+          <X size={21} />
+        </button>
+      </div>
+      <div className="dialog-image">
+        <img src={slide.image} alt={slide.alt[lang]} />
+      </div>
+      <div className="dialog-toolbar">
+        <button
+          className="text-button"
+          onClick={() => cycle(-1)}
+          aria-label={t("上一张图片", "Previous image")}
+        >
+          <ArrowLeft size={17} />
+          {t("上一张", "Previous")}
+        </button>
+        <a
+          href={slide.image}
+          download={`Therma-Clear-${id}.webp`}
+          className="text-button"
+        >
+          <Download size={16} />
+          {t("保存图片", "Save image")}
+        </a>
+        <button
+          className="text-button"
+          onClick={() => cycle(1)}
+          aria-label={t("下一张图片", "Next image")}
+        >
+          {t("下一张", "Next")}
+          <ArrowRight size={17} />
+        </button>
+      </div>
+    </dialog>
+  );
+}
+function MetricStrip() {
+  const { lang } = useLang();
+  return (
+    <div className="metrics-grid">
+      {metrics.map((metric) => (
+        <div className="metric" key={metric.label.en}>
+          <strong>{metric.value}</strong>
+          <span>{metric.label[lang]}</span>
+        </div>
+      ))}
     </div>
   );
 }
-function CTA() {
-  const { t } = useLang();
+function FeatureCards() {
+  const { lang } = useLang();
+  const icons = [Layers3, ShieldCheck, Droplets];
   return (
-    <section className="cta-section">
-      <div className="container cta-inner">
-        <div>
-          <span className="overline">
-            {t("从一层涂料，到一份安心", "START WITH THE RIGHT PROTECTION")}
-          </span>
-          <h2>
-            {t("你的下一个项目，", "Your next project.")}
-            <br />
-            {t("值得更周全的防护。", "Consider every layer.")}
-          </h2>
-        </div>
-        <Link to="/contact" className="button black">
-          {t("与我们聊聊", "Let’s discuss your project")}
-          <ArrowUpRight size={19} />
-        </Link>
-        <Flame className="cta-watermark" aria-hidden="true" />
-      </div>
-    </section>
-  );
-}
-function ProductCard({ product }: { product: Product }) {
-  const { t, lang } = useLang();
-  return (
-    <Link className="product-card" to={`/products?product=${product.id}`}>
-      <div className="product-visual">
-        <span className="product-category">
-          {categories[product.category][lang]}
-        </span>
-        <img
-          src={`/images/${product.id.toLowerCase()}.svg`}
-          alt={t(
-            `${product.id} 防火涂料示例包装`,
-            `${product.id} concept coating packaging`,
-          )}
-          loading="lazy"
-        />
-        <span className="product-open">
-          <Plus size={20} />
-        </span>
-      </div>
-      <div className="product-info">
-        <div className="product-model">
-          {product.id}
-          <span>{t("示例产品", "CONCEPT")}</span>
-        </div>
-        <h3>{product.name[lang]}</h3>
-        <p>{product.tag[lang]}</p>
-        <div className="product-card-bottom">
-          <span>
-            {t("耐火时间示例", "Illustrative fire resistance")}
-            <strong>
-              {product.duration}
-              <small> min</small>
-            </strong>
-          </span>
-          <ArrowUpRight size={21} />
-        </div>
-      </div>
-    </Link>
-  );
-}
-function CoatingFeatures() {
-  const { t, lang } = useLang();
-  const icons = [Layers3, Film, Building2];
-  return (
-    <div className="coating-features">
-      {coating.features.map((feature, index) => {
-        const Icon = icons[index];
+    <div className="feature-grid">
+      {features.map((feature, i) => {
+        const Icon = icons[i];
         return (
-          <article className="coating-feature" key={feature.id}>
-            <div className="coating-feature-top">
-              <span>{feature.id}</span>
-              <Icon size={25} strokeWidth={1.3} />
+          <article className="feature-card" key={feature.id}>
+            <div>
+              <span>{feature.number}</span>
+              <Icon size={27} strokeWidth={1.3} />
             </div>
             <h3>{feature.title[lang]}</h3>
             <p>{feature.description[lang]}</p>
-            <span className="content-pending">
-              {t("具体内容待补充", "Details to follow")}
-            </span>
           </article>
         );
       })}
     </div>
   );
 }
-function FeaturedCoating() {
-  const { t, lang } = useLang();
+function DownloadLink({ compact = false }: { compact?: boolean }) {
+  const { lang, t } = useLang();
   return (
-    <section className="section featured-coating" id="therma-clear">
-      <div className="container flagship-grid">
-        <div className="flagship-image">
-          <img
-            src="/images/coating-system.svg"
-            alt={t(
-              "涂层与基材层次的概念插画，非真实产品结构图",
-              "Concept illustration of coating and substrate layers, not an actual product cross-section",
-            )}
-          />
-          <span>{t("涂层概念示意", "COATING CONCEPT")}</span>
-        </div>
-        <div className="flagship-copy">
-          <Eyebrow>{t("重点产品", "PRODUCT SPOTLIGHT")}</Eyebrow>
-          <h2>{coating.name}</h2>
-          <p>{coating.summary[lang]}</p>
-          <div className="flagship-points">
-            {coating.features.map((feature) => (
-              <span key={feature.id}>
-                <Check size={14} />
-                {feature.title[lang]}
-              </span>
-            ))}
-          </div>
-          <div className="flagship-actions">
-            <Link to="/technology#demonstration" className="button">
-              {t("查看演示与资料", "Film & resources")}
-              <ArrowUpRight size={17} />
-            </Link>
-            <Link to="/contact?product=THERMA-CLEAR" className="text-link">
-              {t("咨询此产品", "Product enquiry")}
-              <ArrowUpRight size={17} />
-            </Link>
-          </div>
-          <p className="subtle-note">
-            {t(
-              "当前展示为布局示意，具体特点与性能将在资料确认后更新。",
-              "Layout preview. Specific features and performance will be added after the source materials are confirmed.",
-            )}
-          </p>
-        </div>
-      </div>
-    </section>
+    <a
+      className={compact ? "text-link" : "button outline"}
+      href={`/downloads/Therma-Clear-${lang}.pdf`}
+      download
+    >
+      <FileText size={16} />
+      {t("下载产品资料", "Download product summary")}
+      <Download size={16} />
+    </a>
   );
 }
-function VideoPanel({ dark = false }: { dark?: boolean }) {
-  const { t } = useLang();
+function Gallery({ ids = [1, 2, 3, 4, 5, 6] }: { ids?: number[] }) {
+  const { lang } = useLang();
   return (
-    <div className={`coating-video ${dark ? "video-on-dark" : ""}`}>
-      {coating.video.src ? (
-        <video
-          controls
-          preload="metadata"
-          playsInline
-          src={coating.video.src}
-          poster={coating.video.poster}
-          aria-label={t(
-            "THERMA CLEAR 产品演示视频",
-            "THERMA CLEAR product demonstration video",
-          )}
-        >
-          {t(
-            "浏览器不支持视频播放。",
-            "Your browser does not support video playback.",
-          )}
-        </video>
-      ) : (
-        <div className="video-placeholder">
-          <img
-            src={coating.video.poster}
-            alt={t(
-              "产品演示区占位插画",
-              "Concept illustration for the product film area",
-            )}
-            loading="lazy"
-          />
-          <span className="video-stamp">
-            THERMA CLEAR <span>/ PRODUCT FILM</span>
-          </span>
-          <div className="video-placeholder-caption">
-            <span className="video-placeholder-icon">
-              <Film size={28} strokeWidth={1.2} />
-            </span>
-            <strong>{t("产品演示视频", "The product, in motion.")}</strong>
-            <p>{t("视频资料待补充", "Video to be added")}</p>
-          </div>
-          <span className="video-runtime">
-            {t(
-              "演示位置预留 · 暂无可播放视频",
-              "RESERVED FILM AREA · NO VIDEO ADDED YET",
-            )}
-          </span>
-        </div>
-      )}
+    <div className="source-gallery">
+      {sourceSlides
+        .filter((slide) => ids.includes(slide.id))
+        .map((slide) => (
+          <figure key={slide.id}>
+            <SourceImage id={slide.id} />
+            <figcaption>
+              <span>{String(slide.id).padStart(2, "0")}</span>
+              {slide.title[lang]}
+              <ArrowUpRight size={15} />
+            </figcaption>
+          </figure>
+        ))}
     </div>
   );
 }
-function ReferenceLibrary() {
-  const { t, lang } = useLang();
+function NextSection({
+  to,
+  title,
+  eyebrow,
+}: {
+  to: string;
+  title: string;
+  eyebrow: string;
+}) {
+  const { t } = useLang();
   return (
-    <section className="section reference-library" id="reference-materials">
+    <section className="next-section">
       <div className="container">
-        <div className="section-heading">
-          <div>
-            <Eyebrow>{t("产品资料", "PRODUCT RESOURCES")}</Eyebrow>
-            <h2>
-              {t(
-                "需要的资料，在这里找到。",
-                "A little more detail, in one place.",
-              )}
-            </h2>
-          </div>
-          <p className="reference-intro">
-            {t(
-              "预留产品演示与介绍资料的位置，后续补充正式文件。",
-              "A space for product presentations and films. Source files will be added here.",
-            )}
-          </p>
+        <div>
+          <Eyebrow>{eyebrow}</Eyebrow>
+          <h2>{title}</h2>
         </div>
-        <div className="reference-grid">
-          {referenceMaterials.map((material) => (
-            <article className="reference-card" key={material.id}>
-              <div className="reference-card-top">
-                {material.type === "MP4" ? (
-                  <Film size={25} strokeWidth={1.3} />
-                ) : (
-                  <FileText size={25} strokeWidth={1.3} />
-                )}
-                <span>{material.type}</span>
-              </div>
-              <h3>{material.title[lang]}</h3>
-              <p>{material.description[lang]}</p>
-              {material.href ? (
-                <a href={material.href} download className="text-link">
-                  {t("下载资料", "Download resource")}
-                  <Download size={15} />
-                </a>
-              ) : (
-                <span className="reference-status">
-                  <Clock3 size={13} />
-                  {t("资料待补充", "Resource to be added")}
-                </span>
-              )}
-            </article>
-          ))}
-        </div>
-        <p className="subtle-note">
-          {t(
-            "产品介绍与演示内容以最终确认资料为准。此处暂不提供未经确认的性能或认证信息。",
-            "Product information and demonstrations will follow the confirmed source materials. No unverified performance or certification claims are provided here.",
-          )}
-        </p>
+        <Link
+          className="round-link"
+          to={to}
+          aria-label={t("了解更多", "Explore more")}
+        >
+          <ArrowUpRight size={27} strokeWidth={1.5} />
+        </Link>
       </div>
     </section>
   );
 }
-function Home() {
-  const { t } = useLang();
-  return (
-    <>
-      <section className="home-hero coating-home">
-        <div className="container hero-inner">
-          <div className="hero-copy">
-            <Eyebrow>{t("涂层产品 · 简明介绍", "COATING IN FOCUS")}</Eyebrow>
-            <div className="hero-product-name">{coating.name}</div>
-            <h1>
-              {t("涂层的价值，", "A closer look.")}
-              <br />
-              <em>{t("一目了然。", "A clearer picture.")}</em>
-            </h1>
-            <p>
-              {t(
-                "聚焦产品特点、演示视频与应用方向。\n以更直观的方式，了解 THERMA CLEAR 涂层。",
-                "Meet THERMA CLEAR through its key features, product demonstrations and application ideas. A simpler way to get to know the coating.",
-              )}
-            </p>
-            <div className="hero-buttons">
-              <Link to="/products#therma-clear" className="button">
-                {t("了解产品", "Meet the coating")}
-                <ArrowUpRight size={19} />
-              </Link>
-              <Link to="/technology#demonstration" className="hero-secondary">
-                <Film size={17} />
-                {t("演示与资料", "Film & resources")}
-              </Link>
-            </div>
-            <div className="hero-caption">
-              <span className="tiny-line" />
-              {t("让产品成为主角。", "THE COATING TAKES CENTRE STAGE.")}
-            </div>
-          </div>
-          <div className="hero-art coating-hero-art">
-            <img
-              src="/images/coating-system.svg"
-              alt={t(
-                "涂层与材料叠层概念插画，非真实测试画面",
-                "Concept illustration of a coating and material layers, not a test image",
-              )}
-              fetchPriority="high"
-            />
-            <div className="hero-art-top">
-              <span className="live-dot" />
-              {t("材料 · 涂层 · 更多可能", "MATERIAL. COATING. POSSIBILITIES.")}
-              <span>01 /</span>
-            </div>
-            <div className="hero-data-card coating-name-card">
-              <span className="mini-icon">
-                <Layers3 size={23} />
-              </span>
-              <div>
-                <span>{t("认识我们的涂层", "MEET THE COATING")}</span>
-                <strong>
-                  THERMA
-                  <br />
-                  CLEAR
-                </strong>
-                <p>
-                  {t(
-                    "从特点开始，向应用延伸。",
-                    "From features to possibilities.",
-                  )}
-                </p>
-              </div>
-              <ArrowUpRight size={22} />
-            </div>
-            <span className="hero-data-footnote">
-              {t(
-                "涂层概念示意 · 非实测画面",
-                "CONCEPT ILLUSTRATION · NOT A TEST IMAGE",
-              )}
-            </span>
-          </div>
-        </div>
-        <div className="container hero-bottom">
-          <span>01 /</span>
-          <p>THERMA CLEAR / {t("产品介绍", "PRODUCT OVERVIEW")}</p>
-          <a href="#protection" onClick={handleSectionLink}>
-            {t("向下探索", "SCROLL TO EXPLORE")}
-            <ArrowDown size={15} />
-          </a>
-        </div>
-      </section>
-      <section className="section coating-highlights" id="protection">
-        <div className="container">
-          <div className="section-heading">
-            <div>
-              <Eyebrow>{t("核心看点", "THE ESSENTIALS")}</Eyebrow>
-              <h2>
-                {t("少一点繁杂，", "Keep it simple.")}
-                <br />
-                {t("多一点直观。", "Make it visual.")}
-              </h2>
-            </div>
-            <div className="section-heading-aside">
-              <p>
-                {t(
-                  "从特点、演示与应用三个角度，\n快速了解产品。",
-                  "An introduction through three lenses: the coating, the demonstration and the application.",
-                )}
-              </p>
-              <Link to="/products" className="text-link">
-                {t("产品介绍", "Explore the product")}
-                <ArrowUpRight size={18} />
-              </Link>
-            </div>
-          </div>
-          <CoatingFeatures />
-        </div>
-      </section>
-      <section className="application-feature film-feature">
-        <div className="container application-feature-inner">
-          <div className="feature-copy">
-            <Eyebrow dark>{t("产品演示", "SEE THE COATING")}</Eyebrow>
-            <h2>
-              {t("让演示，", "Let the film")}
-              <br />
-              {t("说明更多。", "tell the story.")}
-            </h2>
-            <p>
-              {t(
-                "用视频与图文呈现涂层的特点和表现，让产品介绍更清晰，也更容易理解。",
-                "Bring the coating introduction to life with a concise film and supporting visuals.",
-              )}
-            </p>
-            <span className="film-status">
-              <span />
-              {t("视频资料待补充", "Video to be added")}
-            </span>
-            <Link to="/technology#demonstration" className="button white">
-              {t("前往演示与资料", "Explore film & resources")}
-              <ArrowUpRight size={18} />
-            </Link>
-          </div>
-          <VideoPanel dark />
-        </div>
-      </section>
-      <section className="section home-applications">
-        <div className="container">
-          <div className="section-heading">
-            <div>
-              <Eyebrow>{t("应用方向", "PLACES & POSSIBILITIES")}</Eyebrow>
-              <h2>{t("从材料，到空间。", "From material to space.")}</h2>
-            </div>
-            <Link className="text-link" to="/applications">
-              {t("浏览应用场景", "Explore application ideas")}
-              <ArrowUpRight size={18} />
-            </Link>
-          </div>
-          <div className="application-preview-grid">
-            {scenes.slice(0, 3).map((scene) => (
-              <Link
-                to={`/applications?scene=${scene.id}`}
-                className="application-preview"
-                key={scene.id}
-              >
-                <img
-                  src={`/images/${scene.id}.svg`}
-                  alt={t(
-                    `${scene.title.zh}概念插画`,
-                    `${scene.title.en} concept illustration`,
-                  )}
-                  loading="lazy"
-                />
-                <span>
-                  <strong>{t(scene.title.zh, scene.title.en)}</strong>
-                  <ArrowUpRight size={18} />
-                </span>
-              </Link>
-            ))}
-          </div>
-          <p className="subtle-note">
-            {t(
-              "场景为布局示例，具体适用范围待产品资料确认。",
-              "Illustrative spaces only. Actual product suitability is to be confirmed.",
-            )}
-          </p>
-        </div>
-      </section>
-      <CTA />
-    </>
-  );
-}
-
 function PageIntro({
+  number,
   eyebrow,
   title,
   description,
-  number,
 }: {
+  number: string;
   eyebrow: string;
   title: string;
   description: string;
-  number: string;
 }) {
   return (
     <section className="page-intro">
       <div className="container">
         <Eyebrow>{eyebrow}</Eyebrow>
-        <div className="page-intro-row">
-          <div>
-            <h1>{title}</h1>
-            <p>{description}</p>
-          </div>
+        <div>
+          <h1>{title}</h1>
           <span className="page-number">/{number}</span>
         </div>
+        <p>{description}</p>
       </div>
     </section>
   );
 }
-function ProductDialog({
-  product,
-  onClose,
-}: {
-  product: Product;
-  onClose: () => void;
-}) {
-  const { t, lang } = useLang();
-  const ref = useRef<HTMLDialogElement>(null);
-  const [tab, setTab] = useState("overview");
-  useEffect(() => {
-    const dialog = ref.current;
-    dialog?.showModal();
-    const original = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      dialog?.close();
-      document.body.style.overflow = original;
-    };
-  }, []);
-  return (
-    <dialog
-      ref={ref}
-      className="product-dialog"
-      onCancel={onClose}
-      aria-labelledby="product-dialog-title"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          const r = e.currentTarget.getBoundingClientRect();
-          if (
-            e.clientX < r.left ||
-            e.clientX > r.right ||
-            e.clientY < r.top ||
-            e.clientY > r.bottom
-          )
-            onClose();
-        }
-      }}
-    >
-      <button
-        className="dialog-close icon-button"
-        onClick={onClose}
-        aria-label={t("关闭产品详情", "Close product details")}
-      >
-        <X />
-      </button>
-      <div className="dialog-layout">
-        <div className="dialog-image">
-          <img
-            src={`/images/${product.id.toLowerCase()}.svg`}
-            alt={t(
-              `${product.id} 产品概念包装`,
-              `${product.id} concept packaging`,
-            )}
-          />
-          <span>{t("示例产品 · 概念包装", "CONCEPT PRODUCT & PACKAGING")}</span>
-        </div>
-        <div className="dialog-content">
-          <Eyebrow>{categories[product.category][lang]}</Eyebrow>
-          <div className="dialog-model">{product.id}</div>
-          <h2 id="product-dialog-title">{product.name[lang]}</h2>
-          <div
-            className="tabs"
-            role="tablist"
-            aria-label={t("产品详情内容", "Product detail sections")}
-          >
-            {[
-              ["overview", "产品概览", "Overview"],
-              ["data", "性能参数", "Performance"],
-              ["downloads", "资料下载", "Downloads"],
-            ].map(([id, zh, en]) => (
-              <button
-                id={`tab-${id}`}
-                role="tab"
-                aria-selected={tab === id}
-                aria-controls="product-tab-panel"
-                tabIndex={tab === id ? 0 : -1}
-                className={tab === id ? "active" : ""}
-                key={id}
-                onClick={() => setTab(id)}
-                onKeyDown={(e) => {
-                  const tabs = ["overview", "data", "downloads"];
-                  if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-                    e.preventDefault();
-                    const next =
-                      tabs[
-                        (tabs.indexOf(id) + (e.key === "ArrowRight" ? 1 : 2)) %
-                          3
-                      ];
-                    setTab(next);
-                    document.getElementById(`tab-${next}`)?.focus();
-                  }
-                }}
-              >
-                {t(zh, en)}
-              </button>
-            ))}
-          </div>
-          <div
-            id="product-tab-panel"
-            role="tabpanel"
-            aria-labelledby={`tab-${tab}`}
-            className="dialog-panel"
-          >
-            {tab === "overview" ? (
-              <>
-                <p>{product.description[lang]}</p>
-                <div className="product-features">
-                  {product.features.map((f) => (
-                    <span key={f.en}>
-                      <Check size={14} />
-                      {f[lang]}
-                    </span>
-                  ))}
-                </div>
-                <div className="overview-stat">
-                  <span>
-                    {t("耐火时间示例", "Illustrative fire resistance")}
-                  </span>
-                  <strong>
-                    {product.duration}
-                    <small> min</small>
-                  </strong>
-                </div>
-              </>
-            ) : tab === "data" ? (
-              <dl className="spec-list">
-                {[
-                  [
-                    t("耐火时间（示例）", "Fire resistance (illustrative)"),
-                    `${product.duration} min`,
-                  ],
-                  [
-                    t("干膜厚度（示例）", "Dry film thickness (illustrative)"),
-                    `${product.thickness} mm`,
-                  ],
-                  [
-                    t("密度（示例）", "Density (illustrative)"),
-                    `${product.density} g/cm³`,
-                  ],
-                  [
-                    t("用量（示例）", "Consumption (illustrative)"),
-                    `${product.consumption} kg/m²`,
-                  ],
-                  [t("颜色", "Finish"), product.color[lang]],
-                ].map(([label, value]) => (
-                  <div key={label}>
-                    <dt>{label}</dt>
-                    <dd>{value}</dd>
-                  </div>
-                ))}
-              </dl>
-            ) : (
-              <>
-                <p>
-                  {t(
-                    "下载示例技术资料，了解产品信息和选型注意事项。资料不用于实际工程设计。",
-                    "Download the concept technical sheet for product information and selection notes. Not for actual engineering design.",
-                  )}
-                </p>
-                <a
-                  className="download-row"
-                  href={`/downloads/${product.id}-${lang}.pdf`}
-                  download
-                >
-                  <FileText size={24} />
-                  <span>
-                    {t("示例技术资料", "Concept technical sheet")}
-                    <small>
-                      {product.id} · PDF · {lang === "zh" ? "中文" : "English"}
-                    </small>
-                  </span>
-                  <Download size={20} />
-                </a>
-              </>
-            )}
-          </div>
-          <Notice compact />
-          <Link to={`/contact?product=${product.id}`} className="button full">
-            {t("咨询此产品", "Discuss this coating")}
-            <ArrowUpRight size={18} />
-          </Link>
-        </div>
-      </div>
-    </dialog>
-  );
-}
-function Products() {
-  const { t, lang } = useLang();
-  const [params, setParams] = useSearchParams();
-  const filter = params.get("category") || "all";
-  const selected = products.find((p) => p.id === params.get("product"));
-  const visible = products.filter(
-    (p) => filter === "all" || p.category === filter,
-  );
-  const [catalogOpen, setCatalogOpen] = useState(
-    filter !== "all" || Boolean(selected),
-  );
-  useEffect(() => {
-    if (selected || filter !== "all") setCatalogOpen(true);
-  }, [filter, selected]);
+function Home() {
+  const { lang, t } = useLang();
   return (
     <>
-      <PageIntro
-        eyebrow={t("产品展示 / PRODUCTS", "OUR COATING SYSTEMS")}
-        title={t("THERMA CLEAR 产品介绍", "Meet THERMA CLEAR.")}
-        description={t(
-          "先了解核心特点，再通过演示与资料认识产品。详细介绍后续补充。",
-          "Start with a concise introduction, then explore the demonstrations and resources. More details will follow.",
-        )}
-        number="01"
-      />
-      <FeaturedCoating />
-      <section className="section catalog-section secondary-section">
-        <div className="container">
-          <details
-            className="example-disclosure"
-            open={catalogOpen}
-            onToggle={(event) => setCatalogOpen(event.currentTarget.open)}
-          >
-            <summary>
-              <span>
-                <Layers3 size={18} />
-                {t("其他产品布局示例", "Example product layouts")}
-              </span>
-              <span className="disclosure-note">
-                {t("非 THERMA CLEAR 产品资料", "NOT THERMA CLEAR PRODUCT DATA")}
-                <ChevronDown size={16} />
-              </span>
-            </summary>
-            <div className="container">
-              <div className="filter-bar">
-                <div
-                  className="filter-list"
-                  aria-label={t(
-                    "按基材筛选产品",
-                    "Filter products by substrate",
-                  )}
-                >
-                  {Object.entries(categories).map(([id, name]) => (
-                    <button
-                      className={filter === id ? "active" : ""}
-                      key={id}
-                      aria-pressed={filter === id}
-                      onClick={() =>
-                        setParams(id === "all" ? {} : { category: id })
-                      }
-                    >
-                      {name[lang]}
-                      {filter === id && (
-                        <span>
-                          {id === "all"
-                            ? products.length
-                            : products.filter((p) => p.category === id).length}
-                        </span>
-                      )}
-                    </button>
-                  ))}
-                </div>
-                <span className="result-count" aria-live="polite">
-                  {t(
-                    `共 ${visible.length} 款产品`,
-                    `${visible.length} coatings`,
-                  )}
-                </span>
-              </div>
-              <div className="product-grid catalog-grid">
-                {visible.map((p) => (
-                  <ProductCard key={p.id} product={p} />
-                ))}
-              </div>
-              {visible.length === 0 && (
-                <p>
-                  {t(
-                    "没有匹配的产品，请选择其他分类。",
-                    "No matching products. Please select another category.",
-                  )}
-                </p>
-              )}
-              <Notice />
-            </div>
-          </details>
-        </div>
-      </section>
-      <section className="container help-banner">
-        <div>
-          <FileText size={28} />
-          <div>
-            <h3>{t("直观了解，轻松交流。", "A clearer conversation.")}</h3>
+      <section className="home-hero">
+        <div className="container hero-inner">
+          <div className="hero-copy">
+            <Eyebrow>
+              THERMA CLEAR /{" "}
+              {t("透明防火材料", "TRANSPARENT FIREPROOF MATERIAL")}
+            </Eyebrow>
+            <h1>
+              {t("透明防火，", "Protection,")}
+              <br />
+              <em>{t("保留材料本色。", "in plain sight.")}</em>
+            </h1>
             <p>
               {t(
-                "查看产品演示与介绍资料，再聊聊你的应用需求。",
-                "Explore the product films and resources, then tell us what you have in mind.",
+                "让防火保护，与自然美感共存。\nTherma Clear 以透明涂层，守护材料原有的色彩与纹理。",
+                "Fire protection with a transparent finish.\nTherma Clear preserves the original colour and texture of the materials around us.",
+              )}
+            </p>
+            <div className="hero-actions">
+              <Link className="button" to="/products">
+                {t("探索 Therma Clear", "Explore Therma Clear")}
+                <ArrowUpRight size={18} />
+              </Link>
+              <Link className="text-link" to="/technology">
+                {t("了解防火机理", "How it works")}
+                <ArrowRight size={17} />
+              </Link>
+            </div>
+            <span className="hero-signature">
+              ADVANCED COMPOSITES STUDIO LIMITED
+            </span>
+          </div>
+          <div className="hero-visual">
+            <SourceImage id={1} className="subject-right" priority />
+            <span className="visual-label">
+              MATERIAL / COATING / PROTECTION
+            </span>
+          </div>
+        </div>
+        <div className="container hero-bottom">
+          <span>01 / THERMA CLEAR</span>
+          <a href="#features" onClick={handleSectionLink}>
+            {t("向下探索", "Discover more")}
+            <ArrowDown size={14} />
+          </a>
+        </div>
+      </section>
+      <section className="metrics-section">
+        <div className="container">
+          <MetricStrip />
+          <p className="source-note">{sourceNote[lang]}</p>
+        </div>
+      </section>
+      <section className="section" id="features">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <Eyebrow>{t("核心特点", "THE ESSENTIALS")}</Eyebrow>
+              <h2>
+                {t("防护融入表面，", "An invisible layer.")}
+                <br />
+                {t("美感留在眼前。", "A visible difference.")}
+              </h2>
+            </div>
+            <p>
+              {t(
+                "无色透明的保护层，\n将材料美感与防火功能结合。",
+                "A colourless, transparent layer that brings material aesthetics and fire protection together.",
               )}
             </p>
           </div>
+          <FeatureCards />
         </div>
-        <Link to="/technology" className="text-link">
-          {t("查看演示与资料", "Explore resources")}
-          <ArrowUpRight size={18} />
-        </Link>
       </section>
-      <CTA />
-      {selected && (
-        <ProductDialog
-          key={selected.id}
-          product={selected}
-          onClose={() => {
-            const next = new URLSearchParams(params);
-            next.delete("product");
-            setParams(next, { replace: true });
-          }}
-        />
-      )}
+      <section className="story-section">
+        <div className="container story-grid">
+          <SourceImage id={2} className="subject-architecture" />
+          <div className="story-copy">
+            <Eyebrow dark>
+              {t("材料与建筑", "MATERIALS & ARCHITECTURE")}
+            </Eyebrow>
+            <h2>
+              {t("让材料，", "Let materials")}
+              <br />
+              {t("保有自己的表达。", "keep their character.")}
+            </h2>
+            <p>
+              {t(
+                "从历史建筑到现代木结构，Therma Clear 以透明保护保留基材的自然纹理。遇火时，涂层迅速膨胀，形成隔热炭层。",
+                "From historical buildings to modern timber structures, Therma Clear preserves natural texture with transparent protection. On exposure to fire, the coating expands rapidly into an insulating char layer.",
+              )}
+            </p>
+            <Link className="text-link light" to="/applications">
+              {t("浏览应用领域", "Explore applications")}
+              <ArrowUpRight size={19} />
+            </Link>
+          </div>
+        </div>
+      </section>
+      <section className="section">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <Eyebrow>{t("水性多功能保护", "WATER-BASED PROTECTION")}</Eyebrow>
+              <h2>
+                {t("从施工，到日常使用。", "From application to everyday use.")}
+              </h2>
+            </div>
+            <Link className="text-link" to="/products">
+              {t("了解产品", "Meet the coating")}
+              <ArrowUpRight size={18} />
+            </Link>
+          </div>
+          <div className="water-grid">
+            <SourceImage id={6} className="subject-water" />
+            <div className="water-copy">
+              <span className="small-label">THERMA CLEAR</span>
+              <h3>
+                {t(
+                  "透明外观，水性成膜。",
+                  "Transparent finish. Water-based film.",
+                )}
+              </h3>
+              <p>
+                {t(
+                  "水性体系，可用水稀释，支持喷涂或刷涂，并在常温下成膜。无卤、无毒、环保的配方，将美感、防火与环境保护结合。",
+                  "A water-based system that can be diluted with water, applied by spraying or brushing, and cured at room temperature. The halogen-free, non-toxic and eco-friendly formulation brings aesthetics, fire protection and environmental considerations together.",
+                )}
+              </p>
+              <div className="tag-list">
+                {[
+                  t("无卤", "Halogen-free"),
+                  t("无毒", "Non-toxic"),
+                  t("常温成膜", "Room-temperature curing"),
+                ].map((tag) => (
+                  <span key={tag}>
+                    <Check size={13} />
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <NextSection
+        to="/technology"
+        eyebrow={t("技术与性能", "TECHNOLOGY & PERFORMANCE")}
+        title={t("看清透明保护背后的原理。", "Look closer at the protection.")}
+      />
+    </>
+  );
+}
+function Products() {
+  const { lang, t } = useLang();
+  return (
+    <>
+      <PageIntro
+        number="01"
+        eyebrow="THERMA CLEAR"
+        title={t(
+          "透明防火，兼顾材料美感。",
+          "Fire protection. Original character.",
+        )}
+        description={company.introduction[lang]}
+      />
+      <section className="section product-overview">
+        <div className="container product-grid">
+          <div>
+            <Eyebrow>
+              {t("透明防火材料", "TRANSPARENT FIREPROOF MATERIAL")}
+            </Eyebrow>
+            <h2>Therma Clear</h2>
+            <p>
+              {t(
+                "以高透明膨胀型防火体系，在材料表面形成无色保护层。日常保留原有外观，遇火膨胀成炭，形成隔热屏障。",
+                "A highly transparent intumescent fire protection system forms a colourless layer on the material. It preserves the everyday appearance and expands into an insulating char barrier when exposed to fire.",
+              )}
+            </p>
+            <div className="material-list">
+              {materials.map((material) => (
+                <span key={material.en}>{material[lang]}</span>
+              ))}
+            </div>
+            <DownloadLink />
+          </div>
+          <SourceImage id={1} className="product-cover" />
+        </div>
+      </section>
+      <section className="section soft-section">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <Eyebrow>{t("产品特点", "PRODUCT CHARACTERISTICS")}</Eyebrow>
+              <h2>
+                {t(
+                  "透明、防护、便于施工。",
+                  "Transparent. Protective. Practical.",
+                )}
+              </h2>
+            </div>
+          </div>
+          <FeatureCards />
+        </div>
+      </section>
+      <section className="section">
+        <div className="container water-grid">
+          <SourceImage id={4} className="subject-system" />
+          <div className="water-copy">
+            <Eyebrow>
+              {t("水性多功能体系", "A MULTIFUNCTIONAL WATER-BASED SYSTEM")}
+            </Eyebrow>
+            <h2>
+              {t("一层涂覆，多重保护。", "Multiple functions. One layer.")}
+            </h2>
+            <p>
+              {t(
+                "支持现场喷涂或刷涂，可用水稀释；常温下成膜。涂层兼具 6H 表面硬度与大于 1.25 MPa 的附着力。",
+                "Supports on-site spraying or brushing, can be diluted with water and forms a film at room temperature. The coating combines 6H surface hardness with adhesion greater than 1.25 MPa.",
+              )}
+            </p>
+            <div className="tag-list">
+              {[
+                t("水性", "Water-based"),
+                t("无卤", "Halogen-free"),
+                t("透明", "Transparent"),
+              ].map((tag) => (
+                <span key={tag}>{tag}</span>
+              ))}
+            </div>
+            <Link className="text-link" to="/technology">
+              {t("查看完整技术指标", "View technical figures")}
+              <ArrowUpRight size={18} />
+            </Link>
+          </div>
+        </div>
+      </section>
+      <section className="section source-section">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <Eyebrow>{t("产品图文", "PRODUCT MATERIALS")}</Eyebrow>
+              <h2>
+                {t(
+                  "进一步了解 Therma Clear。",
+                  "A closer look at Therma Clear.",
+                )}
+              </h2>
+            </div>
+            <span className="gallery-hint">
+              {t(
+                "点击图片查看完整图文",
+                "Select an image to view the complete material",
+              )}
+            </span>
+          </div>
+          <Gallery />
+        </div>
+      </section>
+      <NextSection
+        to="/technology"
+        eyebrow={t("技术与性能", "TECHNOLOGY & PERFORMANCE")}
+        title={t(
+          "让每一项性能，都清晰可见。",
+          "Explore the detail behind the coating.",
+        )}
+      />
     </>
   );
 }
 function Technology() {
-  const { t, lang } = useLang();
-  const [selected, setSelected] = useState(products[0].id);
-  const product = products.find((p) => p.id === selected)!;
-  const rows = [
-    {
-      label: t("适用基材", "Substrate"),
-      values: products.map((p) => categories[p.category][lang]),
-    },
-    {
-      label: t("耐火时间示例", "Illustrative fire resistance"),
-      values: products.map((p) => `${p.duration} min`),
-    },
-    {
-      label: t("干膜厚度示例", "Illustrative dry film thickness"),
-      values: products.map((p) => `${p.thickness} mm`),
-    },
-    {
-      label: t("密度示例", "Illustrative density"),
-      values: products.map((p) => `${p.density} g/cm³`),
-    },
-    {
-      label: t("理论用量示例", "Illustrative consumption"),
-      values: products.map((p) => `${p.consumption} kg/m²`),
-    },
-    {
-      label: t("表面颜色", "Finish"),
-      values: products.map((p) => p.color[lang]),
-    },
-    {
-      label: t("使用环境", "Environment"),
-      values: products.map(() => t("室内（示例）", "Interior (concept)")),
-    },
-  ];
+  const { lang, t } = useLang();
   return (
     <>
       <PageIntro
-        eyebrow={t("演示与资料 / RESOURCES", "FILM & PRODUCT RESOURCES")}
-        title={t("认识涂层，从这里开始。", "Get to know the coating.")}
-        description={t(
-          "产品视频与介绍资料集中呈现，让重点更清晰。",
-          "A dedicated space for product demonstrations and presentations. The essentials, together.",
-        )}
         number="02"
+        eyebrow={t("技术与性能", "TECHNOLOGY & PERFORMANCE")}
+        title={t(
+          "透明屏障背后的防火机理。",
+          "The science behind a transparent barrier.",
+        )}
+        description={t(
+          "纳米分散与折射率匹配，将阻燃组分与成炭前驱体整合于水性体系中。遇火后，通过磷氮协同作用迅速膨胀成炭。",
+          "Nano-dispersion and refractive index matching integrate flame retardants and char-forming precursors into a water-based system. On fire exposure, phosphorus–nitrogen synergy enables rapid expansion and char formation.",
+        )}
       />
-      <section className="section demonstration-section" id="demonstration">
-        <div className="container demonstration-grid">
-          <div>
-            <Eyebrow>{t("产品视频", "PRODUCT FILM")}</Eyebrow>
-            <h2>THERMA CLEAR</h2>
-            <p>
-              {t(
-                "通过视频，了解产品的特点与演示过程。",
-                "Explore the coating and its demonstration through a product film.",
-              )}
-            </p>
-            <span className="content-pending">
-              {t("视频待添加", "VIDEO TO FOLLOW")}
-            </span>
+      <section className="section technology-intro">
+        <div className="container">
+          <MetricStrip />
+          <div className="mechanism-steps">
+            {[
+              [
+                "01",
+                t("透明涂层", "Transparent coating"),
+                t(
+                  "分子或纳米尺度的分散，保留材料外观。",
+                  "Molecular or nanoscale dispersion preserves the material’s appearance.",
+                ),
+              ],
+              [
+                "02",
+                t("遇火膨胀", "Intumescence"),
+                t(
+                  "磷氮协同作用，促进快速膨胀与成炭。",
+                  "Phosphorus–nitrogen synergy promotes rapid expansion and char formation.",
+                ),
+              ],
+              [
+                "03",
+                t("隔热屏障", "Insulating barrier"),
+                t(
+                  "形成发泡炭层，隔离热量与氧气。",
+                  "A foamed char layer separates the substrate from heat and oxygen.",
+                ),
+              ],
+            ].map(([n, title, description]) => (
+              <article key={n}>
+                <span>{n}</span>
+                <h3>{title}</h3>
+                <p>{description}</p>
+              </article>
+            ))}
           </div>
-          <VideoPanel />
         </div>
       </section>
-      <ReferenceLibrary />
-      <section className="container secondary-technical">
-        <details className="example-disclosure">
-          <summary>
-            <span>
-              <FileText size={18} />
-              {t("示例技术参数与下载", "Example technical data & downloads")}
-            </span>
-            <span className="disclosure-note">
-              {t("非 THERMA CLEAR 产品资料", "NOT THERMA CLEAR PRODUCT DATA")}
-              <ChevronDown size={16} />
-            </span>
-          </summary>
-          <section className="section technical-section">
-            <div className="container">
-              <div className="table-heading">
-                <div>
-                  <span className="overline">
-                    {t("产品性能对比", "COATING COMPARISON")}
-                  </span>
-                  <h2>{t("一览关键参数", "The key figures, together.")}</h2>
-                </div>
-                <a
-                  href={`/downloads/product-comparison-${lang}.csv`}
-                  download
-                  className="button outline"
-                >
-                  <Download size={16} />
-                  {t("下载参数表 CSV", "Download table · CSV")}
-                </a>
-              </div>
-              <Notice />
-              <div
-                className="table-scroll"
-                tabIndex={0}
-                role="region"
-                aria-label={t(
-                  "产品参数对比表，可横向滚动",
-                  "Product comparison table, scroll horizontally",
-                )}
-              >
-                <table className="comparison-table">
-                  <thead>
-                    <tr>
-                      <th scope="col">{t("技术指标", "Technical property")}</th>
-                      {products.map((p) => (
-                        <th scope="col" key={p.id}>
-                          <span>{p.id}</span>
-                          <small>{p.name[lang]}</small>
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rows.map((row) => (
-                      <tr key={row.label}>
-                        <th scope="row">{row.label}</th>
-                        {row.values.map((v, i) => (
-                          <td key={i}>{v}</td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <p className="subtle-note">
+      <section className="section soft-section">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <Eyebrow>
                 {t(
-                  "手机端可左右滑动查看完整参数。耐火时间与涂层厚度并非一一对应，实际系统须经项目专项验证。",
-                  "Swipe horizontally on smaller screens. Fire resistance and coating thickness are not directly interchangeable; actual systems need project-specific validation.",
+                  "产品资料中的技术指标",
+                  "FIGURES FROM THE PRODUCT MATERIALS",
                 )}
-              </p>
+              </Eyebrow>
+              <h2>{t("关键性能一览", "The key figures.")}</h2>
             </div>
-          </section>
-          <section className="resources-section section">
-            <div className="container resources-grid">
-              <div>
-                <Eyebrow>{t("资料中心", "RESOURCE LIBRARY")}</Eyebrow>
-                <h2>
-                  {t("把专业资料，", "The detail you need.")}
-                  <br />
-                  {t("带到你的项目中。", "Ready to take away.")}
-                </h2>
-                <p>
-                  {t(
-                    "选择产品，下载相应语言的示例技术资料。正式资料、检测报告及安全数据表需在取得真实文件后补充。",
-                    "Choose a coating and download its concept technical sheet in your current language. Verified technical reports and safety data sheets will be added when available.",
-                  )}
-                </p>
-                <label className="field-label" htmlFor="resource-product">
-                  {t("选择产品", "Choose a coating")}
-                </label>
-                <div className="select-wrap">
-                  <select
-                    id="resource-product"
-                    value={selected}
-                    onChange={(e) => setSelected(e.target.value)}
-                  >
-                    {products.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.id} — {p.name[lang]}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown size={16} />
-                </div>
-              </div>
-              <div className="resources-card">
-                <span className="resource-code">
-                  {product.id}
-                  <FileText size={44} strokeWidth={1} />
-                </span>
-                <h3>{t("示例产品技术资料", "Concept technical data sheet")}</h3>
-                <p>{product.name[lang]}</p>
-                <div className="resource-meta">
-                  <span>PDF</span>
-                  <span>{lang === "zh" ? "中文" : "ENGLISH"}</span>
-                  <span>{t("演示版本 1.0", "CONCEPT VERSION 1.0")}</span>
-                </div>
-                <a
-                  href={`/downloads/${product.id}-${lang}.pdf`}
-                  download
-                  className="button full"
-                >
-                  {t("下载技术资料", "Download technical sheet")}
-                  <Download size={18} />
-                </a>
-                <p className="subtle-note">
-                  {t(
-                    "仅供网站演示，不可用于工程设计或合规证明。",
-                    "For website demonstration, not engineering design or compliance.",
-                  )}
-                </p>
-              </div>
-            </div>
-          </section>
-        </details>
+            <DownloadLink />
+          </div>
+          <div
+            className="table-scroll"
+            tabIndex={0}
+            role="region"
+            aria-label={t(
+              "技术性能表，可左右滑动",
+              "Technical data table, scroll horizontally",
+            )}
+          >
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">{t("性能指标", "Property")}</th>
+                  <th scope="col">{t("资料数值", "Reported value")}</th>
+                  <th scope="col">
+                    {t("对应材料或说明", "Material or context")}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {technicalData.map((row) => (
+                  <tr key={row.label.en}>
+                    <th scope="row">{row.label[lang]}</th>
+                    <td>{row.value}</td>
+                    <td>{row.condition[lang]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="source-note">{sourceNote[lang]}</p>
+        </div>
       </section>
-      <CTA />
+      <section className="section" id="demonstration">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <Eyebrow>
+                {t("图像中的防火演示", "FIRE DEMONSTRATION IMAGES")}
+              </Eyebrow>
+              <h2>
+                {t(
+                  "从透明涂层，到膨胀炭层。",
+                  "From transparent film to insulating char.",
+                )}
+              </h2>
+            </div>
+            <p>
+              {t(
+                "图中记录了热成像与火焰演示过程，\n展示涂层受热后的成炭变化。",
+                "Thermal images and flame demonstrations illustrate char formation as the coating is exposed to heat.",
+              )}
+            </p>
+          </div>
+          <SourceImage id={3} className="technical-plate" />
+          <div className="demonstration-labels">
+            <span>
+              {t("画面温度标注", "Temperature labels")}
+              <strong>20.7°C / 86.7°C / 153°C</strong>
+            </span>
+            <span>
+              {t("演示时间标注", "Time labels")}
+              <strong>0 s / 40 s / 10 min</strong>
+            </span>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
 function Applications() {
-  const { t, lang } = useLang();
-  const [params, setParams] = useSearchParams();
-  const active = scenes.find((s) => s.id === params.get("scene")) || scenes[0];
-  const icons = [Building2, Factory, TrainFront, TreePine];
-  const Icon = icons[scenes.indexOf(active)];
+  const { lang, t } = useLang();
+  const [selected, setSelected] = useState(0);
+  const active = applications[selected];
+  const icons = [Building2, Package, TrainFront];
   return (
     <>
       <PageIntro
-        eyebrow={t("应用场景 / APPLICATIONS", "PROTECTION IN CONTEXT")}
-        title={t("走进建筑，理解每一种守护。", "Protection, in its element.")}
-        description={t(
-          "理解空间，才能理解防护。为不同类型建筑探索适配的涂层体系。",
-          "Understand the space to understand the protection. Explore coating concepts for a range of architectural environments.",
-        )}
         number="03"
+        eyebrow={t("应用领域", "APPLICATIONS")}
+        title={t(
+          "保留本色，延伸材料的可能。",
+          "Original character. Broader possibilities.",
+        )}
+        description={t(
+          "从建筑与包装，到轨道交通内饰，透明保护让材料原有的纹理与色彩继续呈现。",
+          "From architecture and packaging to rail transit interiors, transparent protection allows the original texture and colour of materials to remain visible.",
+        )}
       />
-      <section className="section applications-section">
+      <section className="section">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <Eyebrow>{t("适用基材", "SUBSTRATES")}</Eyebrow>
+              <h2>
+                {t(
+                  "多种基材，同样透明。",
+                  "Different substrates. The same clarity.",
+                )}
+              </h2>
+            </div>
+            <div className="material-list">
+              {materials.map((material) => (
+                <span key={material.en}>{material[lang]}</span>
+              ))}
+            </div>
+          </div>
+          <SourceImage id={5} className="materials-plate" />
+        </div>
+      </section>
+      <section className="section soft-section">
         <div className="container">
           <div
-            className="scene-nav"
+            className="application-tabs"
             role="tablist"
-            aria-label={t("选择应用场景", "Choose an application")}
+            aria-label={t("选择应用领域", "Select an application")}
           >
-            {scenes.map((s, i) => {
-              const I = icons[i];
+            {applications.map((item, index) => {
+              const Icon = icons[index];
               return (
                 <button
+                  key={item.id}
+                  id={`application-${item.id}`}
                   role="tab"
-                  id={`scene-${s.id}`}
-                  aria-controls="scene-panel"
-                  aria-selected={active.id === s.id}
-                  tabIndex={active.id === s.id ? 0 : -1}
-                  className={active.id === s.id ? "active" : ""}
-                  key={s.id}
-                  onClick={() => setParams({ scene: s.id })}
-                  onKeyDown={(e) => {
-                    if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-                      e.preventDefault();
+                  aria-selected={selected === index}
+                  aria-controls="application-panel"
+                  tabIndex={selected === index ? 0 : -1}
+                  className={selected === index ? "active" : ""}
+                  onClick={() => setSelected(index)}
+                  onKeyDown={(event) => {
+                    if (
+                      ["ArrowLeft", "ArrowRight", "Home", "End"].includes(
+                        event.key,
+                      )
+                    ) {
+                      event.preventDefault();
                       const next =
-                        scenes[(i + (e.key === "ArrowRight" ? 1 : 3)) % 4];
-                      setParams({ scene: next.id });
-                      document.getElementById(`scene-${next.id}`)?.focus();
+                        event.key === "Home"
+                          ? 0
+                          : event.key === "End"
+                            ? 2
+                            : (selected +
+                                (event.key === "ArrowRight" ? 1 : 2)) %
+                              3;
+                      setSelected(next);
+                      document
+                        .getElementById(`application-${applications[next].id}`)
+                        ?.focus();
                     }
                   }}
                 >
-                  <I size={21} strokeWidth={1.4} />
-                  <span>{s.title[lang]}</span>
+                  <Icon size={21} strokeWidth={1.4} />
+                  <span>{item.title[lang]}</span>
                   <ArrowUpRight size={16} />
                 </button>
               );
             })}
           </div>
           <div
-            className="scene-detail"
+            className="application-panel"
+            id="application-panel"
             role="tabpanel"
-            id="scene-panel"
-            aria-labelledby={`scene-${active.id}`}
+            aria-labelledby={`application-${active.id}`}
           >
-            <div className="scene-image">
-              <img
-                key={active.id}
-                src={`/images/${active.id}.svg`}
-                alt={t(
-                  `${active.title.zh}概念插画`,
-                  `${active.title.en} concept illustration`,
-                )}
-              />
-              <span>
-                {t(
-                  "应用概念示意 · 非真实项目案例",
-                  "CONCEPT ILLUSTRATION · NOT A COMPLETED PROJECT",
-                )}
+            <div className="application-copy">
+              <span className="small-label">
+                {active.number} / THERMA CLEAR
               </span>
-            </div>
-            <div className="scene-copy">
-              <span className="scene-index">
-                {active.n}
-                <Icon size={33} strokeWidth={1} />
-              </span>
-              <h2>{active.subtitle[lang]}</h2>
+              <h2>{active.title[lang]}</h2>
               <p>{active.description[lang]}</p>
-              <div className="scene-tags">{active.tags[lang]}</div>
-              <div className="recommended">
-                <span>{t("相关示例产品", "RELATED CONCEPT COATING")}</span>
-                <Link to={`/products?product=${active.product}`}>
-                  <strong>{active.product}</strong>
-                  <ArrowUpRight size={22} />
-                </Link>
-              </div>
-              <Link
-                className="text-link"
-                to={`/contact?product=${active.product}`}
-              >
-                {t("咨询此场景方案", "Discuss this application")}
+              <span className="application-caption">{active.label[lang]}</span>
+              <Link className="text-link" to="/technology">
+                {t("了解技术性能", "Explore the performance")}
                 <ArrowUpRight size={18} />
               </Link>
             </div>
+            <SourceImage
+              id={active.image}
+              className={
+                active.image === 2
+                  ? "subject-architecture"
+                  : active.image === 4
+                    ? "subject-system"
+                    : "application-materials"
+              }
+            />
           </div>
-          <Notice />
         </div>
       </section>
-      <section className="section applications-notes">
-        <div className="container">
-          <Eyebrow>
-            {t("每一栋建筑，都是独立课题", "EVERY BUILDING HAS ITS OWN BRIEF")}
-          </Eyebrow>
-          <h2>
-            {t(
-              "从使用场景出发，回到工程本身。",
-              "Start with the space. Design for the structure.",
-            )}
-          </h2>
-          <p>
-            {t(
-              "防火涂层的实际选型，取决于结构形式、耐火要求、构件截面、环境条件和当地标准。此处场景仅帮助理解产品方向，不能替代专业消防设计。",
-              "Actual coating selection depends on structural design, required fire resistance, section factors, exposure conditions and local standards. These scenarios explain coating concepts and do not replace professional fire engineering design.",
-            )}
-          </p>
-        </div>
-      </section>
-      <CTA />
+      <NextSection
+        to="/products"
+        eyebrow="THERMA CLEAR"
+        title={t(
+          "以透明保护，延续材料之美。",
+          "Keep the beauty. Add the protection.",
+        )}
+      />
     </>
   );
 }
-function downloadText(text: string, filename: string) {
-  const url = URL.createObjectURL(
-    new Blob(["\uFEFF", text], { type: "text/plain;charset=utf-8" }),
-  );
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-function Contact() {
-  const { t, lang } = useLang();
-  const [params] = useSearchParams();
-  const [submitted, setSubmitted] = useState(false);
-  const [summary, setSummary] = useState("");
-  const [draft, setDraft] = useState<Record<string, string>>({});
-  const [chosen, setChosen] = useState(
-    params.get("product") === "THERMA-CLEAR" ||
-      products.some((p) => p.id === params.get("product"))
-      ? params.get("product")!
-      : "",
-  );
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    setDraft(
-      Object.fromEntries(
-        [...data.entries()].map(([key, value]) => [key, String(value)]),
-      ),
-    );
-    const text = `${t("防火材料 · 项目咨询单（演示，尚未发送）", "FIREPROOF MATERIALS · PROJECT BRIEF (DEMO, NOT SENT)")}\n\n${t("姓名", "Name")}: ${data.get("name")}\n${t("公司", "Company")}: ${data.get("company") || "—"}\n${t("邮箱", "Email")}: ${data.get("email")}\n${t("电话", "Phone")}: ${data.get("phone") || "—"}\n${t("产品", "Product")}: ${data.get("product") || t("需要选型建议", "Selection advice needed")}\n\n${t("项目需求", "Project requirements")}:\n${data.get("message")}`;
-    setSummary(text);
-    setSubmitted(true);
-  };
+function About() {
+  const { lang, t } = useLang();
   return (
     <>
       <PageIntro
-        eyebrow={t("联系我们 / CONTACT", "LET’S START A CONVERSATION")}
-        title={t(
-          "从一次交流，开始更好的防护。",
-          "A conversation is a good first layer.",
-        )}
-        description={t(
-          "告诉我们你的项目需求，一起探索更合适的涂层方案。",
-          "Tell us about your project and explore a more considered coating approach.",
-        )}
         number="04"
+        eyebrow={t("关于卓界", "THE COMPANY")}
+        title={company.name[lang]}
+        description={lang === "zh" ? company.englishName : company.name.zh}
       />
-      <section className="section contact-section">
-        <div className="container contact-grid">
-          <div className="contact-aside">
-            <Eyebrow>{t("保持联系", "GET IN TOUCH")}</Eyebrow>
+      <section className="section">
+        <div className="container about-grid">
+          <div className="about-copy">
+            <Eyebrow>THERMA CLEAR</Eyebrow>
             <h2>
-              {t("好的方案，", "Good solutions")}
+              {t("将防火安全，", "Bringing fire protection")}
               <br />
-              {t("始于充分了解。", "start with understanding.")}
+              {t("融入材料美感。", "and aesthetics together.")}
             </h2>
             <p>
               {t(
-                "无论是产品选型、技术资料还是项目应用，都可以从这里开始。",
-                "Coating selection, technical resources or project applications — start your conversation here.",
+                "Therma Clear 的设计源于建筑、包装与轨道交通领域对美感和防火保护的共同需求。透明保护层保留材料原有的外观，遇火后膨胀成炭，兼顾视觉表达与防护功能。",
+                "Therma Clear was designed around the shared need for aesthetics and fire protection in architecture, packaging and rail transit. A transparent layer preserves the original appearance and expands into char on fire exposure, bringing visual expression and protection together.",
               )}
             </p>
-            <div className="contact-details">
-              <div>
-                <Mail size={21} />
-                <div>
-                  <span>{t("电子邮箱", "EMAIL")}</span>
-                  <strong>hello@fireproof.example</strong>
-                  <small>
-                    {t("示例邮箱，尚未开通", "Example email, not connected")}
-                  </small>
-                </div>
-              </div>
-              <div>
-                <MapPin size={21} />
-                <div>
-                  <span>{t("办公地点", "LOCATION")}</span>
-                  <strong>
-                    {t("中国 · 上海（示例）", "Shanghai, China (example)")}
-                  </strong>
-                  <small>
-                    {t(
-                      "待补充真实办公地址",
-                      "Actual office address to be added",
-                    )}
-                  </small>
-                </div>
-              </div>
-              <div>
-                <Clock3 size={21} />
-                <div>
-                  <span>{t("服务时间", "OFFICE HOURS")}</span>
-                  <strong>
-                    {t("周一至周五 09:00–18:00", "Mon–Fri, 09:00–18:00")}
-                  </strong>
-                  <small>
-                    {t(
-                      "中国标准时间 · 示例安排",
-                      "China Standard Time · Illustrative hours",
-                    )}
-                  </small>
-                </div>
-              </div>
-            </div>
-            <div className="contact-aside-note">
-              <ShieldCheck size={21} />
-              <p>
-                {t(
-                  "演示模式：信息仅在当前浏览器内生成咨询单，不会发送或存入服务器。",
-                  "Demo mode: the brief is generated in this browser only. No information is sent or stored on a server.",
-                )}
-              </p>
+            <Link to="/products" className="button">
+              {t("了解 Therma Clear", "Discover Therma Clear")}
+              <ArrowUpRight size={18} />
+            </Link>
+          </div>
+          <SourceImage id={2} className="subject-architecture" />
+        </div>
+      </section>
+      <section className="section soft-section">
+        <div className="container sustainability-grid">
+          <div>
+            <Eyebrow>
+              {t(
+                "水性材料与可持续发展",
+                "WATER-BASED MATERIALS & SUSTAINABILITY",
+              )}
+            </Eyebrow>
+            <h2>
+              {t("保护材料，", "Protect the material.")}
+              <br />
+              {t("也珍惜资源。", "Respect the resource.")}
+            </h2>
+          </div>
+          <div>
+            <Leaf size={30} strokeWidth={1.3} />
+            <p>
+              {t(
+                "水性、无卤、无毒的透明涂层，可在常温下成膜。通过保护基材、减少材料更换与浪费，支持绿色建筑、可持续物流与低碳生产。",
+                "A water-based, halogen-free, non-toxic transparent coating that forms a film at room temperature. Protecting substrates and reducing material replacement and waste supports green building, sustainable logistics and low-carbon production.",
+              )}
+            </p>
+          </div>
+        </div>
+      </section>
+      <section className="section contact-section" id="contact">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <Eyebrow>{t("联系方式", "CONTACT")}</Eyebrow>
+              <h2>{t("联系我们", "Contact us")}</h2>
             </div>
           </div>
-          <div className="contact-form-card">
-            {submitted ? (
-              <div className="form-success" role="status">
-                <CheckCircle2 size={52} strokeWidth={1.3} />
-                <span className="overline">
-                  {t("咨询单已生成", "YOUR BRIEF IS READY")}
-                </span>
-                <h2>
-                  {t("需求已整理，", "Your project,")}
-                  <br />
-                  {t("下一步更清晰。", "a little clearer.")}
-                </h2>
-                <p>
-                  {t(
-                    "这是演示网站，信息尚未发送。你可以下载咨询单保存，待配置真实联系方式后再提交。",
-                    "This is a demo website. Your information has not been sent. Download the brief for your records and share it once real contact details are configured.",
-                  )}
-                </p>
-                <button
-                  className="button full"
-                  onClick={() =>
-                    downloadText(summary, `project-brief-${lang}.txt`)
-                  }
-                >
-                  {t("下载我的咨询单", "Download my project brief")}
-                  <Download size={18} />
-                </button>
-                <button
-                  className="text-link"
-                  onClick={() => setSubmitted(false)}
-                >
-                  {t("返回修改", "Edit my brief")}
-                  <ArrowRight size={17} />
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={onSubmit}>
-                <div className="form-heading">
-                  <h3>{t("聊聊你的项目", "Tell us about your project")}</h3>
-                  <span>{t("* 为必填项", "* Required fields")}</span>
+          <dl className="contact-fields">
+            {[t("电话", "Phone"), t("邮箱", "Email"), t("地址", "Address")].map(
+              (label) => (
+                <div key={label}>
+                  <dt>{label}</dt>
+                  <dd title={t("尚未填写", "Not provided")} />
                 </div>
-                <div className="form-row">
-                  <label>
-                    {t("你的姓名", "Your name")} <span>*</span>
-                    <input
-                      defaultValue={draft.name}
-                      name="name"
-                      autoComplete="name"
-                      required
-                      maxLength={80}
-                      placeholder={t("请输入姓名", "Full name")}
-                    />
-                  </label>
-                  <label>
-                    {t("公司名称", "Company")}
-                    <input
-                      defaultValue={draft.company}
-                      name="company"
-                      autoComplete="organization"
-                      maxLength={120}
-                      placeholder={t(
-                        "请输入公司名称（选填）",
-                        "Company name (optional)",
-                      )}
-                    />
-                  </label>
-                </div>
-                <div className="form-row">
-                  <label>
-                    {t("电子邮箱", "Email address")} <span>*</span>
-                    <input
-                      defaultValue={draft.email}
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      maxLength={160}
-                      placeholder="name@company.com"
-                    />
-                  </label>
-                  <label>
-                    {t("联系电话", "Phone number")}
-                    <input
-                      defaultValue={draft.phone}
-                      name="phone"
-                      type="tel"
-                      autoComplete="tel"
-                      maxLength={40}
-                      placeholder={t(
-                        "请输入电话（选填）",
-                        "Phone number (optional)",
-                      )}
-                    />
-                  </label>
-                </div>
-                <label>
-                  {t("感兴趣的产品", "Coating of interest")}
-                  <div className="select-wrap">
-                    <select
-                      name="product"
-                      value={chosen}
-                      onChange={(e) => setChosen(e.target.value)}
-                    >
-                      <option value="">
-                        {t(
-                          "尚未确定，需要选型建议",
-                          "Not sure — I need selection advice",
-                        )}
-                      </option>
-                      <option value="THERMA-CLEAR">THERMA CLEAR</option>
-                      {products.map((p) => (
-                        <option key={p.id} value={p.id}>
-                          {p.id} — {p.name[lang]}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronDown size={16} />
-                  </div>
-                </label>
-                <label>
-                  {t("项目需求", "Project requirements")} <span>*</span>
-                  <textarea
-                    defaultValue={draft.message}
-                    name="message"
-                    rows={5}
-                    required
-                    minLength={10}
-                    maxLength={3000}
-                    placeholder={t(
-                      "请简单介绍项目类型、基材、防护需求或其他问题（至少 10 个字）…",
-                      "Tell us about the building, substrate, protection requirements or questions (at least 10 characters)…",
-                    )}
-                  />
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    defaultChecked={draft.consent === "on"}
-                    type="checkbox"
-                    name="consent"
-                    required
-                  />
-                  <span>
-                    {t(
-                      "我了解此为演示表单，所填信息仅用于在本地生成咨询单，不会发送。",
-                      "I understand this demo form generates a local brief only and does not send my information.",
-                    )}{" "}
-                    *
-                  </span>
-                </label>
-                <button className="button full" type="submit">
-                  {t("生成项目咨询单", "Create my project brief")}
-                  <ArrowUpRight size={18} />
-                </button>
-                <p className="form-bottom-note">
-                  {t(
-                    "正式上线前需配置真实联系方式和表单接收服务。",
-                    "Real contact details and a form delivery service are required before launch.",
-                  )}
-                </p>
-              </form>
+              ),
             )}
-          </div>
+          </dl>
+        </div>
+      </section>
+      <section className="company-nameplate">
+        <div className="container">
+          <span className="small-label">
+            ADVANCED COMPOSITES STUDIO LIMITED
+          </span>
+          <strong>{company.name.zh}</strong>
+          <span>Therma Clear · {company.tagline[lang]}</span>
         </div>
       </section>
     </>
@@ -1648,61 +1127,43 @@ function NotFound() {
   return (
     <section className="container not-found">
       <Eyebrow>404</Eyebrow>
-      <h1>{t("这个页面暂时不在这里。", "This page is not here.")}</h1>
-      <p>
-        {t(
-          "可以返回首页继续探索产品与防护方案。",
-          "Return home to explore our coating concepts.",
-        )}
-      </p>
+      <h1>{t("没有找到这个页面。", "This page could not be found.")}</h1>
       <Link className="button" to="/">
-        {t("返回首页", "Back to home")}
+        {t("返回首页", "Return home")}
         <ArrowRight size={18} />
       </Link>
     </section>
   );
 }
 function App() {
-  const { t, lang } = useLang();
+  const { lang, t } = useLang();
   const location = useLocation();
+  const [image, setImage] = useState<number | null>(null);
   useEffect(() => {
+    setImage(null);
     if (location.hash) {
-      const sectionId = decodeURIComponent(location.hash.slice(1));
+      const id = decodeURIComponent(location.hash.slice(1));
       requestAnimationFrame(() =>
-        document
-          .getElementById(sectionId)
-          ?.scrollIntoView({ behavior: "instant" }),
+        document.getElementById(id)?.scrollIntoView({ behavior: "instant" }),
       );
     } else window.scrollTo({ top: 0, behavior: "instant" });
   }, [location.pathname, location.hash]);
   useEffect(() => {
-    const page = nav.find(([path]) => path === location.pathname);
-    document.title = `${page ? t(page[1], page[2]) : "404"} · ${t(brand.zh, brand.en)}`;
+    const page = navigation.find(([path]) => path === location.pathname);
+    document.title = `${page ? t(page[1], page[2]) : "404"} · ${company.name[lang]}`;
     document
       .querySelector('meta[name="description"]')
       ?.setAttribute(
         "content",
         t(
-          "防火材料 · THERMA CLEAR 涂层产品介绍、演示与资料、应用方向。布局演示，产品内容待确认。",
-          "Meet THERMA CLEAR: coating introduction, product film, resources and application ideas. Layout preview; product facts to be confirmed.",
+          "卓界科技有限公司 Therma Clear 透明防火材料，介绍透明膨胀型防火体系、水性施工、技术性能与应用领域。",
+          "Advanced Composites Studio Limited presents Therma Clear: transparent intumescent fire protection, water-based application, technical performance and application areas.",
         ),
       );
-  }, [location.pathname, lang, t]);
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !document.querySelector("dialog[open]"))
-        document
-          .querySelector<HTMLButtonElement>(
-            '.menu-toggle[aria-expanded="true"]',
-          )
-          ?.click();
-    };
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [lang, location.pathname, t]);
   return (
-    <>
-      <a className="skip-link" href="#main" onClick={handleSectionLink}>
+    <Viewer.Provider value={setImage}>
+      <a href="#main" onClick={handleSectionLink} className="skip-link">
         {t("跳转到主要内容", "Skip to content")}
       </a>
       <Header />
@@ -1712,12 +1173,23 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/technology" element={<Technology />} />
           <Route path="/applications" element={<Applications />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
+          <Route
+            path="/contact"
+            element={<Navigate to="/about#contact" replace />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />
-    </>
+      {image !== null && (
+        <ImageDialog
+          id={image}
+          onClose={() => setImage(null)}
+          onChange={setImage}
+        />
+      )}
+    </Viewer.Provider>
   );
 }
 createRoot(document.getElementById("root")!).render(

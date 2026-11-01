@@ -1,269 +1,229 @@
 export type Lang = "zh" | "en";
 export type Localized = { zh: string; en: string };
-export interface Product {
-  id: string;
-  name: Localized;
-  category: "steel" | "concrete" | "wood";
-  tag: Localized;
-  description: Localized;
-  duration: number;
-  thickness: string;
-  density: string;
-  consumption: string;
-  color: Localized;
-  features: Localized[];
-}
-export const brand = { zh: "防火材料", en: "FIREPROOF MATERIALS" };
-export const categories: Record<string, Localized> = {
-  all: { zh: "全部产品", en: "All products" },
-  steel: { zh: "钢结构防护", en: "Steel protection" },
-  concrete: { zh: "混凝土防护", en: "Concrete protection" },
-  wood: { zh: "木结构防护", en: "Timber protection" },
-};
-export const products: Product[] = [
-  {
-    id: "SF-120",
-    name: { zh: "水性膨胀型防火涂料", en: "Water-based intumescent coating" },
-    category: "steel",
-    tag: { zh: "轻薄涂层 · 强效防护", en: "Thin film. Reliable protection." },
-    description: {
-      zh: "为室内钢结构设计的水性膨胀型涂层。受热后形成隔热炭层，兼顾建筑美观与结构防护需求。",
-      en: "A water-based intumescent concept for interior steelwork. Designed to form an insulating char layer when exposed to heat, with a clean architectural finish.",
-    },
-    duration: 120,
-    thickness: "1.5–3.0",
-    density: "1.35 ± 0.10",
-    consumption: "2.0–4.0",
-    color: { zh: "哑光白 / 可定制", en: "Matt white / Custom" },
-    features: [
-      { zh: "水性配方", en: "Water-based" },
-      { zh: "轻薄美观", en: "Thin profile" },
-      { zh: "室内钢结构", en: "Interior steel" },
-    ],
-  },
-  {
-    id: "SF-180",
-    name: { zh: "厚型钢结构防火涂料", en: "High-build steel fire coating" },
-    category: "steel",
-    tag: { zh: "厚实屏障 · 持久守护", en: "A stronger thermal barrier." },
-    description: {
-      zh: "适用于工业钢结构的厚型防火涂层示例方案，以矿物隔热体系延缓热量传递，满足大型结构的防护需求。",
-      en: "A high-build mineral coating concept for industrial steelwork, designed to slow heat transfer in large structural elements.",
-    },
-    duration: 180,
-    thickness: "15–25",
-    density: "0.65 ± 0.10",
-    consumption: "10.0–17.0",
-    color: { zh: "自然灰", en: "Natural grey" },
-    features: [
-      { zh: "矿物体系", en: "Mineral system" },
-      { zh: "高厚度防护", en: "High-build" },
-      { zh: "工业建筑", en: "Industrial use" },
-    ],
-  },
-  {
-    id: "CF-90",
-    name: { zh: "混凝土结构防火涂料", en: "Concrete fire protection coating" },
-    category: "concrete",
-    tag: { zh: "稳固基底 · 从容应对", en: "Protection from the foundation." },
-    description: {
-      zh: "面向隧道及混凝土结构的防火涂层示例。通过连续隔热层保护结构基材，适配复杂建筑空间。",
-      en: "A protective coating concept for tunnels and concrete structures. A continuous thermal layer is designed to protect the substrate in demanding spaces.",
-    },
-    duration: 90,
-    thickness: "8–15",
-    density: "0.80 ± 0.10",
-    consumption: "6.0–12.0",
-    color: { zh: "浅灰色", en: "Light grey" },
-    features: [
-      { zh: "混凝土基材", en: "Concrete substrate" },
-      { zh: "连续隔热", en: "Thermal barrier" },
-      { zh: "隧道空间", en: "Tunnel spaces" },
-    ],
-  },
-  {
-    id: "WF-60",
-    name: { zh: "木结构透明防火涂料", en: "Clear timber fire coating" },
-    category: "wood",
-    tag: {
-      zh: "保留质感 · 增添安心",
-      en: "Natural texture. Added protection.",
-    },
-    description: {
-      zh: "为室内木结构与装饰构件设计的透明防火涂层示例，在保留木材自然纹理的同时增添防护层。",
-      en: "A clear fire coating concept for interior timber and decorative elements, designed to preserve natural wood grain with an added protective layer.",
-    },
-    duration: 60,
-    thickness: "0.5–1.0",
-    density: "1.10 ± 0.10",
-    consumption: "0.6–1.2",
-    color: { zh: "透明 / 半哑光", en: "Clear / Satin" },
-    features: [
-      { zh: "自然木纹", en: "Natural grain" },
-      { zh: "透明涂层", en: "Clear finish" },
-      { zh: "室内装饰", en: "Interior finish" },
-    ],
-  },
-];
-export const scenes = [
-  {
-    id: "commercial",
-    n: "01",
-    title: { zh: "商业与公共建筑", en: "Commercial & public spaces" },
-    subtitle: {
-      zh: "让每一处公共空间，多一份安心。",
-      en: "Confidence in every shared space.",
-    },
-    description: {
-      zh: "适用于办公楼、商业综合体、展览馆等建筑的室内钢结构。兼顾涂层外观与建筑空间的设计表达。",
-      en: "For interior steelwork in offices, mixed-use buildings and exhibition halls. Balance a clean coating finish with architectural expression.",
-    },
-    product: "SF-120",
-    tags: {
-      zh: "商业综合体 / 办公建筑 / 展览空间",
-      en: "Mixed-use / Offices / Exhibitions",
-    },
-  },
-  {
-    id: "industrial",
-    n: "02",
-    title: { zh: "工业厂房与仓储", en: "Industrial & logistics" },
-    subtitle: {
-      zh: "为大跨度结构，构筑可靠防线。",
-      en: "A considered barrier for larger structures.",
-    },
-    description: {
-      zh: "为厂房、物流仓储等大跨度钢结构提供防护方案思路。结合构件尺寸、使用环境与施工条件选择适配涂层。",
-      en: "Explore coating concepts for large-span steelwork in factories and logistics spaces. Selection depends on section size, environment and site conditions.",
-    },
-    product: "SF-180",
-    tags: {
-      zh: "工业厂房 / 物流仓储 / 设备空间",
-      en: "Factories / Warehouses / Plant rooms",
-    },
-  },
-  {
-    id: "transport",
-    n: "03",
-    title: { zh: "交通与基础设施", en: "Transport & infrastructure" },
-    subtitle: {
-      zh: "守护连接城市的每一段旅程。",
-      en: "Considered protection for connected cities.",
-    },
-    description: {
-      zh: "探索隧道、交通枢纽与地下空间的混凝土结构防护。实际方案需根据项目火灾工况、基材和施工要求设计。",
-      en: "Explore concrete protection for tunnels, transport hubs and underground spaces. Actual systems require project-specific fire exposure and substrate design.",
-    },
-    product: "CF-90",
-    tags: {
-      zh: "交通枢纽 / 隧道工程 / 地下空间",
-      en: "Transport hubs / Tunnels / Underground",
-    },
-  },
-  {
-    id: "timber",
-    n: "04",
-    title: { zh: "木构建筑与室内", en: "Timber & interior spaces" },
-    subtitle: {
-      zh: "让自然的温度，与安全相伴。",
-      en: "Make room for natural warmth.",
-    },
-    description: {
-      zh: "面向室内木构、酒店及文化空间的装饰防护思路。透明表面处理保留木纹，具体防护要求需以真实检测结果为准。",
-      en: "A finish concept for interior timber, hospitality and cultural spaces. A clear finish preserves the grain; actual protection requires verified test evidence.",
-    },
-    product: "WF-60",
-    tags: {
-      zh: "木构建筑 / 酒店空间 / 文化场馆",
-      en: "Timber / Hospitality / Cultural spaces",
-    },
-  },
-];
-
-// THERMA CLEAR layout content. Product facts remain unconfirmed until the source
-// presentations and videos are available. Add verified benefits and local files here.
-export const coating = {
-  name: "THERMA CLEAR",
-  summary: {
-    zh: "从产品特点到实际演示，以更直观的方式认识 THERMA CLEAR 涂层。具体产品介绍将在资料确认后补充。",
-    en: "Get to know THERMA CLEAR through a concise product introduction and demonstration. Product details will be added once the source materials are confirmed.",
-  },
-  features: [
-    {
-      id: "01",
-      title: { zh: "涂层特点", en: "Coating features" },
-      description: {
-        zh: "用简洁图文介绍产品的核心特点。",
-        en: "A clear, visual introduction to the key product features.",
-      },
-    },
-    {
-      id: "02",
-      title: { zh: "演示与表现", en: "See it in action" },
-      description: {
-        zh: "通过产品视频，直观了解涂层表现。",
-        en: "A product film to help explain the coating in context.",
-      },
-    },
-    {
-      id: "03",
-      title: { zh: "应用方向", en: "Application ideas" },
-      description: {
-        zh: "展示适用场景与基本选型方向。",
-        en: "An overview of potential applications and selection considerations.",
-      },
-    },
-  ],
-  video: {
-    src: "", // Add an authorised local MP4 path, e.g. /media/therma-clear.mp4.
-    poster: "/images/coating-system.svg",
+export const company = {
+  name: { zh: "卓界科技有限公司", en: "Advanced Composites Studio Limited" },
+  englishName: "Advanced Composites Studio Limited",
+  product: "Therma Clear",
+  tagline: { zh: "透明防火材料", en: "Transparent Fireproof Material" },
+  introduction: {
+    zh: "Therma Clear 将透明外观与防火保护相结合，形成保留基材色彩与纹理的保护层。遇火后，涂层迅速膨胀并形成隔热炭层。",
+    en: "Therma Clear brings a transparent finish and fire protection together, preserving the colour and texture of the substrate. On exposure to fire, the coating rapidly expands to form an insulating char layer.",
   },
 };
-// File names come from the user's email screenshot. No SharePoint links or private
-// school-account information are embedded in the public website or offline preview.
-export const referenceMaterials = [
+export const features = [
   {
-    id: "product-ppt",
-    type: "PPTX",
-    filename: "Product PPT for Meeting with Nu-Rock v2 2.pptx",
-    title: { zh: "产品介绍", en: "Product presentation" },
+    id: "transparency",
+    number: "01",
+    title: { zh: "透明，保留本色", en: "Transparent by design" },
     description: {
-      zh: "产品定位与特点概览",
-      en: "Product context and key features",
+      zh: "无色透明的保护层，保留材料原有色彩与自然纹理。",
+      en: "A colourless, transparent protective layer that preserves the material’s original colour and natural texture.",
     },
-    href: "",
+    source: [1, 2, 5],
   },
   {
-    id: "therma-ppt",
-    type: "PPTX",
-    filename: "THERMA CLEAR 1.pptx",
-    title: { zh: "THERMA CLEAR 介绍", en: "THERMA CLEAR overview" },
+    id: "protection",
+    number: "02",
+    title: { zh: "遇火膨胀，形成屏障", en: "Protection through expansion" },
     description: {
-      zh: "涂层介绍与应用思路",
-      en: "Coating overview and application ideas",
+      zh: "通过膨胀成炭形成隔热层，阻隔热量与氧气。",
+      en: "An intumescent system that forms an insulating char layer to separate the substrate from heat and oxygen.",
     },
-    href: "",
+    source: [2, 3, 6],
   },
   {
-    id: "video-2",
-    type: "MP4",
-    filename: "THERMA CLEAR V4 2.mp4",
-    title: { zh: "产品演示视频 01", en: "Product demonstration 01" },
+    id: "application",
+    number: "03",
+    title: { zh: "水性体系，便于施工", en: "Water-based application" },
     description: {
-      zh: "预留产品视频展示位置",
-      en: "Reserved for a product demonstration",
+      zh: "支持喷涂或刷涂，可用水稀释，并在常温下成膜。",
+      en: "Suitable for spraying or brushing, dilutable with water and able to form a film at room temperature.",
     },
-    href: "",
-  },
-  {
-    id: "video-1",
-    type: "MP4",
-    filename: "THERMA CLEAR V4 1.mp4",
-    title: { zh: "产品演示视频 02", en: "Product demonstration 02" },
-    description: {
-      zh: "预留补充演示视频位置",
-      en: "Reserved for an additional demonstration",
-    },
-    href: "",
+    source: [4, 6],
   },
 ];
+export const metrics = [
+  {
+    value: ">80%",
+    label: { zh: "透光率", en: "Light transmittance" },
+    source: 3,
+  },
+  { value: "120×", label: { zh: "膨胀倍率", en: "Intumescence" }, source: 3 },
+  { value: "6H", label: { zh: "表面硬度", en: "Surface hardness" }, source: 4 },
+  { value: ">1.25 MPa", label: { zh: "附着力", en: "Adhesion" }, source: 4 },
+];
+export const technicalData = [
+  {
+    label: { zh: "透光率", en: "Light transmittance" },
+    value: ">80%",
+    condition: { zh: "透明涂层", en: "Transparent coating" },
+    source: 3,
+  },
+  {
+    label: { zh: "膨胀倍率", en: "Intumescence" },
+    value: "120×",
+    condition: {
+      zh: "遇火膨胀成炭",
+      en: "Expansion and char formation on fire exposure",
+    },
+    source: 3,
+  },
+  {
+    label: { zh: "表面硬度", en: "Surface hardness" },
+    value: "6H",
+    condition: { zh: "涂层表面", en: "Coating surface" },
+    source: 4,
+  },
+  {
+    label: { zh: "附着力", en: "Adhesion" },
+    value: ">1.25 MPa",
+    condition: {
+      zh: "资料所述涂层附着力",
+      en: "Adhesion stated in the product material",
+    },
+    source: 4,
+  },
+  {
+    label: {
+      zh: "木材防火与隔热保护",
+      en: "Fire and thermal protection for wood",
+    },
+    value: ">2 h",
+    condition: { zh: "5mm 木材", en: "5 mm wood" },
+    source: 3,
+  },
+  {
+    label: {
+      zh: "纸板防火与隔热保护",
+      en: "Fire and thermal protection for cardboard",
+    },
+    value: ">1 h",
+    condition: { zh: "1mm 纸板", en: "1 mm cardboard" },
+    source: 3,
+  },
+];
+export const materials: Localized[] = [
+  { zh: "木材", en: "Wood" },
+  { zh: "玻璃", en: "Glass" },
+  { zh: "纸板", en: "Cardboard" },
+  { zh: "FRP 复合材料", en: "FRP composites" },
+];
+export const applications = [
+  {
+    id: "architecture",
+    number: "01",
+    title: { zh: "建筑与历史保护", en: "Architecture & heritage" },
+    description: {
+      zh: "面向历史建筑与现代木结构，在防火保护的同时保留材料原有的纹理与外观。",
+      en: "For historical buildings and modern timber structures, combining fire protection with the original texture and appearance of the material.",
+    },
+    image: 2,
+    label: {
+      zh: "保留自然纹理与建筑美感",
+      en: "Preserve texture and architectural character",
+    },
+  },
+  {
+    id: "packaging",
+    number: "02",
+    title: { zh: "包装与物流", en: "Packaging & logistics" },
+    description: {
+      zh: "面向纸板等包装基材，形成不改变原有色彩的透明保护层。",
+      en: "A transparent protective layer for cardboard and other packaging substrates, retaining the original colour of the material.",
+    },
+    image: 5,
+    label: {
+      zh: "透明保护，延续材料本色",
+      en: "Transparent protection, original appearance",
+    },
+  },
+  {
+    id: "rail",
+    number: "03",
+    title: { zh: "轨道交通内饰", en: "Rail transit interiors" },
+    description: {
+      zh: "用于轨道交通内饰的材料表面，将透明外观、防火保护与耐用性相结合。",
+      en: "For material surfaces in rail transit interiors, bringing a transparent appearance, fire protection and durability together.",
+    },
+    image: 4,
+    label: {
+      zh: "兼顾外观、防护与耐用性",
+      en: "Appearance, protection and durability",
+    },
+  },
+];
+export const sourceSlides = [
+  {
+    id: 1,
+    image: "/images/therma-clear-1.webp",
+    title: {
+      zh: "Therma Clear · 透明防火材料",
+      en: "Therma Clear · Transparent Fireproof Material",
+    },
+    alt: {
+      zh: "Therma Clear 透明防火材料主视觉，展示木板与透明蜂窝状保护层",
+      en: "Therma Clear product visual showing a timber board and a transparent honeycomb protective layer",
+    },
+  },
+  {
+    id: 2,
+    image: "/images/therma-clear-2.webp",
+    title: { zh: "防火安全与材料美感", en: "Safety and aesthetics" },
+    alt: {
+      zh: "产品设计理念与传统木构建筑图片",
+      en: "Product design introduction alongside a traditional timber building",
+    },
+  },
+  {
+    id: 3,
+    image: "/images/therma-clear-3.webp",
+    title: {
+      zh: "透明屏障与防火机理",
+      en: "The transparent fire protection barrier",
+    },
+    alt: {
+      zh: "防火机理资料，含 20.7、86.7、153 摄氏度热成像及 0 秒、40 秒、10 分钟火焰演示画面",
+      en: "Fire protection material with thermal images labelled 20.7, 86.7 and 153 degrees Celsius and flame demonstrations at 0 seconds, 40 seconds and 10 minutes",
+    },
+  },
+  {
+    id: 4,
+    image: "/images/therma-clear-4.webp",
+    title: {
+      zh: "水性多功能保护体系",
+      en: "Water-based multifunctional protection",
+    },
+    alt: {
+      zh: "水性涂层资料，标注超过 2 小时防火保护、6H 硬度及大于 1.25 MPa 附着力",
+      en: "Water-based coating material describing over 2 hours of fire protection, 6H hardness and adhesion above 1.25 MPa",
+    },
+  },
+  {
+    id: 5,
+    image: "/images/therma-clear-5.webp",
+    title: {
+      zh: "多基材与透明外观",
+      en: "Multiple substrates, transparent appearance",
+    },
+    alt: {
+      zh: "木材、纸板与玻璃等材料的透明保护示意",
+      en: "Transparent protection illustrated on wood, cardboard and glass",
+    },
+  },
+  {
+    id: 6,
+    image: "/images/therma-clear-6.webp",
+    title: {
+      zh: "可持续的水性材料",
+      en: "A water-based approach to sustainability",
+    },
+    alt: {
+      zh: "木材表面的透明涂层，图中标注无毒、无卤、环保、常温成膜与防火特性",
+      en: "Transparent coating on timber, labelled non-toxic, halogen-free, eco-friendly, room-temperature curing and fireproof",
+    },
+  },
+];
+export const sourceNote = {
+  zh: "数据整理自所提供的产品图文资料；保护时间对应资料中标明的基材与厚度。",
+  en: "Figures are taken from the supplied product materials. Protection times refer to the substrates and thicknesses stated in those materials.",
+};

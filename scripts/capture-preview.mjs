@@ -15,48 +15,62 @@ const page = await context.newPage();
 const errors = [];
 page.on("pageerror", (error) => errors.push(error.message));
 const origin = "http://127.0.0.1:4173";
-const capture = async (route, name, fullPage = true) => {
+async function capture(route, name) {
   const response = await page.goto(origin + route);
-  if (!response.ok()) throw new Error(`Failed production route: ${route}`);
+  if (!response.ok()) throw new Error(`Failed ${route}`);
   await page.locator("h1").waitFor();
   await page.evaluate(async () => {
     await Promise.all(
-      [...document.images].map(async (img) => {
-        img.loading = "eager";
-        await img.decode();
+      [...document.images].map(async (image) => {
+        image.loading = "eager";
+        await image.decode();
       }),
     );
   });
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
   await page.screenshot({
-    path: new URL(name + ".png", output).pathname,
-    fullPage,
+    path: new URL(`acs-${name}.png`, output).pathname,
+    fullPage: true,
   });
-};
-await capture("/", "home-desktop");
-await page.screenshot({
-  path: new URL("preview-desktop.png", output).pathname,
-});
-for (const route of ["products", "technology", "applications", "contact"])
-  await capture("/" + route, route + "-desktop");
-await page.setViewportSize({ width: 390, height: 844 });
-await capture("/", "home-mobile");
-await page.screenshot({ path: new URL("preview-mobile.png", output).pathname });
-await page.evaluate(() => localStorage.setItem("fireproof-language", "en"));
-await page.setViewportSize({ width: 1440, height: 1000 });
-await capture("/", "home-english-desktop");
-await capture("/products?product=SF-120", "product-details-desktop");
-await page.getByRole("dialog").waitFor();
-await page.screenshot({
-  path: new URL("product-details-desktop.png", output).pathname,
-});
-const pdf = await context.request.get(origin + "/downloads/SF-120-en.pdf");
-if (
-  !pdf.ok() ||
-  !(await pdf.body()).subarray(0, 5).equals(Buffer.from("%PDF-"))
-)
-  throw new Error("Production PDF not valid");
-if (errors.length) throw new Error(errors.join("\n"));
-console.log(
-  "Production smoke check passed: all 5 routes, language switch, product dialog, images and PDF. Saved 10 preview screenshots.",
-);
-await browser.close();
+}
+try {
+  await capture("/", "home-desktop");
+  await page.screenshot({
+    path: new URL("acs-hero-desktop.png", output).pathname,
+  });
+  for (const route of ["products", "technology", "applications", "about"])
+    await capture("/" + route, route + "-desktop");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await capture("/", "home-mobile");
+  await page.screenshot({
+    path: new URL("acs-hero-mobile.png", output).pathname,
+  });
+  await capture("/about#contact", "contact-mobile");
+  await page.evaluate(() => localStorage.setItem("acs-language", "en"));
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await capture("/", "home-english");
+  await page.goto(origin + "/products");
+  await page
+    .locator(".source-gallery figure")
+    .nth(2)
+    .getByRole("button")
+    .click();
+  await page.getByRole("dialog").waitFor();
+  await page.screenshot({
+    path: new URL("acs-source-image-viewer.png", output).pathname,
+  });
+  const pdf = await context.request.get(
+    origin + "/downloads/Therma-Clear-en.pdf",
+  );
+  if (
+    !pdf.ok() ||
+    !(await pdf.body()).subarray(0, 5).equals(Buffer.from("%PDF-"))
+  )
+    throw new Error("Invalid product PDF");
+  if (errors.length) throw new Error(errors.join("\n"));
+  console.log(
+    "Production browser smoke checks passed; company previews saved with acs- prefix.",
+  );
+} finally {
+  await browser.close();
+}

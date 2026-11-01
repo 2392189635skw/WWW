@@ -1,7 +1,12 @@
-防火材料 / THERMA CLEAR 网站初稿
+卓界科技有限公司 / Advanced Composites Studio Limited
+Therma Clear 透明防火材料公司网站
 
-查看：在电脑上用 Chrome 或 Edge 打开 website-preview.html。
-修改：回到这次聊天，让助手先读 /workspace/WWW/docs/CONTINUE.md，再说明修改要求。
-离线预览不会自动更新，改完源代码后需重新生成。
-视频与真实产品资料尚未接入；表单只生成本地咨询单。
-请同时保留自己的原始 PPT、MP4 和电脑上已修复的预览文件。
+用电脑上的 Chrome 或 Edge 打开 website-preview.html。
+已包含中英文五页、六张产品图片、图片放大、产品摘要 PDF。
+电话、邮箱、地址按要求保留为空。
+源内容仅来自本次提供的六张产品图。旧示例产品与数据已删除。
+
+继续修改：回到这条聊天，请助手先读 /workspace/WWW/docs/CONTINUE.md。
+电脑上的旧 HTML 不会自动更新，需要使用新生成的文件。
+如果复制 HTML 文本，请确保最后出现 ACS_PREVIEW_COMPLETE，且没有遗漏长脚本。
+本文件是离线预览，未公开发布，不含购买、支付或发送表单。
