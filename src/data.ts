@@ -48,7 +48,11 @@ export const metrics = [
     label: { zh: "透光率", en: "Light transmittance" },
     source: 3,
   },
-  { value: "120×", label: { zh: "膨胀倍率", en: "Intumescence" }, source: 3 },
+  {
+    value: "120×",
+    label: { zh: "最大膨胀倍率", en: "Maximum expansion ratio" },
+    source: 3,
+  },
   { value: "6H", label: { zh: "表面硬度", en: "Surface hardness" }, source: 4 },
   { value: ">1.25 MPa", label: { zh: "附着力", en: "Adhesion" }, source: 4 },
 ];
@@ -60,7 +64,7 @@ export const technicalData = [
     source: 3,
   },
   {
-    label: { zh: "膨胀倍率", en: "Intumescence" },
+    label: { zh: "最大膨胀倍率", en: "Maximum expansion ratio" },
     value: "120×",
     condition: {
       zh: "遇火膨胀成炭",
