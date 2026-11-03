@@ -14,7 +14,7 @@
 
 1. 使用现有 `/workspace/WWW`，不创建 worktree（除非用户明确要求）。先读 `PROJECT_STATUS.md` 和 `CONTENT_SOURCES.md`，检查 Git 状态并保留已有修改。
 2. 当前公司名是**卓界科技有限公司 / Advanced Composites Studio Limited**。不再使用此前的“防火材料”临时品牌、虚构 SF/CF/WF 产品或旧下载资料。
-3. 只按六张产品图及其文字填写内容，用户要求精简。联系方式区域必须保留，电话、邮箱、地址目前为空，后续收到用户信息再补。
+3. 按六张产品图及用户后续明确补充填写内容，用户要求精简。联系方式区域必须保留，电话、邮箱、地址目前为空，后续收到用户信息再补。
 4. 产品信息和数字集中在 `src/data.ts`。页面为 `src/main.tsx`，样式为 `src/styles.css`。六张压缩 WebP 位于 `public/images/`，原始 PNG 位于 `/workspace/reference-materials/advanced-composites-studio/`。
 5. 依赖缺失：`npm ci --no-audit --no-fund --cache /workspace/.npm-cache`；开发：`npm run dev`（5173）；构建：`npm run build`；浏览器检查：`npm test`。先检查服务是否已启动，不终止未知进程。
 6. 修改产品数据后生成摘要：`node scripts/export-data.mjs | python3 scripts/generate-documents.py`，ReportLab 在此环境已有。不要把摘要称为检测报告。

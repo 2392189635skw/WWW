@@ -34,6 +34,7 @@ import {
   applications,
   company,
   features,
+  fireExposureResult,
   materials,
   metrics,
   sourceNote,
@@ -882,14 +883,10 @@ function Technology() {
             </p>
           </div>
           <SourceImage id={3} className="technical-plate" />
-          <div className="demonstration-labels">
+          <div className="exposure-result" id="exposure-result">
             <span>
-              {t("画面温度标注", "Temperature labels")}
-              <strong>20.7°C / 86.7°C / 153°C</strong>
-            </span>
-            <span>
-              {t("演示时间标注", "Time labels")}
-              <strong>0 s / 40 s / 10 min</strong>
+              {fireExposureResult.label[lang]}
+              <strong>{fireExposureResult.value[lang]}</strong>
             </span>
           </div>
         </div>

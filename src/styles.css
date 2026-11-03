@@ -936,19 +936,19 @@ tbody tr:last-child > * {
 .materials-plate > img {
   object-fit: contain;
 }
-.demonstration-labels {
+.exposure-result {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 30px;
   border-bottom: 1px solid var(--line);
   padding: 24px 0;
 }
-.demonstration-labels > span {
+.exposure-result > span {
   font-size: 10px;
   color: var(--muted);
   line-height: 1.8;
 }
-.demonstration-labels strong {
+.exposure-result strong {
   display: block;
   color: var(--ink);
   font-size: 19px;
@@ -2222,16 +2222,16 @@ tbody tr:last-child > * {
   .technical-plate {
     aspect-ratio: 16/9;
   }
-  .demonstration-labels {
+  .exposure-result {
     grid-template-columns: 1fr;
     gap: 22px;
     padding-block: 23px;
   }
-  .demonstration-labels strong {
+  .exposure-result strong {
     font-size: 19px;
     margin-top: 7px;
   }
-  .demonstration-labels > span {
+  .exposure-result > span {
     font-size: 10px;
   }
   .application-tabs {

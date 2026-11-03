@@ -93,9 +93,12 @@ test("technical figures keep the source substrate conditions and remove invented
     ">1.25 MPa",
   );
   await expect(page.locator(".source-note")).toContainText("基材与厚度");
-  await expect(page.locator(".demonstration-labels")).toContainText(
-    "20.7°C / 86.7°C / 153°C",
+  await expect(page.locator("#exposure-result")).toContainText(
+    "受火 2 小时后温度",
   );
+  await expect(page.locator("#exposure-result")).toContainText("约 150°C");
+  await expect(page.getByText("画面温度标注", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("演示时间标注", { exact: true })).toHaveCount(0);
   await expect(page.locator("body")).not.toContainText("SF-120");
   await expect(page.locator("body")).not.toContainText("资料待补充");
 });

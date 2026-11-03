@@ -231,3 +231,14 @@ export const sourceNote = {
   zh: "数据整理自所提供的产品图文资料；保护时间对应资料中标明的基材与厚度。",
   en: "Figures are taken from the supplied product materials. Protection times refer to the substrates and thicknesses stated in those materials.",
 };
+
+// Supplementary observation supplied by the user on 2026-11-03.
+// The measurement location and test conditions were not specified; do not infer them.
+export const fireExposureResult = {
+  label: {
+    zh: "受火 2 小时后温度",
+    en: "Temperature after 2 hours of fire exposure",
+  },
+  value: { zh: "约 150°C", en: "Approx. 150°C" },
+  source: "User-supplied supplementary information, 2026-11-03",
+};
