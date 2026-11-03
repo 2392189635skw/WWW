@@ -2526,6 +2526,176 @@ h2,
 h3 {
   text-wrap: balance;
 }
+.business-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+.business-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 36px;
+  border: 1px solid var(--line);
+  background: var(--soft);
+}
+.business-card:nth-child(2) {
+  background: #eef2eb;
+}
+.business-card h3 {
+  font-size: 28px;
+  line-height: 1.35;
+  margin-top: 24px;
+}
+.business-card > .small-label {
+  color: #52604f;
+}
+.business-subtitle {
+  color: var(--accent);
+  font-size: 12px;
+  line-height: 1.8;
+  margin-top: 12px;
+}
+.business-card p {
+  font-size: 13px;
+  color: var(--muted);
+  margin-block: 18px 24px;
+}
+.business-card .text-link {
+  margin-top: auto;
+  align-self: flex-start;
+}
+.consulting-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.consulting-card {
+  min-width: 0;
+  padding: 30px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.consulting-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--accent);
+  margin-bottom: 30px;
+}
+.consulting-card h3 {
+  font-size: 22px;
+  line-height: 1.5;
+}
+.consulting-card p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 16px;
+}
+.consulting-contact {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+}
+.consulting-contact > div {
+  max-width: 680px;
+}
+.consulting-contact h2 {
+  font-size: 34px;
+  line-height: 1.45;
+  margin-top: 24px;
+}
+.consulting-contact p {
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.consulting-contact .button {
+  flex-shrink: 0;
+}
+.footer-email {
+  display: inline-block;
+  color: #d5dfcf;
+  font-size: 13px;
+  margin-top: 16px;
+}
+.footer-email:hover,
+.contact-fields a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.contact-fields > div {
+  min-width: 0;
+}
+.contact-fields dd {
+  font-size: 18px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.contact-fields address {
+  font-style: normal;
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--ink);
+}
+@media (min-width: 641px) and (max-width: 1000px) {
+  .main-nav {
+    gap: 15px;
+  }
+  .header-inner {
+    gap: 16px;
+  }
+  .business-card {
+    padding: 27px;
+  }
+  .consulting-card {
+    padding: 23px;
+  }
+  .consulting-card h3 {
+    font-size: 19px;
+  }
+  .contact-fields {
+    grid-template-columns: 0.7fr 1fr 1.5fr;
+  }
+  .contact-fields > div {
+    padding: 24px 18px;
+  }
+  .contact-fields dd {
+    font-size: 15px;
+  }
+}
+@media (max-width: 640px) {
+  .business-grid,
+  .consulting-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .business-card,
+  .consulting-card {
+    padding: 26px;
+  }
+  .business-card h3 {
+    font-size: 25px;
+  }
+  .consulting-card h3 {
+    font-size: 21px;
+  }
+  .consulting-card-top {
+    margin-bottom: 22px;
+  }
+  .consulting-contact {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 27px;
+  }
+  .consulting-contact h2 {
+    font-size: 28px;
+  }
+  .footer-email {
+    font-size: 12px;
+  }
+}
 .menu-toggle.icon-button {
   display: none;
 }

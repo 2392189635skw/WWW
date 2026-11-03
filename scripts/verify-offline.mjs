@@ -33,16 +33,17 @@ try {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("http://offline-preview.test/");
-  await expect(page.locator("h1")).toContainText("透明防火");
+  await expect(page.locator("h1")).toContainText("防火涂层");
   await expect(page.locator(".brand").first()).toContainText(
     "卓界科技有限公司",
   );
   await page.getByRole("link", { name: "向下探索" }).click();
-  await expect(page.locator("#features")).toBeInViewport();
+  await expect(page.locator("#businesses")).toBeInViewport();
   await page.getByRole("link", { name: "返回顶部" }).click();
   await expect(page.locator("h1")).toBeInViewport();
   for (const [name, heading] of [
     ["产品介绍", "透明防火，兼顾材料美感。"],
+    ["工程咨询", "材料、结构与防火工程咨询。"],
     ["技术与性能", "透明屏障背后的防火机理。"],
     ["应用领域", "保留本色，延伸材料的可能。"],
     ["关于卓界", "卓界科技有限公司"],
@@ -53,8 +54,14 @@ try {
       .click();
     await expect(page.locator("h1")).toHaveText(heading);
   }
-  for (const field of await page.locator(".contact-fields dd").all())
-    await expect(field).toHaveText("");
+  await expect(page.locator('[data-contact="phone"] dd')).toBeEmpty();
+  await expect(page.locator('[data-contact="email"] a')).toHaveAttribute(
+    "href",
+    "mailto:info@acs-x.com",
+  );
+  await expect(page.locator('[data-contact="address"]')).toContainText(
+    "10楼E15室",
+  );
   await page
     .getByRole("navigation", { name: "主导航" })
     .getByRole("link", { name: "产品介绍", exact: true })
@@ -103,7 +110,7 @@ try {
   // Regression: truncation in trailing attribution must not reproduce the old blank page.
   served = html.slice(0, html.indexOf("<!-- THIRD-PARTY LICENCES") + 100);
   await page.goto("http://offline-preview.test/");
-  await expect(page.locator("h1")).toContainText("Protection,");
+  await expect(page.locator("h1")).toContainText("Coatings.");
   // A genuinely incomplete executable script still presents useful static content.
   served = html.slice(0, html.indexOf("<script>") + 100);
   await page.goto("http://offline-preview.test/");
@@ -111,7 +118,7 @@ try {
   await expect(page.locator("h1")).toHaveText("卓界科技有限公司");
   expect(errors).toEqual([]);
   console.log(
-    "Standalone company preview passed: five pages, six embedded images, image viewer, in-page technical data, language persistence, mobile navigation, empty contact fields and truncated-file regressions. Network disabled.",
+    "Standalone company preview passed: six pages, two business areas, six embedded images, image viewer, in-page technical data, language persistence, mobile navigation, company contact details with blank phone and truncated-file regressions. Network disabled.",
   );
 } finally {
   await browser.close();

@@ -16,13 +16,11 @@ import {
   ArrowRight,
   ArrowUpRight,
   Building2,
-  Check,
   Download,
   Expand,
   FileText,
   Globe2,
   Layers3,
-  Leaf,
   Menu,
   Package,
   ShieldCheck,
@@ -32,7 +30,10 @@ import {
 } from "lucide-react";
 import {
   applications,
+  businessAreas,
   company,
+  consultingServices,
+  contact,
   features,
   fireExposureResult,
   materials,
@@ -92,6 +93,7 @@ function LanguageProvider({ children }: { children: ReactNode }) {
 const navigation = [
   ["/", "首页", "Home"],
   ["/products", "产品介绍", "Product"],
+  ["/consulting", "工程咨询", "Consultancy"],
   ["/technology", "技术与性能", "Technology"],
   ["/applications", "应用领域", "Applications"],
   ["/about", "关于卓界", "Company"],
@@ -182,11 +184,10 @@ function Footer() {
       <div className="container footer-main">
         <div>
           <Logo />
-          <p>
-            {company.product}
-            <span> / </span>
-            {company.tagline[lang]}
-          </p>
+          <p>{company.businessTagline[lang]}</p>
+          <a className="footer-email" href={`mailto:${contact.email}`}>
+            {contact.email}
+          </a>
         </div>
         <nav aria-label={t("页脚导航", "Footer navigation")}>
           {navigation.slice(1).map(([path, zh, en]) => (
@@ -485,6 +486,51 @@ function PageIntro({
     </section>
   );
 }
+function BusinessCards() {
+  const { lang, t } = useLang();
+  return (
+    <div
+      className="business-grid"
+      aria-label={t("两项业务", "Our two business areas")}
+    >
+      {businessAreas.map((business) => (
+        <article className="business-card" key={business.id}>
+          <span className="small-label">
+            {t("业务", "BUSINESS")} / {business.number}
+          </span>
+          <h3>{business.title[lang]}</h3>
+          <span className="business-subtitle">{business.subtitle[lang]}</span>
+          <p>{business.description[lang]}</p>
+          <Link className="text-link" to={business.to}>
+            {business.linkLabel[lang]}
+            <ArrowUpRight size={18} />
+          </Link>
+        </article>
+      ))}
+    </div>
+  );
+}
+function ConsultingCards() {
+  const { lang } = useLang();
+  const icons = [Layers3, Building2, ShieldCheck];
+  return (
+    <div className="consulting-grid">
+      {consultingServices.map((service, index) => {
+        const Icon = icons[index];
+        return (
+          <article className="consulting-card" key={service.id}>
+            <div className="consulting-card-top">
+              <Icon size={30} strokeWidth={1.3} aria-hidden="true" />
+              <span className="small-label">0{index + 1}</span>
+            </div>
+            <h3>{service.title[lang]}</h3>
+            <p>{service.description[lang]}</p>
+          </article>
+        );
+      })}
+    </div>
+  );
+}
 function Home() {
   const { lang, t } = useLang();
   return (
@@ -493,27 +539,21 @@ function Home() {
         <div className="container hero-inner">
           <div className="hero-copy">
             <Eyebrow>
-              THERMA CLEAR /{" "}
-              {t("透明防火材料", "TRANSPARENT FIREPROOF MATERIAL")}
+              {t("卓界科技 / 产品与咨询", "ADVANCED COMPOSITES STUDIO")}
             </Eyebrow>
             <h1>
-              {t("透明防火，", "Protection,")}
+              {t("防火涂层，", "Coatings.")}
               <br />
-              <em>{t("保留材料本色。", "in plain sight.")}</em>
+              <em>{t("工程咨询。", "Consultancy.")}</em>
             </h1>
-            <p>
-              {t(
-                "让防火保护，与自然美感共存。\nTherma Clear 以透明涂层，守护材料原有的色彩与纹理。",
-                "Fire protection with a transparent finish.\nTherma Clear preserves the original colour and texture of the materials around us.",
-              )}
-            </p>
+            <p>{company.overview[lang]}</p>
             <div className="hero-actions">
               <Link className="button" to="/products">
-                {t("探索 Therma Clear", "Explore Therma Clear")}
+                {t("了解涂层产品", "Explore the coating")}
                 <ArrowUpRight size={18} />
               </Link>
-              <Link className="text-link" to="/technology">
-                {t("了解防火机理", "How it works")}
+              <Link className="text-link" to="/consulting">
+                {t("了解工程咨询", "Engineering consultancy")}
                 <ArrowRight size={17} />
               </Link>
             </div>
@@ -524,16 +564,27 @@ function Home() {
           <div className="hero-visual">
             <SourceImage id={1} className="subject-right" priority />
             <span className="visual-label">
-              MATERIAL / COATING / PROTECTION
+              THERMA CLEAR / TRANSPARENT FIRE PROTECTION
             </span>
           </div>
         </div>
         <div className="container hero-bottom">
-          <span>01 / THERMA CLEAR</span>
-          <a href="#features" onClick={handleSectionLink}>
+          <span>COATINGS / ENGINEERING CONSULTANCY</span>
+          <a href="#businesses" onClick={handleSectionLink}>
             {t("向下探索", "Discover more")}
             <ArrowDown size={14} />
           </a>
+        </div>
+      </section>
+      <section className="section" id="businesses">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <Eyebrow>{t("两项业务", "OUR BUSINESS")}</Eyebrow>
+              <h2>{t("产品与服务，清晰连接。", "Products and expertise.")}</h2>
+            </div>
+          </div>
+          <BusinessCards />
         </div>
       </section>
       <section className="metrics-section">
@@ -546,7 +597,9 @@ function Home() {
         <div className="container">
           <div className="section-heading">
             <div>
-              <Eyebrow>{t("核心特点", "THE ESSENTIALS")}</Eyebrow>
+              <Eyebrow>
+                THERMA CLEAR / {t("产品特点", "COATING FEATURES")}
+              </Eyebrow>
               <h2>
                 {t("防护融入表面，", "An invisible layer.")}
                 <br />
@@ -563,81 +616,28 @@ function Home() {
           <FeatureCards />
         </div>
       </section>
-      <section className="story-section">
-        <div className="container story-grid">
-          <SourceImage id={2} className="subject-architecture" />
-          <div className="story-copy">
-            <Eyebrow dark>
-              {t("材料与建筑", "MATERIALS & ARCHITECTURE")}
-            </Eyebrow>
-            <h2>
-              {t("让材料，", "Let materials")}
-              <br />
-              {t("保有自己的表达。", "keep their character.")}
-            </h2>
-            <p>
-              {t(
-                "从历史建筑到现代木结构，Therma Clear 以透明保护保留基材的自然纹理。遇火时，涂层迅速膨胀，形成隔热炭层。",
-                "From historical buildings to modern timber structures, Therma Clear preserves natural texture with transparent protection. On exposure to fire, the coating expands rapidly into an insulating char layer.",
-              )}
-            </p>
-            <Link className="text-link light" to="/applications">
-              {t("浏览应用领域", "Explore applications")}
-              <ArrowUpRight size={19} />
-            </Link>
-          </div>
-        </div>
-      </section>
-      <section className="section">
+      <section className="section soft-section">
         <div className="container">
           <div className="section-heading">
             <div>
-              <Eyebrow>{t("水性多功能保护", "WATER-BASED PROTECTION")}</Eyebrow>
-              <h2>
-                {t("从施工，到日常使用。", "From application to everyday use.")}
-              </h2>
+              <Eyebrow>{t("工程咨询", "ENGINEERING CONSULTANCY")}</Eyebrow>
+              <h2>{t("材料、结构与防火。", "Materials. Structures. Fire.")}</h2>
             </div>
-            <Link className="text-link" to="/products">
-              {t("了解产品", "Meet the coating")}
+            <Link className="text-link" to="/consulting">
+              {t("查看咨询服务", "Explore consultancy services")}
               <ArrowUpRight size={18} />
             </Link>
           </div>
-          <div className="water-grid">
-            <SourceImage id={6} className="subject-water" />
-            <div className="water-copy">
-              <span className="small-label">THERMA CLEAR</span>
-              <h3>
-                {t(
-                  "透明外观，水性成膜。",
-                  "Transparent finish. Water-based film.",
-                )}
-              </h3>
-              <p>
-                {t(
-                  "水性体系，可用水稀释，支持喷涂或刷涂，并在常温下成膜。无卤、无毒、环保的配方，将美感、防火与环境保护结合。",
-                  "A water-based system that can be diluted with water, applied by spraying or brushing, and cured at room temperature. The halogen-free, non-toxic and eco-friendly formulation brings aesthetics, fire protection and environmental considerations together.",
-                )}
-              </p>
-              <div className="tag-list">
-                {[
-                  t("无卤", "Halogen-free"),
-                  t("无毒", "Non-toxic"),
-                  t("常温成膜", "Room-temperature curing"),
-                ].map((tag) => (
-                  <span key={tag}>
-                    <Check size={13} />
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
+          <ConsultingCards />
         </div>
       </section>
       <NextSection
-        to="/technology"
-        eyebrow={t("技术与性能", "TECHNOLOGY & PERFORMANCE")}
-        title={t("看清透明保护背后的原理。", "Look closer at the protection.")}
+        to="/about#contact"
+        eyebrow={t("联系我们", "CONTACT US")}
+        title={t(
+          "咨询产品，或交流工程需求。",
+          "Let’s discuss your requirements.",
+        )}
       />
     </>
   );
@@ -1024,12 +1024,67 @@ function Applications() {
     </>
   );
 }
+function Consulting() {
+  const { t } = useLang();
+  return (
+    <>
+      <PageIntro
+        number="04"
+        eyebrow={t("工程咨询服务", "ENGINEERING CONSULTANCY")}
+        title={t("材料、结构与防火工程咨询。", "Engineering consultancy.")}
+        description={t(
+          "围绕材料工程、结构工程与防火工程的技术问题，提供咨询服务与技术支持。",
+          "Consultancy and technical support in materials engineering, structural engineering and fire engineering.",
+        )}
+      />
+      <section className="section">
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <Eyebrow>{t("咨询方向", "OUR FOCUS")}</Eyebrow>
+              <h2>
+                {t(
+                  "三个方向，回应工程需求。",
+                  "Three areas of engineering expertise.",
+                )}
+              </h2>
+            </div>
+          </div>
+          <ConsultingCards />
+        </div>
+      </section>
+      <section className="section soft-section">
+        <div className="container consulting-contact">
+          <div>
+            <Eyebrow>{t("交流需求", "GET IN TOUCH")}</Eyebrow>
+            <h2>
+              {t(
+                "从你的工程问题开始。",
+                "Start with your engineering question.",
+              )}
+            </h2>
+            <p>
+              {t(
+                "欢迎通过邮件介绍项目背景、关注的技术问题与咨询需求。",
+                "Email us with your project background, technical questions and consultancy requirements.",
+              )}
+            </p>
+          </div>
+          <a className="button" href={`mailto:${contact.email}`}>
+            {contact.email}
+            <ArrowUpRight size={18} />
+          </a>
+        </div>
+      </section>
+    </>
+  );
+}
 function About() {
   const { lang, t } = useLang();
   return (
     <>
       <PageIntro
-        number="04"
+        number="05"
         eyebrow={t("关于卓界", "THE COMPANY")}
         title={company.name[lang]}
         description={lang === "zh" ? company.englishName : company.name.zh}
@@ -1037,50 +1092,30 @@ function About() {
       <section className="section">
         <div className="container about-grid">
           <div className="about-copy">
-            <Eyebrow>THERMA CLEAR</Eyebrow>
+            <Eyebrow>{t("我们的业务", "OUR BUSINESS")}</Eyebrow>
             <h2>
-              {t("将防火安全，", "Bringing fire protection")}
+              {t("涂层产品，", "Coating products.")}
               <br />
-              {t("融入材料美感。", "and aesthetics together.")}
+              {t("工程咨询。", "Engineering consultancy.")}
             </h2>
-            <p>
-              {t(
-                "Therma Clear 的设计源于建筑、包装与轨道交通领域对美感和防火保护的共同需求。透明保护层保留材料原有的外观，遇火后膨胀成炭，兼顾视觉表达与防护功能。",
-                "Therma Clear was designed around the shared need for aesthetics and fire protection in architecture, packaging and rail transit. A transparent layer preserves the original appearance and expands into char on fire exposure, bringing visual expression and protection together.",
-              )}
-            </p>
-            <Link to="/products" className="button">
-              {t("了解 Therma Clear", "Discover Therma Clear")}
+            <p>{company.overview[lang]}</p>
+            <Link to="/about#contact" className="button">
+              {t("联系我们", "Contact us")}
               <ArrowUpRight size={18} />
             </Link>
           </div>
-          <SourceImage id={2} className="subject-architecture" />
+          <SourceImage id={1} className="product-cover" />
         </div>
       </section>
       <section className="section soft-section">
-        <div className="container sustainability-grid">
-          <div>
-            <Eyebrow>
-              {t(
-                "水性材料与可持续发展",
-                "WATER-BASED MATERIALS & SUSTAINABILITY",
-              )}
-            </Eyebrow>
-            <h2>
-              {t("保护材料，", "Protect the material.")}
-              <br />
-              {t("也珍惜资源。", "Respect the resource.")}
-            </h2>
+        <div className="container">
+          <div className="section-heading">
+            <div>
+              <Eyebrow>{t("产品与服务", "PRODUCTS & SERVICES")}</Eyebrow>
+              <h2>{company.businessTagline[lang]}</h2>
+            </div>
           </div>
-          <div>
-            <Leaf size={30} strokeWidth={1.3} />
-            <p>
-              {t(
-                "水性、无卤、无毒的透明涂层，可在常温下成膜。通过保护基材、减少材料更换与浪费，支持绿色建筑、可持续物流与低碳生产。",
-                "A water-based, halogen-free, non-toxic transparent coating that forms a film at room temperature. Protecting substrates and reducing material replacement and waste supports green building, sustainable logistics and low-carbon production.",
-              )}
-            </p>
-          </div>
+          <BusinessCards />
         </div>
       </section>
       <section className="section contact-section" id="contact">
@@ -1092,14 +1127,22 @@ function About() {
             </div>
           </div>
           <dl className="contact-fields">
-            {[t("电话", "Phone"), t("邮箱", "Email"), t("地址", "Address")].map(
-              (label) => (
-                <div key={label}>
-                  <dt>{label}</dt>
-                  <dd title={t("尚未填写", "Not provided")} />
-                </div>
-              ),
-            )}
+            <div data-contact="phone">
+              <dt>{t("电话", "Phone")}</dt>
+              <dd title={t("尚未填写", "Not provided")}>{contact.phone}</dd>
+            </div>
+            <div data-contact="email">
+              <dt>{t("邮箱", "Email")}</dt>
+              <dd>
+                <a href={`mailto:${contact.email}`}>{contact.email}</a>
+              </dd>
+            </div>
+            <div data-contact="address">
+              <dt>{t("地址", "Address")}</dt>
+              <dd>
+                <address>{contact.address[lang]}</address>
+              </dd>
+            </div>
           </dl>
         </div>
       </section>
@@ -1109,7 +1152,7 @@ function About() {
             ADVANCED COMPOSITES STUDIO LIMITED
           </span>
           <strong>{company.name.zh}</strong>
-          <span>Therma Clear · {company.tagline[lang]}</span>
+          <span>{company.businessTagline[lang]}</span>
         </div>
       </section>
     </>
@@ -1149,8 +1192,8 @@ function App() {
       ?.setAttribute(
         "content",
         t(
-          "卓界科技有限公司 Therma Clear 透明防火材料，介绍透明膨胀型防火体系、水性施工、技术性能与应用领域。",
-          "Advanced Composites Studio Limited presents Therma Clear: transparent intumescent fire protection, water-based application, technical performance and application areas.",
+          "卓界科技有限公司提供 Therma Clear 透明防火涂层产品，以及材料工程、结构工程和防火工程咨询服务。",
+          "Advanced Composites Studio Limited supplies Therma Clear transparent fire protection coatings and consultancy in materials engineering, structural engineering and fire engineering.",
         ),
       );
   }, [lang, location.pathname, t]);
@@ -1164,6 +1207,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/consulting" element={<Consulting />} />
           <Route path="/technology" element={<Technology />} />
           <Route path="/applications" element={<Applications />} />
           <Route path="/about" element={<About />} />

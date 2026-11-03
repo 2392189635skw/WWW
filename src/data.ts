@@ -5,9 +5,85 @@ export const company = {
   englishName: "Advanced Composites Studio Limited",
   product: "Therma Clear",
   tagline: { zh: "透明防火材料", en: "Transparent Fireproof Material" },
+  businessTagline: {
+    zh: "涂层产品与工程咨询",
+    en: "Coating Products & Engineering Consultancy",
+  },
+  overview: {
+    zh: "卓界科技有限公司开展两项业务：Therma Clear 透明防火涂层产品销售，以及材料工程、结构工程和防火工程咨询服务。",
+    en: "Advanced Composites Studio Limited has two business areas: the sale of Therma Clear transparent fire protection coatings, and consultancy in materials engineering, structural engineering and fire engineering.",
+  },
   introduction: {
     zh: "Therma Clear 将透明外观与防火保护相结合，形成保留基材色彩与纹理的保护层。遇火后，涂层迅速膨胀并形成隔热炭层。",
     en: "Therma Clear brings a transparent finish and fire protection together, preserving the colour and texture of the substrate. On exposure to fire, the coating rapidly expands to form an insulating char layer.",
+  },
+};
+export const businessAreas = [
+  {
+    id: "coatings",
+    number: "01",
+    title: { zh: "涂层产品销售", en: "Coating Products" },
+    subtitle: {
+      zh: "Therma Clear 透明防火涂层",
+      en: "Therma Clear transparent fire protection",
+    },
+    description: {
+      zh: "销售 Therma Clear 透明防火涂层，在保留基材色彩与纹理的同时提供防火保护。",
+      en: "Therma Clear transparent fire protection coatings preserve the colour and texture of the substrate while providing fire protection.",
+    },
+    to: "/products",
+    linkLabel: { zh: "了解涂层产品", en: "Explore the coating" },
+  },
+  {
+    id: "consulting",
+    number: "02",
+    title: { zh: "工程咨询服务", en: "Engineering Consultancy" },
+    subtitle: {
+      zh: "材料工程 · 结构工程 · 防火工程",
+      en: "Materials · Structures · Fire engineering",
+    },
+    description: {
+      zh: "围绕材料、结构与防火领域的工程技术问题，提供咨询服务与技术支持。",
+      en: "Consultancy and technical support for engineering questions relating to materials, structures and fire protection.",
+    },
+    to: "/consulting",
+    linkLabel: { zh: "了解工程咨询", en: "Explore our consultancy" },
+  },
+];
+export const consultingServices = [
+  {
+    id: "materials",
+    title: { zh: "材料工程咨询", en: "Materials Engineering" },
+    description: {
+      zh: "提供材料选用、性能与应用方面的工程技术咨询。",
+      en: "Technical consultancy on material selection, performance and application.",
+    },
+  },
+  {
+    id: "structures",
+    title: { zh: "结构工程咨询", en: "Structural Engineering" },
+    description: {
+      zh: "围绕结构方案与相关工程技术问题，提供咨询支持。",
+      en: "Consultancy on structural approaches and related engineering questions.",
+    },
+  },
+  {
+    id: "fire",
+    title: { zh: "防火工程咨询", en: "Fire Engineering" },
+    description: {
+      zh: "提供防火方案与材料防火应用方面的工程技术咨询。",
+      en: "Technical consultancy on fire protection approaches and the application of fire protection materials.",
+    },
+  },
+];
+// Contact details supplied directly by the user; the building name is retained
+// from the business registration certificate rather than guessing a translation.
+export const contact = {
+  email: "info@acs-x.com",
+  phone: "",
+  address: {
+    zh: "香港九龙新蒲岗大有街2–4号 Wong King Industrial Building 10楼E15室",
+    en: "Flat E15, 10/F, Wong King Industrial Building, 2–4 Tai Yau Street, San Po Kong, Kowloon, Hong Kong",
   },
 };
 export const features = [

@@ -38,7 +38,13 @@ try {
   await page.screenshot({
     path: new URL("acs-hero-desktop.png", output).pathname,
   });
-  for (const route of ["products", "technology", "applications", "about"])
+  for (const route of [
+    "products",
+    "consulting",
+    "technology",
+    "applications",
+    "about",
+  ])
     await capture("/" + route, route + "-desktop");
   await page.setViewportSize({ width: 390, height: 844 });
   await capture("/", "home-mobile");
@@ -46,6 +52,7 @@ try {
     path: new URL("acs-hero-mobile.png", output).pathname,
   });
   await capture("/about#contact", "contact-mobile");
+  await capture("/consulting", "consulting-mobile");
   await page.evaluate(() => localStorage.setItem("acs-language", "en"));
   await page.setViewportSize({ width: 1440, height: 1000 });
   await capture("/", "home-english");

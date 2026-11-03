@@ -1,6 +1,13 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-const routes = ["/", "/products", "/technology", "/applications", "/about"];
+const routes = [
+  "/",
+  "/products",
+  "/consulting",
+  "/technology",
+  "/applications",
+  "/about",
+];
 for (const locale of ["zh", "en"]) {
   for (const route of routes) {
     test(`${locale} ${route}: company page renders with real images and accessible controls`, async ({
@@ -58,7 +65,7 @@ test("company naming and bilingual navigation persist across reload", async ({
     "Advanced Composites Studio Limited",
   );
   await page.getByRole("button", { name: "Switch to English" }).click();
-  await expect(page.locator("h1")).toContainText("Protection,");
+  await expect(page.locator("h1")).toContainText("Coatings.");
   await page
     .getByRole("navigation", { name: "Main navigation" })
     .getByRole("link", { name: "Company", exact: true })
@@ -155,7 +162,7 @@ test("application tabs follow architecture, packaging and rail content with keyb
     "true",
   );
 });
-test("contact information remains intentionally empty without fake details or a form", async ({
+test("contact uses the supplied company email and registered address while phone stays blank", async ({
   page,
 }) => {
   await page.goto("/contact");
@@ -166,13 +173,62 @@ test("contact information remains intentionally empty without fake details or a 
     "邮箱",
     "地址",
   ]);
-  for (const field of await page.locator(".contact-fields dd").all())
-    await expect(field).toHaveText("");
-  await expect(page.locator("form")).toHaveCount(0);
-  await expect(page.locator('a[href^="mailto:"],a[href^="tel:"]')).toHaveCount(
-    0,
+  await expect(page.locator('[data-contact="phone"] dd')).toBeEmpty();
+  await expect(page.locator('[data-contact="email"] a')).toHaveAttribute(
+    "href",
+    "mailto:info@acs-x.com",
   );
+  await expect(page.locator('[data-contact="email"] a')).toHaveText(
+    "info@acs-x.com",
+  );
+  await expect(page.locator('[data-contact="address"] address')).toHaveText(
+    "香港九龙新蒲岗大有街2–4号 Wong King Industrial Building 10楼E15室",
+  );
+  await page.getByRole("button", { name: "Switch to English" }).click();
+  await expect(page.locator('[data-contact="address"] address')).toHaveText(
+    "Flat E15, 10/F, Wong King Industrial Building, 2–4 Tai Yau Street, San Po Kong, Kowloon, Hong Kong",
+  );
+  await expect(page.locator('[data-contact="phone"] dd')).toBeEmpty();
+  await expect(page.locator("form")).toHaveCount(0);
+  await expect(page.locator('a[href^="tel:"]')).toHaveCount(0);
   await expect(page.locator("body")).not.toContainText(".example");
+});
+test("both business entrances work and engineering consultancy leads to the company contact", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const businesses = page.locator("#businesses");
+  await expect(businesses.locator("article")).toHaveCount(2);
+  await businesses
+    .getByRole("link", { name: "了解涂层产品", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/products$/);
+  await page.goBack();
+  await businesses
+    .getByRole("link", { name: "了解工程咨询", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/consulting$/);
+  await page.reload();
+  await expect(page.locator(".consulting-card h3")).toHaveText([
+    "材料工程咨询",
+    "结构工程咨询",
+    "防火工程咨询",
+  ]);
+  await expect(
+    page.locator("main").getByRole("link", { name: "info@acs-x.com" }),
+  ).toHaveAttribute("href", "mailto:info@acs-x.com");
+  await page.getByRole("button", { name: "Switch to English" }).click();
+  await expect(page.locator(".consulting-card h3")).toHaveText([
+    "Materials Engineering",
+    "Structural Engineering",
+    "Fire Engineering",
+  ]);
+  await page
+    .getByRole("contentinfo")
+    .getByRole("link", { name: "Contact", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/about#contact$/);
+  await expect(page.locator('[data-contact="email"]')).toBeInViewport();
 });
 test("PDF summaries remain valid and the product link opens in-page technical data", async ({
   page,

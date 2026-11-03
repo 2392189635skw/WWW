@@ -14,8 +14,8 @@
 
 1. 使用现有 `/workspace/WWW`，不创建 worktree（除非用户明确要求）。先读 `PROJECT_STATUS.md` 和 `CONTENT_SOURCES.md`，检查 Git 状态并保留已有修改。
 2. 当前公司名是**卓界科技有限公司 / Advanced Composites Studio Limited**。不再使用此前的“防火材料”临时品牌、虚构 SF/CF/WF 产品或旧下载资料。
-3. 按六张产品图及用户后续明确补充填写内容，用户要求精简。联系方式区域必须保留，电话、邮箱、地址目前为空，后续收到用户信息再补。
-4. 产品信息和数字集中在 `src/data.ts`。页面为 `src/main.tsx`，样式为 `src/styles.css`。六张压缩 WebP 位于 `public/images/`，原始 PNG 位于 `/workspace/reference-materials/advanced-composites-studio/`。
+3. 网站现有两项业务：Therma Clear 涂层产品销售；材料工程、结构工程和防火工程咨询。产品依据六张图及用户后续补充，咨询方向由用户明确提供，文案精简，不虚构资质或案例。联系邮箱为 `info@acs-x.com`，地址按用户登记证整理：Flat E15, 10/F, Wong King Industrial Building, 2–4 Tai Yau Street, San Po Kong, Kowloon, Hong Kong。电话继续留空，不推断区号或号码。
+4. 产品、咨询、联系信息与数字集中在 `src/data.ts`。页面为 `src/main.tsx`，新增咨询路径 `/consulting`，联系方式在 `/about#contact`。样式为 `src/styles.css`。六张压缩 WebP 位于 `public/images/`，原始 PNG 位于 `/workspace/reference-materials/advanced-composites-studio/`。
 5. 依赖缺失：`npm ci --no-audit --no-fund --cache /workspace/.npm-cache`；开发：`npm run dev`（5173）；构建：`npm run build`；浏览器检查：`npm test`。先检查服务是否已启动，不终止未知进程。
 6. 修改产品数据后生成摘要：`node scripts/export-data.mjs | python3 scripts/generate-documents.py`，ReportLab 在此环境已有。不要把摘要称为检测报告。
 7. 离线预览：`node scripts/build-offline.mjs`，然后 `node scripts/verify-offline.mjs`。通过后将 `artifacts/acs-website-preview.html` 同步到 `deliverables/website-preview.html`。生成文件末尾有 `<!-- ACS_PREVIEW_COMPLETE -->`。
@@ -23,6 +23,6 @@
 9. 本环境禁止 Chromium 直接访问 file://。离线测试使用断网夹具加载相同 HTML，不声称已验证 Windows 文件协议。上次白屏源于复制 HTML 时末尾截断，现已把许可证注释放在脚本关闭之后，并增加静态载入提示。
 10. 用户无编程基础，中文解释、尽量自动处理。保留双语和移动适配。用户在 2026-11-03 回复“允许”，已授权将当前最新版源码上传到 `2392189635skw/WWW` 并公开上线；这份授权覆盖当前部署流程，不重复索取确认。购买和付费仍需另行确认。本地修改、检查、保存可继续。
 11. 当前环境保存和本地归档不保证永久留存；源码已推送到 GitHub `main`，远程哈希已核对。未验证新任务恢复。若新任务缺源码，先从该仓库恢复，不要重建一个空项目覆盖旧稿。原始 PNG、原始 ZIP 不在仓库内，需单独保留。
-12. Cloudflare 部署按 `CLOUDFLARE_DEPLOYMENT.md`。用户当前选中 Workers Git 部署，项目名 `www`，构建 `npm run build`，部署 `npx wrangler deploy`。Cloudflare 控制台登录和 API 凭据未连接至当前工作区，不能代点击或声称已上线；需要用户在原表单点击部署并提供结果地址，随后继续线上检查和域名配置。若已启用自动部署，源码推送也可能触发构建。
+12. Cloudflare 部署按 `CLOUDFLARE_DEPLOYMENT.md`。Workers Git 部署，项目名 `www`，构建 `npm run build`，部署 `npx wrangler deploy`。用户已报告完成部署，域名 `acs-x.com`。当前环境代理拦截此域名，Cloudflare 控制台登录和 API 凭据也未连接；可以推送授权更新以触发已启用的 Git 自动构建，但不能把推送成功说成线上构建成功。若需用户参与，应指导查看现有项目的部署结果，无需重新创建项目。
 
 当前页面不再提供 PDF 下载按钮。用户反馈手机微信点击无反馈后，已移除技术页按钮；产品页保留“查看技术参数”，跳到 /technology#technical-data。正式资料将来提供后再按用户需求恢复下载入口。
