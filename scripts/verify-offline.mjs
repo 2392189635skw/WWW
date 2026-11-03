@@ -79,11 +79,10 @@ try {
     "水性多功能",
   );
   await page.getByRole("button", { name: "关闭图片" }).click();
-  const pending = page.waitForEvent("download");
-  await page.getByRole("link", { name: "下载产品资料" }).click();
-  const doc = await pending;
-  expect(doc.suggestedFilename()).toBe("Therma-Clear-zh.pdf");
-  expect(await doc.failure()).toBeNull();
+  await expect(page.getByRole("link", { name: "下载产品资料" })).toHaveCount(0);
+  await page.getByRole("link", { name: "查看技术参数", exact: true }).click();
+  await expect(page.locator("#technical-data")).toBeInViewport();
+  await expect(page.getByRole("link", { name: "下载产品资料" })).toHaveCount(0);
   await page.getByRole("button", { name: "Switch to English" }).click();
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
@@ -112,7 +111,7 @@ try {
   await expect(page.locator("h1")).toHaveText("卓界科技有限公司");
   expect(errors).toEqual([]);
   console.log(
-    "Standalone company preview passed: five pages, six embedded images, image viewer, PDF, language persistence, mobile navigation, empty contact fields and truncated-file regressions. Network disabled.",
+    "Standalone company preview passed: five pages, six embedded images, image viewer, in-page technical data, language persistence, mobile navigation, empty contact fields and truncated-file regressions. Network disabled.",
   );
 } finally {
   await browser.close();

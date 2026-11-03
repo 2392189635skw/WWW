@@ -403,18 +403,14 @@ function FeatureCards() {
     </div>
   );
 }
-function DownloadLink({ compact = false }: { compact?: boolean }) {
-  const { lang, t } = useLang();
+function ProductInfoLink() {
+  const { t } = useLang();
   return (
-    <a
-      className={compact ? "text-link" : "button outline"}
-      href={`/downloads/Therma-Clear-${lang}.pdf`}
-      download
-    >
+    <Link className="button outline" to="/technology#technical-data">
       <FileText size={16} />
-      {t("下载产品资料", "Download product summary")}
-      <Download size={16} />
-    </a>
+      {t("查看技术参数", "View technical data")}
+      <ArrowUpRight size={16} />
+    </Link>
   );
 }
 function Gallery({ ids = [1, 2, 3, 4, 5, 6] }: { ids?: number[] }) {
@@ -676,7 +672,7 @@ function Products() {
                 <span key={material.en}>{material[lang]}</span>
               ))}
             </div>
-            <DownloadLink />
+            <ProductInfoLink />
           </div>
           <SourceImage id={1} className="product-cover" />
         </div>
@@ -829,9 +825,9 @@ function Technology() {
               </Eyebrow>
               <h2>{t("关键性能一览", "The key figures.")}</h2>
             </div>
-            <DownloadLink />
           </div>
           <div
+            id="technical-data"
             className="table-scroll"
             tabIndex={0}
             role="region"

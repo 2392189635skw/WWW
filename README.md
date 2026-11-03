@@ -7,7 +7,7 @@ Therma Clear 透明防火材料公司网站。中英一键切换，适配电脑�
 ## 当前页面
 
 - 首页：透明防火主视觉、四项关键数据、三项产品特点、建筑和水性材料展示。
-- 产品：Therma Clear、适用基材、水性施工、六张完整图文、资料摘要下载。
+- 产品：Therma Clear、适用基材、水性施工、六张完整图文、网页内技术参数入口。
 - 技术：膨胀成炭机理、六项指标与基材条件、真实图文中的演示画面。
 - 应用：建筑与历史保护、包装与物流、轨道交通内饰；木材、玻璃、纸板及 FRP。
 - 公司：中英文公司名称、产品设计方向、水性材料与可持续发展。
@@ -59,7 +59,7 @@ node scripts/build-offline.mjs
 node scripts/verify-offline.mjs
 ```
 
-验证后将 `artifacts/acs-website-preview.html` 保存为 `deliverables/website-preview.html`。用电脑浏览器打开即可查看与分享，文件已嵌入图片、PDF 和程序。旧文件不会自动跟随代码修改。
+验证后将 `artifacts/acs-website-preview.html` 保存为 `deliverables/website-preview.html`。用电脑浏览器打开即可查看与分享，文件已嵌入图片与程序；页面内直接查看技术参数，不依赖手机浏览器处理 PDF 下载。旧文件不会自动跟随代码修改。
 
 当前云浏览器的测试夹具会禁用网络验证离线内容；系统禁止直接 file://，因此不把夹具测试说成本机 Windows 文件协议测试。导出末尾标记 `ACS_PREVIEW_COMPLETE` 有助于判断是否完整复制。
 

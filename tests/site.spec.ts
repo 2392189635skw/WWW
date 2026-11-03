@@ -171,7 +171,7 @@ test("contact information remains intentionally empty without fake details or a 
   );
   await expect(page.locator("body")).not.toContainText(".example");
 });
-test("downloaded summaries are actual PDFs in both languages", async ({
+test("PDF summaries remain valid and the product link opens in-page technical data", async ({
   page,
   request,
 }) => {
@@ -184,10 +184,25 @@ test("downloaded summaries are actual PDFs in both languages", async ({
     expect(buffer.toString()).toContain("Advanced Composites Studio Limited");
     expect(buffer.length).toBeGreaterThan(2000);
   }
-  await page.goto("/technology");
-  const pending = page.waitForEvent("download");
-  await page.getByRole("link", { name: "下载产品资料" }).click();
-  expect((await pending).suggestedFilename()).toBe("Therma-Clear-zh.pdf");
+  await page.goto("/products");
+  await expect(page.getByRole("link", { name: "下载产品资料" })).toHaveCount(0);
+  await page.getByRole("link", { name: "查看技术参数", exact: true }).click();
+  await expect(page).toHaveURL(/technology#technical-data$/);
+  await expect(page.locator("#technical-data")).toBeInViewport();
+  await expect(page.getByRole("link", { name: "下载产品资料" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Switch to English" }).click();
+  await expect(
+    page.getByRole("link", { name: "Download product summary" }),
+  ).toHaveCount(0);
+  await page
+    .getByRole("navigation", { name: "Main navigation" })
+    .getByRole("link", { name: "Product", exact: true })
+    .click();
+  await page
+    .getByRole("link", { name: "View technical data", exact: true })
+    .click();
+  await expect(page).toHaveURL(/technology#technical-data$/);
+  await expect(page.locator("#technical-data")).toBeInViewport();
 });
 for (const width of [320, 390, 768, 1440]) {
   test(`responsive at ${width}px in both languages without page overflow`, async ({
