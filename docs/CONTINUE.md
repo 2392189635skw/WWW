@@ -8,7 +8,7 @@
 
 > 继续修改卓界科技有限公司 / Therma Clear 网站，请先读 /workspace/WWW/docs/CONTINUE.md。这次想修改：……
 
-电脑上旧的 HTML 不会自动更新，修改后需要重新生成预览。源码、产品原图和你电脑上的完整预览都应保留；环境没有公开发布或推送 GitHub。
+电脑上旧的 HTML 不会自动更新，修改后需要重新生成预览。源码已在用户授权后同步到 GitHub `2392189635skw/WWW` 的 `main` 分支，可从该仓库恢复；产品原图和你电脑上的完整预览也应保留。Cloudflare 线上部署尚未确认成功。
 
 ## 给接手的助手
 
@@ -21,8 +21,8 @@
 7. 离线预览：`node scripts/build-offline.mjs`，然后 `node scripts/verify-offline.mjs`。通过后将 `artifacts/acs-website-preview.html` 同步到 `deliverables/website-preview.html`。生成文件末尾有 `<!-- ACS_PREVIEW_COMPLETE -->`。
 8. 正式预览：`npm run preview`（4173）；`node scripts/capture-preview.mjs` 保存 acs- 前缀截图。不要给用户 localhost 链接；此产品的文件“另存为”此前报“无法下载构件”，不能把文件链接当成已成功下载。
 9. 本环境禁止 Chromium 直接访问 file://。离线测试使用断网夹具加载相同 HTML，不声称已验证 Windows 文件协议。上次白屏源于复制 HTML 时末尾截断，现已把许可证注释放在脚本关闭之后，并增加静态载入提示。
-10. 用户无编程基础，中文解释、尽量自动处理。保留双语和移动适配。购买、付费、公开发布或推送可能公开的源码前必须先获得确认；本地修改、检查、保存可继续。
-11. 当前环境保存和本地归档不保证永久留存；未推送 GitHub，未验证跨任务恢复。若新任务缺源码，不要重建一个空项目覆盖旧稿。
-12. Cloudflare 部署按 `CLOUDFLARE_DEPLOYMENT.md`。用户当前选中 Workers Git 部署，配置已本地准备，项目名 `www`，构建 `npm run build`，部署 `npx wrangler deploy`。2026-11-03 只读检查远程没有任何分支；未推送、未公开部署。先取得明确确认再同步源码，推送可能触发自动上线。
+10. 用户无编程基础，中文解释、尽量自动处理。保留双语和移动适配。用户在 2026-11-03 回复“允许”，已授权将当前最新版源码上传到 `2392189635skw/WWW` 并公开上线；这份授权覆盖当前部署流程，不重复索取确认。购买和付费仍需另行确认。本地修改、检查、保存可继续。
+11. 当前环境保存和本地归档不保证永久留存；源码已推送到 GitHub `main`，远程哈希已核对。未验证新任务恢复。若新任务缺源码，先从该仓库恢复，不要重建一个空项目覆盖旧稿。原始 PNG、原始 ZIP 不在仓库内，需单独保留。
+12. Cloudflare 部署按 `CLOUDFLARE_DEPLOYMENT.md`。用户当前选中 Workers Git 部署，项目名 `www`，构建 `npm run build`，部署 `npx wrangler deploy`。Cloudflare 控制台登录和 API 凭据未连接至当前工作区，不能代点击或声称已上线；需要用户在原表单点击部署并提供结果地址，随后继续线上检查和域名配置。若已启用自动部署，源码推送也可能触发构建。
 
 当前页面不再提供 PDF 下载按钮。用户反馈手机微信点击无反馈后，已移除技术页按钮；产品页保留“查看技术参数”，跳到 /technology#technical-data。正式资料将来提供后再按用户需求恢复下载入口。
