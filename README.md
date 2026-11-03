@@ -32,7 +32,7 @@ npm run preview
 node scripts/capture-preview.mjs
 ```
 
-开发端口 5173、正式预览端口 4173。`dist/` 是静态构建，SPA 服务器需将页面地址回退到 `index.html`；`public/_redirects` 为支持该格式的平台提供配置。当前保留 noindex，未公开发布。
+开发端口 5173、正式预览端口 4173。`dist/` 是静态构建，SPA 服务器需将页面地址回退到 `index.html`。Cloudflare Workers 的静态资源与页面回退已在 `wrangler.jsonc` 配置，填写方法见 [Cloudflare 部署说明](docs/CLOUDFLARE_DEPLOYMENT.md)。当前保留 noindex，未公开发布。
 
 ## 修改的位置
 

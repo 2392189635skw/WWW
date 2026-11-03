@@ -25,7 +25,8 @@
     "@vitejs/plugin-react": "^4.3.4",
     "prettier": "^3.9.10",
     "typescript": "~5.7.2",
-    "vite": "^6.0.5"
+    "vite": "^6.0.5",
+    "wrangler": "^4.156.2"
   },
   "engines": {
     "node": ">=22.12.0"

@@ -10,3 +10,8 @@ artifacts/
 *.tsbuildinfo
 .venv/
 __pycache__/
+
+# Local Cloudflare development state
+.wrangler/
+.dev.vars
+.dev.vars.*
