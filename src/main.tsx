@@ -500,6 +500,9 @@ function BusinessCards() {
           </span>
           <h3>{business.title[lang]}</h3>
           <span className="business-subtitle">{business.subtitle[lang]}</span>
+          {business.id === "coatings" && (
+            <span className="product-subtitle">{company.productSubtitle}</span>
+          )}
           <p>{business.description[lang]}</p>
           <Link className="text-link" to={business.to}>
             {business.linkLabel[lang]}
@@ -529,6 +532,20 @@ function ConsultingCards() {
         );
       })}
     </div>
+  );
+}
+function SupportStatement() {
+  const { lang, t } = useLang();
+  return (
+    <section
+      className="support-statement"
+      aria-label={t("支持计划", "Support programmes")}
+    >
+      <div className="container support-inner">
+        <h2>{t("支持计划", "Supported by")}</h2>
+        <p>{company.supportStatement[lang]}</p>
+      </div>
+    </section>
   );
 }
 function Home() {
@@ -563,9 +580,7 @@ function Home() {
           </div>
           <div className="hero-visual">
             <SourceImage id={1} className="subject-right" priority />
-            <span className="visual-label">
-              THERMA CLEAR / TRANSPARENT FIRE PROTECTION
-            </span>
+            <span className="visual-label">{company.product}</span>
           </div>
         </div>
         <div className="container hero-bottom">
@@ -587,6 +602,7 @@ function Home() {
           <BusinessCards />
         </div>
       </section>
+      <SupportStatement />
       <section className="metrics-section">
         <div className="container">
           <MetricStrip />
@@ -598,7 +614,7 @@ function Home() {
           <div className="section-heading">
             <div>
               <Eyebrow>
-                THERMA CLEAR / {t("产品特点", "COATING FEATURES")}
+                {company.product} / {t("产品特点", "COATING FEATURES")}
               </Eyebrow>
               <h2>
                 {t("防护融入表面，", "An invisible layer.")}
@@ -648,7 +664,7 @@ function Products() {
     <>
       <PageIntro
         number="01"
-        eyebrow="THERMA CLEAR"
+        eyebrow={company.product}
         title={t(
           "透明防火，兼顾材料美感。",
           "Fire protection. Original character.",
@@ -661,7 +677,8 @@ function Products() {
             <Eyebrow>
               {t("透明防火材料", "TRANSPARENT FIREPROOF MATERIAL")}
             </Eyebrow>
-            <h2>Therma Clear</h2>
+            <h2 className="product-name">{company.product}</h2>
+            <span className="product-subtitle">{company.productSubtitle}</span>
             <p>
               {t(
                 "以高透明膨胀型防火体系，在材料表面形成无色保护层。日常保留原有外观，遇火膨胀成炭，形成隔热屏障。",
@@ -733,8 +750,8 @@ function Products() {
               <Eyebrow>{t("产品图文", "PRODUCT MATERIALS")}</Eyebrow>
               <h2>
                 {t(
-                  "进一步了解 Therma Clear。",
-                  "A closer look at Therma Clear.",
+                  `进一步了解 ${company.product}。`,
+                  `A closer look at ${company.product}.`,
                 )}
               </h2>
             </div>
@@ -990,7 +1007,7 @@ function Applications() {
           >
             <div className="application-copy">
               <span className="small-label">
-                {active.number} / THERMA CLEAR
+                {active.number} / {company.product}
               </span>
               <h2>{active.title[lang]}</h2>
               <p>{active.description[lang]}</p>
@@ -1015,7 +1032,7 @@ function Applications() {
       </section>
       <NextSection
         to="/products"
-        eyebrow="THERMA CLEAR"
+        eyebrow={company.product}
         title={t(
           "以透明保护，延续材料之美。",
           "Keep the beauty. Add the protection.",
@@ -1107,6 +1124,7 @@ function About() {
           <SourceImage id={1} className="product-cover" />
         </div>
       </section>
+      <SupportStatement />
       <section className="section soft-section">
         <div className="container">
           <div className="section-heading">
@@ -1192,8 +1210,8 @@ function App() {
       ?.setAttribute(
         "content",
         t(
-          "卓界科技有限公司提供 Therma Clear 透明防火涂层产品，以及材料工程、结构工程和防火工程咨询服务。",
-          "Advanced Composites Studio Limited supplies Therma Clear transparent fire protection coatings and consultancy in materials engineering, structural engineering and fire engineering.",
+          `卓界科技有限公司提供 ${company.product} 透明防火涂层产品，以及材料工程、结构工程和防火工程咨询服务。`,
+          `Advanced Composites Studio Limited supplies ${company.product} transparent fire protection coatings and consultancy in materials engineering, structural engineering and fire engineering.`,
         ),
       );
   }, [lang, location.pathname, t]);

@@ -61,3 +61,11 @@ TypeScript + Vite 构建通过；22 项 Playwright 检查全部通过（0 失败
 邮箱更新为 `info@acs-x.com`，地址采用用户商业登记证中的 E15 室、10 楼、Wong King Industrial Building、2–4 Tai Yau Street、San Po Kong、Kowloon、Hong Kong；中文楼名不作推测。联系方式在 `/about#contact`，电话仍为空；邮件链接也出现在咨询页与页脚，不新增发信表单。
 
 本次正式构建通过，25 项浏览器检查全部通过，涵盖六页双语、两项业务入口、咨询页直接访问与刷新、邮件链接、登记地址、空电话、可访问性及 320/390/768/1440px 布局。首轮业务卡片小字对比度问题已修正并全量复测。生产静态预览、离线断网夹具及 Wrangler `deploy --dry-run` 通过。当前环境代理仍限制公网访问，测试结果不等于独立验证线上部署；Git 推送用于触发已连接的 Cloudflare 自动部署。
+
+## 2026-11-07：产品品牌与支持说明本地稿（待 Logo 原图）
+
+按用户要求，产品全名更新为 `FireCoat-X™ ThermaClear™`，下方小标题为 `Therma Clear`。自有产品文案、首张图的网页标题、页面摘要和双语 PDF 摘要同步更新；用户原始产品图不重绘。首页及关于页增加支持计划说明，英文保留用户原句：Our company is supported by HK Tech 300 Seed Fund and Hong Kong Science and Technology Parks Corporation (HKSTP) Ideation Programme。中文提供对应翻译。
+
+正式构建和 25 项浏览器检查通过，包括新产品名称、小标题、支持说明、双语、移动布局与可访问性。所有更改仍为本地稿，未推送 main，等待 Logo 原文件后完成整版更新。
+
+未完成部分：用户两次将新 ACS Logo 作为聊天图片发来，但可用工具没有该图片的文件路径或下载编号，工作区附件目录也无此原图。目前页眉、页脚及 favicon 仍是旧 A 标识。需要可读取的原文件（若图片自动变成聊天消息，请用户压成 ZIP 文件附件）才能按原图替换，不能声称已完成 Logo 替换，也不要重绘近似标识。当前发布授权仍有效，拿到原图后不必再询问是否可以上传或更新网站。

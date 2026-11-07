@@ -34,6 +34,9 @@ try {
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("http://offline-preview.test/");
   await expect(page.locator("h1")).toContainText("防火涂层");
+  await expect(page.locator(".support-statement p")).toContainText(
+    "HK Tech 300",
+  );
   await expect(page.locator(".brand").first()).toContainText(
     "卓界科技有限公司",
   );
@@ -68,6 +71,12 @@ try {
     .click();
   await expect(page.locator(".source-gallery figure")).toHaveCount(6);
   await expect(page.locator("h1")).toHaveText("透明防火，兼顾材料美感。");
+  await expect(page.locator(".product-name")).toHaveText(
+    "FireCoat-X™ ThermaClear™",
+  );
+  await expect(page.locator(".product-overview .product-subtitle")).toHaveText(
+    "Therma Clear",
+  );
   for (const image of await page.locator("main img").all()) {
     await image.scrollIntoViewIfNeeded();
     await expect(image).toHaveAttribute("src", /^data:image\/webp;base64,/);
@@ -101,6 +110,9 @@ try {
     .click();
   await expect(page.locator("h1")).toHaveText(
     "Advanced Composites Studio Limited",
+  );
+  await expect(page.locator(".support-statement p")).toHaveText(
+    "Our company is supported by HK Tech 300 Seed Fund and Hong Kong Science and Technology Parks Corporation (HKSTP) Ideation Programme",
   );
   expect(
     await page.evaluate(

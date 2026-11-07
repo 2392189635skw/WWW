@@ -1,21 +1,27 @@
 export type Lang = "zh" | "en";
 export type Localized = { zh: string; en: string };
+const productName = "FireCoat-X™ ThermaClear™";
 export const company = {
   name: { zh: "卓界科技有限公司", en: "Advanced Composites Studio Limited" },
   englishName: "Advanced Composites Studio Limited",
-  product: "Therma Clear",
+  product: productName,
+  productSubtitle: "Therma Clear",
   tagline: { zh: "透明防火材料", en: "Transparent Fireproof Material" },
   businessTagline: {
     zh: "涂层产品与工程咨询",
     en: "Coating Products & Engineering Consultancy",
   },
   overview: {
-    zh: "卓界科技有限公司开展两项业务：Therma Clear 透明防火涂层产品销售，以及材料工程、结构工程和防火工程咨询服务。",
-    en: "Advanced Composites Studio Limited has two business areas: the sale of Therma Clear transparent fire protection coatings, and consultancy in materials engineering, structural engineering and fire engineering.",
+    zh: `卓界科技有限公司开展两项业务：${productName} 透明防火涂层产品销售，以及材料工程、结构工程和防火工程咨询服务。`,
+    en: `Advanced Composites Studio Limited has two business areas: the sale of ${productName} transparent fire protection coatings, and consultancy in materials engineering, structural engineering and fire engineering.`,
   },
   introduction: {
-    zh: "Therma Clear 将透明外观与防火保护相结合，形成保留基材色彩与纹理的保护层。遇火后，涂层迅速膨胀并形成隔热炭层。",
-    en: "Therma Clear brings a transparent finish and fire protection together, preserving the colour and texture of the substrate. On exposure to fire, the coating rapidly expands to form an insulating char layer.",
+    zh: `${productName} 将透明外观与防火保护相结合，形成保留基材色彩与纹理的保护层。遇火后，涂层迅速膨胀并形成隔热炭层。`,
+    en: `${productName} brings a transparent finish and fire protection together, preserving the colour and texture of the substrate. On exposure to fire, the coating rapidly expands to form an insulating char layer.`,
+  },
+  supportStatement: {
+    zh: "本公司获 HK Tech 300 种子基金及香港科技园公司（HKSTP）Ideation Programme 支持。",
+    en: "Our company is supported by HK Tech 300 Seed Fund and Hong Kong Science and Technology Parks Corporation (HKSTP) Ideation Programme",
   },
 };
 export const businessAreas = [
@@ -24,12 +30,12 @@ export const businessAreas = [
     number: "01",
     title: { zh: "涂层产品销售", en: "Coating Products" },
     subtitle: {
-      zh: "Therma Clear 透明防火涂层",
-      en: "Therma Clear transparent fire protection",
+      zh: productName,
+      en: productName,
     },
     description: {
-      zh: "销售 Therma Clear 透明防火涂层，在保留基材色彩与纹理的同时提供防火保护。",
-      en: "Therma Clear transparent fire protection coatings preserve the colour and texture of the substrate while providing fire protection.",
+      zh: `销售 ${productName} 透明防火涂层，在保留基材色彩与纹理的同时提供防火保护。`,
+      en: `${productName} transparent fire protection coatings preserve the colour and texture of the substrate while providing fire protection.`,
     },
     to: "/products",
     linkLabel: { zh: "了解涂层产品", en: "Explore the coating" },
@@ -237,8 +243,8 @@ export const sourceSlides = [
     id: 1,
     image: "/images/therma-clear-1.webp",
     title: {
-      zh: "Therma Clear · 透明防火材料",
-      en: "Therma Clear · Transparent Fireproof Material",
+      zh: `${productName} · 透明防火材料`,
+      en: `${productName} · Transparent Fireproof Material`,
     },
     alt: {
       zh: "Therma Clear 透明防火材料主视觉，展示木板与透明蜂窝状保护层",

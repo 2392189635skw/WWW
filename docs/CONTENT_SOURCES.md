@@ -25,3 +25,9 @@
 - 删除技术页底部的“画面温度标注”“演示时间标注”，替换为“受火 2 小时后温度：约 150°C”。英文同步采用近似表达。此项来自用户补充，不是由原图的 10 分钟/153°C 推断；测温位置、受火方式与基材条件未另提供，网页不补造这些信息，也不声称独立验证。
 - 公司业务分为涂层产品销售与工程咨询。咨询的三个方向是材料工程、结构工程、防火工程；仅写简短方向说明，不增加未经提供的注册工程师、法定签署、认证、客户或项目经历。
 - 联系邮箱由用户明确指定为 `info@acs-x.com`。地址依据聊天中的商业登记证图片：`FLAT E15 10/F / WONG KING INDUSTRIAL BUILDING / 2-4 TAI YAU STREET SAN PO KONG / KL`。整理英文为 `Flat E15, 10/F, Wong King Industrial Building, 2–4 Tai Yau Street, San Po Kong, Kowloon, Hong Kong`；中文保留证件中的英文楼名，不猜测楼宇中文译名。没有使用或公开证件上的登记号码、条码或费用信息。
+
+## 用户后续补充（2026-11-07）
+
+- 产品全名改为 `FireCoat-X™ ThermaClear™`，其下的小标题为 `Therma Clear`，两种语言都使用这组产品名称。网页自有文案与项目内产品摘要同步修改。原始六张产品图里的旧文字仍属于原始资料，不重绘原图。
+- 首页及关于公司页增加支持计划说明。英文按用户原句：`Our company is supported by HK Tech 300 Seed Fund and Hong Kong Science and Technology Parks Corporation (HKSTP) Ideation Programme`。中文为精简翻译。此项是用户直接提供的公司说明，不外推资助金额、期限、股权或认证，不使用未提供的资助机构标识。
+- 用户指定以聊天中新的 ACS 图片替换公司标识。图片包含材料纹理 X 图案、ACS、英文公司名和 acs-x.com。当前可在对话中看到图片，但可用工具没有提供其本地路径或下载编号，工作区附件中也未发现原图。Logo 替换待用户提供可下载的原始图片文件或 ZIP 后完成；不凭描述重绘或使用近似图片冒充原图。

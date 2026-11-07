@@ -14,7 +14,7 @@
 
 1. 使用现有 `/workspace/WWW`，不创建 worktree（除非用户明确要求）。先读 `PROJECT_STATUS.md` 和 `CONTENT_SOURCES.md`，检查 Git 状态并保留已有修改。
 2. 当前公司名是**卓界科技有限公司 / Advanced Composites Studio Limited**。不再使用此前的“防火材料”临时品牌、虚构 SF/CF/WF 产品或旧下载资料。
-3. 网站现有两项业务：Therma Clear 涂层产品销售；材料工程、结构工程和防火工程咨询。产品依据六张图及用户后续补充，咨询方向由用户明确提供，文案精简，不虚构资质或案例。联系邮箱为 `info@acs-x.com`，地址按用户登记证整理：Flat E15, 10/F, Wong King Industrial Building, 2–4 Tai Yau Street, San Po Kong, Kowloon, Hong Kong。电话继续留空，不推断区号或号码。
+3. 网站现有两项业务：FireCoat-X™ ThermaClear™ 涂层产品销售（其下小标题 Therma Clear）；材料工程、结构工程和防火工程咨询。产品依据六张图及用户后续补充，咨询方向由用户明确提供，文案精简，不虚构资质或案例。联系邮箱为 `info@acs-x.com`，地址按用户登记证整理：Flat E15, 10/F, Wong King Industrial Building, 2–4 Tai Yau Street, San Po Kong, Kowloon, Hong Kong。电话继续留空，不推断区号或号码。
 4. 产品、咨询、联系信息与数字集中在 `src/data.ts`。页面为 `src/main.tsx`，新增咨询路径 `/consulting`，联系方式在 `/about#contact`。样式为 `src/styles.css`。六张压缩 WebP 位于 `public/images/`，原始 PNG 位于 `/workspace/reference-materials/advanced-composites-studio/`。
 5. 依赖缺失：`npm ci --no-audit --no-fund --cache /workspace/.npm-cache`；开发：`npm run dev`（5173）；构建：`npm run build`；浏览器检查：`npm test`。先检查服务是否已启动，不终止未知进程。
 6. 修改产品数据后生成摘要：`node scripts/export-data.mjs | python3 scripts/generate-documents.py`，ReportLab 在此环境已有。不要把摘要称为检测报告。
@@ -26,3 +26,5 @@
 12. Cloudflare 部署按 `CLOUDFLARE_DEPLOYMENT.md`。Workers Git 部署，项目名 `www`，构建 `npm run build`，部署 `npx wrangler deploy`。用户已报告完成部署，域名 `acs-x.com`。当前环境代理拦截此域名，Cloudflare 控制台登录和 API 凭据也未连接；可以推送授权更新以触发已启用的 Git 自动构建，但不能把推送成功说成线上构建成功。若需用户参与，应指导查看现有项目的部署结果，无需重新创建项目。
 
 当前页面不再提供 PDF 下载按钮。用户反馈手机微信点击无反馈后，已移除技术页按钮；产品页保留“查看技术参数”，跳到 /technology#technical-data。正式资料将来提供后再按用户需求恢复下载入口。
+
+2026-11-07 当前待完成：产品新名称与支持计划说明已加入本地稿；原始 ACS Logo 只以聊天图片出现，没有可用的文件路径或 Sediment ID。必须拿到可下载的 Logo 原图（若 PNG/JPG 被客户端转成聊天图片，可请用户压缩为 ZIP 附件）后再替换页眉、页脚与浏览器图标，检查移动显示并一并发布。不要把现有 A 图标说成已经替换，也不要重绘近似标识。首页及关于页保留用户给出的英文支持说明与中文翻译。

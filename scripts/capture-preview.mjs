@@ -52,6 +52,7 @@ try {
     path: new URL("acs-hero-mobile.png", output).pathname,
   });
   await capture("/about#contact", "contact-mobile");
+  await capture("/products", "products-mobile");
   await capture("/consulting", "consulting-mobile");
   await page.evaluate(() => localStorage.setItem("acs-language", "en"));
   await page.setViewportSize({ width: 1440, height: 1000 });

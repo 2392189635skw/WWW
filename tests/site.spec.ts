@@ -25,6 +25,21 @@ for (const locale of ["zh", "en"]) {
         "lang",
         locale === "zh" ? "zh-CN" : "en",
       );
+      if (route === "/" || route === "/about") {
+        await expect(page.locator(".support-statement p")).toHaveText(
+          locale === "zh"
+            ? "本公司获 HK Tech 300 种子基金及香港科技园公司（HKSTP）Ideation Programme 支持。"
+            : "Our company is supported by HK Tech 300 Seed Fund and Hong Kong Science and Technology Parks Corporation (HKSTP) Ideation Programme",
+        );
+      }
+      if (route === "/products") {
+        await expect(page.locator(".product-name")).toHaveText(
+          "FireCoat-X™ ThermaClear™",
+        );
+        await expect(
+          page.locator(".product-overview .product-subtitle"),
+        ).toHaveText("Therma Clear");
+      }
       for (const img of await page.locator("main img").all()) {
         await img.scrollIntoViewIfNeeded();
         await expect(img).toBeVisible();
