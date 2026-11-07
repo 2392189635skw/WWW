@@ -25,6 +25,21 @@ for (const locale of ["zh", "en"]) {
         "lang",
         locale === "zh" ? "zh-CN" : "en",
       );
+      await expect(page.locator(".brand-logo")).toHaveCount(2);
+      for (const logo of await page.locator(".brand-logo").all()) {
+        await expect(logo).toHaveAttribute("src", "/images/acs-logo.png");
+        expect(
+          await logo.evaluate(
+            (image: HTMLImageElement) =>
+              image.complete && image.naturalWidth === 1254,
+          ),
+        ).toBe(true);
+      }
+      await expect(page.locator(".brand-mark")).toHaveCount(0);
+      await expect(page.locator('link[rel="icon"]')).toHaveAttribute(
+        "href",
+        "/images/acs-logo.png",
+      );
       if (route === "/" || route === "/about") {
         await expect(page.locator(".support-statement p")).toHaveText(
           locale === "zh"
@@ -278,7 +293,7 @@ test("PDF summaries remain valid and the product link opens in-page technical da
   await expect(page).toHaveURL(/technology#technical-data$/);
   await expect(page.locator("#technical-data")).toBeInViewport();
 });
-for (const width of [320, 390, 768, 1440]) {
+for (const width of [320, 390, 641, 768, 1440]) {
   test(`responsive at ${width}px in both languages without page overflow`, async ({
     page,
   }) => {

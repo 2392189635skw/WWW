@@ -30,4 +30,4 @@
 
 - 产品全名改为 `FireCoat-X™ ThermaClear™`，其下的小标题为 `Therma Clear`，两种语言都使用这组产品名称。网页自有文案与项目内产品摘要同步修改。原始六张产品图里的旧文字仍属于原始资料，不重绘原图。
 - 首页及关于公司页增加支持计划说明。英文按用户原句：`Our company is supported by HK Tech 300 Seed Fund and Hong Kong Science and Technology Parks Corporation (HKSTP) Ideation Programme`。中文为精简翻译。此项是用户直接提供的公司说明，不外推资助金额、期限、股权或认证，不使用未提供的资助机构标识。
-- 用户指定以聊天中新的 ACS 图片替换公司标识。图片包含材料纹理 X 图案、ACS、英文公司名和 acs-x.com。当前可在对话中看到图片，但可用工具没有提供其本地路径或下载编号，工作区附件中也未发现原图。Logo 替换待用户提供可下载的原始图片文件或 ZIP 后完成；不凭描述重绘或使用近似图片冒充原图。
+- 用户指定以新的 ACS 图片替换公司标识，并提供 `微信图片_20261107231517_484_3.zip`（Sediment ID `file_0000000010d4820b9d6bbd2d0bbc7be3`）。其中只有一张 1254×1254 RGB PNG，包含材料纹理 X 图案、ACS、英文公司名和 acs-x.com。网页资产 `public/images/acs-logo.png` 与 ZIP 内原图的字节完全相同，SHA-256 为 `d2dc5e75bedd24a7de382b6ac0438a1f7749f81864230f9f41324d40cdf9cdc9`。页眉、页脚及浏览器图标使用这张图片，保持比例完整显示，不裁切、重绘或反色。ZIP 和来源清单保存在原始材料目录 `brand/` 子目录，网页不包含 ZIP 文件。

@@ -116,10 +116,14 @@ function Logo() {
         "Advanced Composites Studio Limited home",
       )}
     >
-      <span className="brand-mark" aria-hidden="true">
-        A<span />
-        <i />
-      </span>
+      <img
+        className="brand-logo"
+        src={company.logo}
+        width={64}
+        height={64}
+        alt={t("ACS 卓界科技公司标识", "ACS company logo")}
+        decoding="async"
+      />
       <span className="brand-wordmark">
         <strong>{company.name[lang]}</strong>
         <small>

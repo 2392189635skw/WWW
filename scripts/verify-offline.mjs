@@ -40,6 +40,19 @@ try {
   await expect(page.locator(".brand").first()).toContainText(
     "卓界科技有限公司",
   );
+  await expect(page.locator(".brand-logo")).toHaveCount(2);
+  for (const logo of await page.locator(".brand-logo").all()) {
+    await expect(logo).toHaveAttribute("src", /^data:image\/png;base64,/);
+    expect(
+      await logo.evaluate(
+        (image) => image.complete && image.naturalWidth === 1254,
+      ),
+    ).toBe(true);
+  }
+  await expect(page.locator('link[rel="icon"]')).toHaveAttribute(
+    "href",
+    /^data:image\/png;base64,/,
+  );
   await page.getByRole("link", { name: "向下探索" }).click();
   await expect(page.locator("#businesses")).toBeInViewport();
   await page.getByRole("link", { name: "返回顶部" }).click();

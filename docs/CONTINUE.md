@@ -27,4 +27,4 @@
 
 当前页面不再提供 PDF 下载按钮。用户反馈手机微信点击无反馈后，已移除技术页按钮；产品页保留“查看技术参数”，跳到 /technology#technical-data。正式资料将来提供后再按用户需求恢复下载入口。
 
-2026-11-07 当前待完成：产品新名称与支持计划说明已加入本地稿；原始 ACS Logo 只以聊天图片出现，没有可用的文件路径或 Sediment ID。必须拿到可下载的 Logo 原图（若 PNG/JPG 被客户端转成聊天图片，可请用户压缩为 ZIP 附件）后再替换页眉、页脚与浏览器图标，检查移动显示并一并发布。不要把现有 A 图标说成已经替换，也不要重绘近似标识。首页及关于页保留用户给出的英文支持说明与中文翻译。
+2026-11-07 用户已补齐原始 ACS Logo ZIP 附件（`file_0000000010d4820b9d6bbd2d0bbc7be3`），无需再索取图片。公司 Logo 为 `public/images/acs-logo.png`，1254×1254 PNG，保留原始字节；页眉、页脚、favicon 和离线预览均统一使用。旧 A 标识与 favicon.svg 已删除。来源 ZIP、原图和校验清单保存在 `/workspace/reference-materials/advanced-composites-studio/brand/`。产品全名为 `FireCoat-X™ ThermaClear™`，下方小标题为 `Therma Clear`。首页及关于页保留用户给出的英文支持说明与中文翻译。更新仍按已授权的 GitHub main → Cloudflare 流程发布，推送成功与线上部署成功需明确区分。
