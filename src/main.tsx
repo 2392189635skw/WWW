@@ -16,6 +16,7 @@ import {
   ArrowRight,
   ArrowUpRight,
   Building2,
+  ChevronDown,
   Download,
   Expand,
   FileText,
@@ -90,12 +91,15 @@ function LanguageProvider({ children }: { children: ReactNode }) {
     </Language.Provider>
   );
 }
-const navigation = [
-  ["/", "首页", "Home"],
+const coatingNavigation = [
   ["/products", "产品介绍", "Product"],
-  ["/consulting", "工程咨询", "Consultancy"],
   ["/technology", "技术与性能", "Technology"],
   ["/applications", "应用领域", "Applications"],
+];
+const navigation = [
+  ["/", "首页", "Home"],
+  ...coatingNavigation,
+  ["/consulting", "工程咨询", "Consultancy"],
   ["/about", "关于卓界", "Company"],
 ];
 function handleSectionLink(event: MouseEvent<HTMLAnchorElement>) {
@@ -136,12 +140,50 @@ function Logo() {
 function Header() {
   const { lang, t, toggle } = useLang();
   const [open, setOpen] = useState(false);
+  const [coatingsOpen, setCoatingsOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+  const coatingsRef = useRef<HTMLDivElement>(null);
+  const coatingsButtonRef = useRef<HTMLButtonElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
+  const coatingActive = coatingNavigation.some(
+    ([path]) => path === location.pathname,
+  );
+  function closeNavigation() {
+    setOpen(false);
+    setCoatingsOpen(false);
+  }
   useEffect(() => {
     setOpen(false);
-  }, [location.pathname, location.hash]);
+    setCoatingsOpen(false);
+  }, [location.pathname, location.hash, lang]);
+  useEffect(() => {
+    function handleOutsideClick(event: PointerEvent) {
+      if (!(event.target instanceof Node)) return;
+      if (!coatingsRef.current?.contains(event.target)) setCoatingsOpen(false);
+      if (!headerRef.current?.contains(event.target)) setOpen(false);
+    }
+    document.addEventListener("pointerdown", handleOutsideClick);
+    return () =>
+      document.removeEventListener("pointerdown", handleOutsideClick);
+  }, []);
   return (
-    <header className="site-header">
+    <header
+      className="site-header"
+      ref={headerRef}
+      onKeyDown={(event) => {
+        if (event.key !== "Escape") return;
+        if (coatingsOpen) {
+          event.preventDefault();
+          setCoatingsOpen(false);
+          coatingsButtonRef.current?.focus();
+        } else if (open) {
+          event.preventDefault();
+          setOpen(false);
+          menuButtonRef.current?.focus();
+        }
+      }}
+    >
       <div className="header-inner">
         <Logo />
         <nav
@@ -149,11 +191,52 @@ function Header() {
           className={`main-nav ${open ? "is-open" : ""}`}
           aria-label={t("主导航", "Main navigation")}
         >
-          {navigation.map(([path, zh, en]) => (
-            <NavLink end={path === "/"} to={path} key={path}>
-              {t(zh, en)}
-            </NavLink>
-          ))}
+          <NavLink end to="/" onClick={closeNavigation}>
+            {t("首页", "Home")}
+          </NavLink>
+          <div
+            className="nav-group"
+            ref={coatingsRef}
+            onBlur={(event) => {
+              if (
+                !(event.relatedTarget instanceof Node) ||
+                !event.currentTarget.contains(event.relatedTarget)
+              ) {
+                setCoatingsOpen(false);
+              }
+            }}
+          >
+            <button
+              className={`nav-group-trigger${coatingActive ? " is-active" : ""}`}
+              ref={coatingsButtonRef}
+              type="button"
+              aria-expanded={coatingsOpen}
+              aria-controls="coating-navigation"
+              onClick={() => setCoatingsOpen((value) => !value)}
+            >
+              {t("防火涂层材料", "Fire Protection Coatings")}
+              <ChevronDown size={14} aria-hidden="true" />
+            </button>
+            <ul
+              className="coating-subnav"
+              id="coating-navigation"
+              hidden={!coatingsOpen}
+            >
+              {coatingNavigation.map(([path, zh, en]) => (
+                <li key={path}>
+                  <NavLink to={path} onClick={closeNavigation}>
+                    {t(zh, en)}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <NavLink to="/consulting" onClick={closeNavigation}>
+            {t("工程咨询", "Consultancy")}
+          </NavLink>
+          <NavLink to="/about" onClick={closeNavigation}>
+            {t("关于卓界", "Company")}
+          </NavLink>
         </nav>
         <div className="header-actions">
           <button
@@ -166,13 +249,17 @@ function Header() {
           </button>
           <button
             className="menu-toggle icon-button"
+            ref={menuButtonRef}
             aria-controls="main-navigation"
             aria-expanded={open}
             aria-label={t(
               open ? "关闭导航" : "打开导航",
               open ? "Close menu" : "Open menu",
             )}
-            onClick={() => setOpen((value) => !value)}
+            onClick={() => {
+              setOpen((value) => !value);
+              setCoatingsOpen(false);
+            }}
           >
             {open ? <X size={23} /> : <Menu size={23} />}
           </button>
@@ -194,16 +281,41 @@ function Footer() {
           </a>
         </div>
         <nav aria-label={t("页脚导航", "Footer navigation")}>
-          {navigation.slice(1).map(([path, zh, en]) => (
-            <Link to={path} key={path}>
-              {t(zh, en)}
+          <div className="footer-nav-group">
+            <p className="footer-nav-heading">
+              {t("防火涂层材料", "Fire Protection Coatings")}
+            </p>
+            <ul>
+              {coatingNavigation.map(([path, zh, en]) => (
+                <li key={path}>
+                  <Link to={path}>
+                    {t(zh, en)}
+                    <ArrowUpRight size={13} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="footer-nav-group">
+            <Link className="footer-nav-heading" to="/consulting">
+              {t("工程咨询", "Consultancy")}
               <ArrowUpRight size={13} />
             </Link>
-          ))}
-          <Link to="/about#contact">
-            {t("联系方式", "Contact")}
-            <ArrowUpRight size={13} />
-          </Link>
+          </div>
+          <div className="footer-nav-group">
+            <Link className="footer-nav-heading" to="/about">
+              {t("关于卓界", "Company")}
+              <ArrowUpRight size={13} />
+            </Link>
+            <ul>
+              <li>
+                <Link to="/about#contact">
+                  {t("联系方式", "Contact")}
+                  <ArrowUpRight size={13} />
+                </Link>
+              </li>
+            </ul>
+          </div>
         </nav>
       </div>
       <div className="container footer-bottom">
@@ -563,7 +675,7 @@ function Home() {
               {t("卓界科技 / 产品与咨询", "ADVANCED COMPOSITES STUDIO")}
             </Eyebrow>
             <h1>
-              {t("防火涂层，", "Coatings.")}
+              {t("防火涂层材料，", "Coatings.")}
               <br />
               <em>{t("工程咨询。", "Consultancy.")}</em>
             </h1>
@@ -1115,7 +1227,7 @@ function About() {
           <div className="about-copy">
             <Eyebrow>{t("我们的业务", "OUR BUSINESS")}</Eyebrow>
             <h2>
-              {t("涂层产品，", "Coating products.")}
+              {t("防火涂层材料，", "Fire protection coatings.")}
               <br />
               {t("工程咨询。", "Engineering consultancy.")}
             </h2>
@@ -1125,7 +1237,18 @@ function About() {
               <ArrowUpRight size={18} />
             </Link>
           </div>
-          <SourceImage id={1} className="product-cover" />
+          <div className="company-logo-panel">
+            <img
+              src={company.logo}
+              width={1254}
+              height={1254}
+              alt={t(
+                "ACS 卓界科技有限公司标识",
+                "ACS Advanced Composites Studio Limited logo",
+              )}
+              decoding="async"
+            />
+          </div>
         </div>
       </section>
       <SupportStatement />

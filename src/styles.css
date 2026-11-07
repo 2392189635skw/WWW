@@ -140,7 +140,8 @@ p {
   align-self: stretch;
   gap: 31px;
 }
-.main-nav > a {
+.main-nav > a,
+.nav-group-trigger {
   display: flex;
   align-items: center;
   position: relative;
@@ -150,10 +151,13 @@ p {
   transition: color 0.2s;
 }
 .main-nav > a:hover,
-.main-nav > a.active {
+.main-nav > a.active,
+.nav-group-trigger:hover,
+.nav-group-trigger.is-active {
   color: var(--accent);
 }
-.main-nav > a.active:after {
+.main-nav > a.active:after,
+.nav-group-trigger.is-active:after {
   content: "";
   position: absolute;
   bottom: 24px;
@@ -162,6 +166,50 @@ p {
   height: 4px;
   background: var(--accent);
   border-radius: 50%;
+}
+.nav-group {
+  position: relative;
+  display: flex;
+}
+.nav-group-trigger {
+  padding: 0;
+  border: 0;
+  gap: 6px;
+}
+.nav-group-trigger > svg {
+  transition: transform 0.2s;
+}
+.nav-group-trigger[aria-expanded="true"] > svg {
+  transform: rotate(180deg);
+}
+.coating-subnav {
+  position: absolute;
+  top: calc(100% - 10px);
+  left: -18px;
+  min-width: 205px;
+  padding: 8px;
+  margin: 0;
+  list-style: none;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-shadow: 0 14px 30px #13221212;
+  z-index: 30;
+}
+.coating-subnav[hidden] {
+  display: none;
+}
+.coating-subnav a {
+  display: block;
+  padding: 13px 15px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.coating-subnav a:hover,
+.coating-subnav a.active {
+  color: var(--accent);
+  background: var(--soft);
 }
 .header-actions {
   display: flex;
@@ -686,10 +734,11 @@ p {
 }
 .footer-main > nav {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 19px 45px;
+  grid-template-columns: minmax(150px, 1.3fr) repeat(2, minmax(85px, 1fr));
+  gap: 24px 30px;
+  align-items: start;
 }
-.footer-main > nav > a {
+.footer-main > nav a {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -697,11 +746,24 @@ p {
   font-size: 11px;
   color: #cfdbca;
 }
-.footer-main > nav > a > svg {
+.footer-main > nav a > svg {
   color: #b4c8a8;
 }
-.footer-main > nav > a:hover {
+.footer-main > nav a:hover {
   color: #fff;
+}
+.footer-nav-group ul {
+  padding: 0;
+  margin: 16px 0 0;
+  list-style: none;
+  display: grid;
+  gap: 14px;
+}
+.footer-main .footer-nav-heading {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.7;
+  color: #eff3ec;
 }
 .footer-bottom {
   display: flex;
@@ -1017,6 +1079,19 @@ tbody tr:last-child > * {
   align-items: stretch;
   gap: 80px;
 }
+.company-logo-panel {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.company-logo-panel img {
+  width: min(100%, 430px);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
 .about-copy {
   padding-block: 24px;
 }
@@ -1239,7 +1314,8 @@ tbody tr:last-child > * {
   .main-nav {
     gap: 23px;
   }
-  .main-nav > a {
+  .main-nav > a,
+  .nav-group-trigger {
     font-size: 11px;
   }
   .brand-wordmark strong {
@@ -1413,7 +1489,8 @@ tbody tr:last-child > * {
   .main-nav {
     gap: 16px;
   }
-  .main-nav > a {
+  .main-nav > a,
+  .nav-group-trigger {
     font-size: 10px;
   }
   .language-button {
@@ -1658,7 +1735,7 @@ tbody tr:last-child > * {
   .footer-main > nav {
     gap: 19px 25px;
   }
-  .footer-main > nav > a {
+  .footer-main > nav a {
     font-size: 10px;
     gap: 18px;
   }
@@ -1995,7 +2072,7 @@ tbody tr:last-child > * {
     gap: 20px 44px;
     width: 100%;
   }
-  .footer-main > nav > a {
+  .footer-main > nav a {
     font-size: 11px;
     gap: 21px;
   }
@@ -2617,6 +2694,13 @@ h3 {
   color: var(--ink);
 }
 @media (min-width: 641px) and (max-width: 1000px) {
+  .footer-main {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .footer-main > nav {
+    width: 100%;
+  }
   .main-nav {
     gap: 15px;
   }
@@ -2701,7 +2785,8 @@ h3 {
   .main-nav.is-open {
     display: flex;
   }
-  .main-nav > a {
+  .main-nav > a,
+  .nav-group-trigger {
     padding: 14px 10px;
     font-size: 13px;
   }
@@ -2709,5 +2794,28 @@ h3 {
     left: auto;
     right: 12px;
     bottom: 23px;
+  }
+  .nav-group {
+    display: block;
+  }
+  .nav-group-trigger {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .nav-group-trigger.is-active:after {
+    display: none;
+  }
+  .coating-subnav {
+    position: static;
+    min-width: 0;
+    padding: 5px;
+    margin: 0 10px 8px;
+    border: 0;
+    border-left: 2px solid var(--line);
+    box-shadow: none;
+    background: var(--soft);
+  }
+  .coating-subnav a {
+    padding: 12px 14px;
   }
 }

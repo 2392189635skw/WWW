@@ -38,6 +38,11 @@ try {
   await page.screenshot({
     path: new URL("acs-hero-desktop.png", output).pathname,
   });
+  await page.locator(".nav-group-trigger").click();
+  await page.screenshot({
+    path: new URL("acs-navigation-desktop.png", output).pathname,
+  });
+  await page.keyboard.press("Escape");
   for (const route of [
     "products",
     "consulting",
@@ -51,6 +56,12 @@ try {
   await page.screenshot({
     path: new URL("acs-hero-mobile.png", output).pathname,
   });
+  await page.locator(".menu-toggle").click();
+  await page.locator(".nav-group-trigger").click();
+  await page.screenshot({
+    path: new URL("acs-navigation-mobile.png", output).pathname,
+  });
+  await page.locator(".menu-toggle").click();
   await capture("/about#contact", "contact-mobile");
   await capture("/products", "products-mobile");
   await capture("/consulting", "consulting-mobile");

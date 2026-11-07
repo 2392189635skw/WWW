@@ -9,8 +9,8 @@ export const company = {
   productSubtitle: "Therma Clear",
   tagline: { zh: "透明防火材料", en: "Transparent Fireproof Material" },
   businessTagline: {
-    zh: "涂层产品与工程咨询",
-    en: "Coating Products & Engineering Consultancy",
+    zh: "防火涂层材料与工程咨询",
+    en: "Fire Protection Coatings & Engineering Consultancy",
   },
   overview: {
     zh: `卓界科技有限公司开展两项业务：${productName} 透明防火涂层产品销售，以及材料工程、结构工程和防火工程咨询服务。`,
@@ -29,7 +29,7 @@ export const businessAreas = [
   {
     id: "coatings",
     number: "01",
-    title: { zh: "涂层产品销售", en: "Coating Products" },
+    title: { zh: "防火涂层材料", en: "Fire Protection Coatings" },
     subtitle: {
       zh: productName,
       en: productName,

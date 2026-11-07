@@ -64,12 +64,22 @@ try {
     ["应用领域", "保留本色，延伸材料的可能。"],
     ["关于卓界", "卓界科技有限公司"],
   ]) {
+    if (["产品介绍", "技术与性能", "应用领域"].includes(name)) {
+      await page
+        .getByRole("navigation", { name: "主导航" })
+        .getByRole("button", { name: "防火涂层材料", exact: true })
+        .click();
+    }
     await page
       .getByRole("navigation", { name: "主导航" })
       .getByRole("link", { name, exact: true })
       .click();
     await expect(page.locator("h1")).toHaveText(heading);
   }
+  await expect(page.locator(".company-logo-panel img")).toHaveAttribute(
+    "src",
+    /^data:image\/png;base64,/,
+  );
   await expect(page.locator('[data-contact="phone"] dd')).toBeEmpty();
   await expect(page.locator('[data-contact="email"] a')).toHaveAttribute(
     "href",
@@ -78,6 +88,10 @@ try {
   await expect(page.locator('[data-contact="address"]')).toContainText(
     "10楼E15室",
   );
+  await page
+    .getByRole("navigation", { name: "主导航" })
+    .getByRole("button", { name: "防火涂层材料", exact: true })
+    .click();
   await page
     .getByRole("navigation", { name: "主导航" })
     .getByRole("link", { name: "产品介绍", exact: true })

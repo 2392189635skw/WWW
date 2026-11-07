@@ -55,6 +55,13 @@ for (const locale of ["zh", "en"]) {
           page.locator(".product-overview .product-subtitle"),
         ).toHaveText("Therma Clear");
       }
+      if (route === "/about") {
+        await expect(page.locator(".company-logo-panel img")).toHaveAttribute(
+          "src",
+          "/images/acs-logo.png",
+        );
+        await expect(page.locator(".about-grid .source-image")).toHaveCount(0);
+      }
       for (const img of await page.locator("main img").all()) {
         await img.scrollIntoViewIfNeeded();
         await expect(img).toBeVisible();
@@ -65,7 +72,7 @@ for (const locale of ["zh", "en"]) {
           ),
         ).toBe(true);
         expect(await img.getAttribute("src")).toMatch(
-          /therma-clear-[1-6]\.webp$/,
+          /(?:therma-clear-[1-6]\.webp|acs-logo\.png)$/,
         );
       }
       expect(errors).toEqual([]);
@@ -285,6 +292,10 @@ test("PDF summaries remain valid and the product link opens in-page technical da
   ).toHaveCount(0);
   await page
     .getByRole("navigation", { name: "Main navigation" })
+    .getByRole("button", { name: "Fire Protection Coatings", exact: true })
+    .click();
+  await page
+    .getByRole("navigation", { name: "Main navigation" })
     .getByRole("link", { name: "Product", exact: true })
     .click();
   await page
@@ -320,6 +331,10 @@ test("mobile menu, image dialog and back-to-top work", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   await page.getByRole("button", { name: "打开导航" }).click();
+  await page
+    .getByRole("navigation", { name: "主导航" })
+    .getByRole("button", { name: "防火涂层材料", exact: true })
+    .click();
   await page
     .getByRole("navigation", { name: "主导航" })
     .getByRole("link", { name: "产品介绍" })
@@ -358,3 +373,94 @@ test("unknown routes have a working return-home link", async ({ page }) => {
   await page.getByRole("link", { name: "返回首页", exact: true }).click();
   await expect(page).toHaveURL("/");
 });
+
+for (const lang of ["zh", "en"]) {
+  test(`${lang}: coating subpages are grouped alongside consultancy with keyboard and mobile navigation`, async ({
+    page,
+  }) => {
+    await page.addInitScript(
+      (value) => localStorage.setItem("acs-language", value),
+      lang,
+    );
+    await page.goto("/");
+    const nav = page.getByRole("navigation", {
+      name: lang === "zh" ? "主导航" : "Main navigation",
+    });
+    const coatings = nav.getByRole("button", {
+      name: lang === "zh" ? "防火涂层材料" : "Fire Protection Coatings",
+      exact: true,
+    });
+    await expect(
+      nav.locator(":scope > a, :scope > .nav-group > button"),
+    ).toHaveText(
+      lang === "zh"
+        ? ["首页", "防火涂层材料", "工程咨询", "关于卓界"]
+        : ["Home", "Fire Protection Coatings", "Consultancy", "Company"],
+    );
+    await expect(coatings).toHaveAttribute("aria-expanded", "false");
+    await coatings.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.locator("#coating-navigation")).toBeVisible();
+    await expect(page.locator("#coating-navigation a")).toHaveText(
+      lang === "zh"
+        ? ["产品介绍", "技术与性能", "应用领域"]
+        : ["Product", "Technology", "Applications"],
+    );
+    await page.keyboard.press("Escape");
+    await expect(page.locator("#coating-navigation")).toBeHidden();
+    await expect(coatings).toBeFocused();
+    const pages =
+      lang === "zh"
+        ? [
+            ["产品介绍", "/products"],
+            ["技术与性能", "/technology"],
+            ["应用领域", "/applications"],
+          ]
+        : [
+            ["Product", "/products"],
+            ["Technology", "/technology"],
+            ["Applications", "/applications"],
+          ];
+    for (const [label, path] of pages) {
+      await coatings.click();
+      await page
+        .locator("#coating-navigation")
+        .getByRole("link", { name: label, exact: true })
+        .click();
+      await expect(page).toHaveURL(new RegExp(`${path}$`));
+      await expect(coatings).toHaveAttribute("aria-expanded", "false");
+      await expect(coatings).toHaveClass(/is-active/);
+    }
+    await coatings.click();
+    await page.locator("h1").click();
+    await expect(coatings).toHaveAttribute("aria-expanded", "false");
+    await nav
+      .getByRole("link", {
+        name: lang === "zh" ? "工程咨询" : "Consultancy",
+        exact: true,
+      })
+      .click();
+    await expect(page).toHaveURL(/\/consulting$/);
+    await expect(coatings).not.toHaveClass(/is-active/);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page
+      .getByRole("button", {
+        name: lang === "zh" ? "打开导航" : "Open menu",
+        exact: true,
+      })
+      .click();
+    await coatings.click();
+    await page
+      .locator("#coating-navigation")
+      .getByRole("link", {
+        name: lang === "zh" ? "技术与性能" : "Technology",
+        exact: true,
+      })
+      .click();
+    await expect(page).toHaveURL(/\/technology$/);
+    await expect(page.locator(".menu-toggle")).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+  });
+}
