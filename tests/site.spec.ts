@@ -27,7 +27,10 @@ for (const locale of ["zh", "en"]) {
       );
       await expect(page.locator(".brand-logo")).toHaveCount(2);
       for (const logo of await page.locator(".brand-logo").all()) {
-        await expect(logo).toHaveAttribute("src", "/images/acs-logo.png");
+        await expect(logo).toHaveAttribute(
+          "src",
+          "/images/acs-logo-21700456.png",
+        );
         expect(
           await logo.evaluate(
             (image: HTMLImageElement) =>
@@ -38,7 +41,7 @@ for (const locale of ["zh", "en"]) {
       await expect(page.locator(".brand-mark")).toHaveCount(0);
       await expect(page.locator('link[rel="icon"]')).toHaveAttribute(
         "href",
-        "/images/acs-logo.png",
+        "/images/acs-logo-21700456.png",
       );
       if (route === "/" || route === "/about") {
         await expect(page.locator(".support-statement p")).toHaveText(
@@ -58,7 +61,7 @@ for (const locale of ["zh", "en"]) {
       if (route === "/about") {
         await expect(page.locator(".company-logo-panel img")).toHaveAttribute(
           "src",
-          "/images/acs-logo.png",
+          "/images/acs-logo-21700456.png",
         );
         await expect(page.locator(".about-grid .source-image")).toHaveCount(0);
       }
@@ -72,7 +75,7 @@ for (const locale of ["zh", "en"]) {
           ),
         ).toBe(true);
         expect(await img.getAttribute("src")).toMatch(
-          /(?:therma-clear-[1-6]\.webp|acs-logo\.png)$/,
+          /(?:therma-clear-[1-6]\.webp|acs-logo-21700456\.png)$/,
         );
       }
       expect(errors).toEqual([]);

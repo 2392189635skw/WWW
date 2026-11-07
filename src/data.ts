@@ -4,7 +4,7 @@ const productName = "FireCoat-X™ ThermaClear™";
 export const company = {
   name: { zh: "卓界科技有限公司", en: "Advanced Composites Studio Limited" },
   englishName: "Advanced Composites Studio Limited",
-  logo: "/images/acs-logo.png",
+  logo: "/images/acs-logo-21700456.png",
   product: productName,
   productSubtitle: "Therma Clear",
   tagline: { zh: "透明防火材料", en: "Transparent Fireproof Material" },

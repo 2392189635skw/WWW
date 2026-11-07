@@ -49,7 +49,7 @@ node scripts/capture-preview.mjs
 
 原始 PNG 在当前工作区 `/workspace/reference-materials/advanced-composites-studio/`。网页图片仅做编码压缩，原图文字未重绘。点击图片可查看完整画面。所有图片及字体均不依赖外部服务。
 
-公司标识使用用户提供的 ACS 原始 PNG：`public/images/acs-logo.png`，页眉、页脚、浏览器图标和离线预览统一引用。图片保留原始字节，不裁切、重绘或反色；浏览器图标与页面共享同一图片。原始 Logo ZIP 和来源清单另存于原始材料目录的 `brand/`。
+公司标识使用用户最新提供的 ACS 原始 PNG：`public/images/acs-logo-21700456.png`，页眉、页脚、公司介绍、浏览器图标和离线预览统一引用。图片保留原始字节，不裁切、重绘或反色；文件名包含图片校验值前缀，确保加载新版标识。原始 Logo ZIP 和来源清单另存于原始材料目录的 `brand/20261108/`。
 
 修改数据后可用当前环境已有的 ReportLab 重新生成产品摘要：
 

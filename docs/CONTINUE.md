@@ -27,6 +27,6 @@
 
 当前页面不再提供 PDF 下载按钮。用户反馈手机微信点击无反馈后，已移除技术页按钮；产品页保留“查看技术参数”，跳到 /technology#technical-data。正式资料将来提供后再按用户需求恢复下载入口。
 
-2026-11-07 用户已补齐原始 ACS Logo ZIP 附件（`file_0000000010d4820b9d6bbd2d0bbc7be3`），无需再索取图片。公司 Logo 为 `public/images/acs-logo.png`，1254×1254 PNG，保留原始字节；页眉、页脚、favicon 和离线预览均统一使用。旧 A 标识与 favicon.svg 已删除。来源 ZIP、原图和校验清单保存在 `/workspace/reference-materials/advanced-composites-studio/brand/`。产品全名为 `FireCoat-X™ ThermaClear™`，下方小标题为 `Therma Clear`。首页及关于页保留用户给出的英文支持说明与中文翻译。更新仍按已授权的 GitHub main → Cloudflare 流程发布，推送成功与线上部署成功需明确区分。
+当前 Logo 使用 2026-11-08 用户最新上传的 `微信图片_20261108010111_514_3.zip`（`file_000000009074820b83f634f846718150`），无需再索取图片。公司 Logo 为 `public/images/acs-logo-21700456.png`，1254×1254 PNG，右侧为木纹、ACS 字母带金属纹理，保留原始字节；页眉、页脚、公司介绍、favicon 和离线预览均统一使用。旧 A 标识、favicon.svg 及上一版 `acs-logo.png` 已从公开资产中删除。来源 ZIP、原图和校验清单保存在 `/workspace/reference-materials/advanced-composites-studio/brand/20261108/`。产品全名为 `FireCoat-X™ ThermaClear™`，下方小标题为 `Therma Clear`。首页及关于页保留用户给出的英文支持说明与中文翻译。更新仍按已授权的 GitHub main → Cloudflare 流程发布，推送成功与线上部署成功需明确区分。
 
 2026-11-08 导航层级：顶层为首页、防火涂层材料、工程咨询、关于卓界；两项业务“防火涂层材料”和“工程咨询”并列。产品介绍、技术与性能、应用领域三页属于防火涂层材料子菜单，沿用原网址，不重新创建页面。`coatingNavigation` 用于子菜单及页脚分组，扁平的 `navigation` 仍用于页面标题元数据，不代表顶层菜单。桌面点击父按钮展开，手机在主菜单内展开；支持 Escape 关闭并返回按钮焦点、点击外部关闭、选中子页高亮父项、跳转后收起。关于页 `.company-logo-panel` 使用公司 Logo，不能恢复为产品图或产品资料查看器。

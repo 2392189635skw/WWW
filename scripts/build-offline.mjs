@@ -115,7 +115,7 @@ const transformed = ts.transform(source, [
   },
 ]);
 const input =
-  `const offlineAssets = ${JSON.stringify(assets)};\nfunction offlineAsset(value) { return offlineAssets[value] || value; }\ndocument.getElementById("offline-favicon")?.setAttribute("href", offlineAsset("/images/acs-logo.png"));\nfunction offlineFilename(value) { return value.split('/').pop() || 'download'; }\n` +
+  `const offlineAssets = ${JSON.stringify(assets)};\nfunction offlineAsset(value) { return offlineAssets[value] || value; }\ndocument.getElementById("offline-favicon")?.setAttribute("href", offlineAsset("/images/acs-logo-21700456.png"));\nfunction offlineFilename(value) { return value.split('/').pop() || 'download'; }\n` +
   ts.createPrinter().printFile(transformed.transformed[0]);
 transformed.dispose();
 const output = await build({
