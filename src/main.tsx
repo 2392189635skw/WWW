@@ -339,8 +339,8 @@ function Eyebrow({
 }) {
   return (
     <div className={`eyebrow ${dark ? "on-dark" : ""}`}>
-      <i />
-      {children}
+      <i aria-hidden="true" />
+      <span>{children}</span>
     </div>
   );
 }
@@ -720,12 +720,6 @@ function Home() {
         </div>
       </section>
       <SupportStatement />
-      <section className="metrics-section">
-        <div className="container">
-          <MetricStrip />
-          <p className="source-note">{sourceNote[lang]}</p>
-        </div>
-      </section>
       <section className="section" id="features">
         <div className="container">
           <div className="section-heading">
@@ -747,6 +741,12 @@ function Home() {
             </p>
           </div>
           <FeatureCards />
+        </div>
+      </section>
+      <section className="metrics-section">
+        <div className="container">
+          <MetricStrip />
+          <p className="source-note">{sourceNote[lang]}</p>
         </div>
       </section>
       <section className="section soft-section">

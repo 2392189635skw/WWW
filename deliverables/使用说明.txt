@@ -23,3 +23,5 @@
 最新业务文案：先进防火技术解决方案 / Advanced Fire Protection Solutions、复合材料开发 / Composite Materials Development、工程咨询 / Engineering Consultancy。关于页使用勾选大标题，不带句末标点；引导语为“卓界科技有限公司的业务范围包括：” / “The business areas of ACS include:”，不写业务数量。
 
 首页最新调整：大标题使用上述带勾的业务名称，去掉标题区域的眉题、说明段落及公司英文签名，保留业务按钮，中英文一致。
+
+栏目小标题统一放大，电脑和手机分别适配；首页性能指标栏及其来源说明已移到“产品特点”下面。
