@@ -122,7 +122,7 @@ test("company naming and bilingual navigation persist across reload", async ({
     "Advanced Composites Studio Limited",
   );
   await page.getByRole("button", { name: "Switch to English" }).click();
-  await expect(page.locator("h1")).toContainText("Coatings.");
+  await expect(page.locator("h1")).toContainText("Coatings");
   await page
     .getByRole("navigation", { name: "Main navigation" })
     .getByRole("link", { name: "Company", exact: true })

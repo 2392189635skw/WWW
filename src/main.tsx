@@ -673,9 +673,9 @@ function Home() {
               {t("卓界科技 / 产品与咨询", "ADVANCED COMPOSITES STUDIO")}
             </Eyebrow>
             <h1>
-              {t("防火涂层材料，", "Coatings.")}
+              {t("防火涂层材料", "Coatings")}
               <br />
-              <em>{t("工程咨询。", "Consultancy.")}</em>
+              <em>{t("工程咨询", "Consultancy")}</em>
             </h1>
             <p>{company.overview[lang]}</p>
             <div className="hero-actions">

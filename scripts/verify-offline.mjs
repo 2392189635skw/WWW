@@ -157,7 +157,7 @@ try {
   // Regression: truncation in trailing attribution must not reproduce the old blank page.
   served = html.slice(0, html.indexOf("<!-- THIRD-PARTY LICENCES") + 100);
   await page.goto("http://offline-preview.test/");
-  await expect(page.locator("h1")).toContainText("Coatings.");
+  await expect(page.locator("h1")).toContainText("Coatings");
   // A genuinely incomplete executable script still presents useful static content.
   served = html.slice(0, html.indexOf("<script>") + 100);
   await page.goto("http://offline-preview.test/");
