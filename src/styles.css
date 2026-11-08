@@ -2770,6 +2770,14 @@ h3 {
   line-height: 1.5;
   letter-spacing: -0.4px;
 }
+.hero-copy h1.business-headings {
+  display: grid;
+  gap: 18px;
+  font-size: clamp(28px, 2.5vw, 38px);
+  line-height: 1.4;
+  letter-spacing: -0.6px;
+  margin-top: 0;
+}
 .business-heading-line {
   display: grid;
   grid-template-columns: 1em minmax(0, 1fr);

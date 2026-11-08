@@ -12,7 +12,7 @@
 
 ## 给接手的助手
 
-首页两行大标题当前为“防火涂层材料 / 工程咨询”，英文为“Coatings / Consultancy”，各行末尾均不加逗号或句号；修改时不要恢复这些标点。
+首页大标题与关于页共用带勾的业务标题：先进防火技术解决方案、复合材料开发、工程咨询；英文为 Advanced Fire Protection Solutions、Composite Materials Development、Engineering Consultancy。各项不带句末标点。首页标题旁的眉题、说明段落及公司英文签名已按用户要求删除，保留业务按钮；关于页仍保留业务引导语。
 
 1. 使用现有 `/workspace/WWW`，不创建 worktree（除非用户明确要求）。先读 `PROJECT_STATUS.md` 和 `CONTENT_SOURCES.md`，检查 Git 状态并保留已有修改。
 2. 当前公司名是**卓界科技有限公司 / Advanced Composites Studio Limited**。不再使用此前的“防火材料”临时品牌、虚构 SF/CF/WF 产品或旧下载资料。

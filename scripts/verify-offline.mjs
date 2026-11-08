@@ -33,7 +33,10 @@ try {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("http://offline-preview.test/");
-  await expect(page.locator("h1")).toContainText("防火涂层");
+  await expect(page.locator("h1")).toContainText("先进防火技术解决方案");
+  await expect(
+    page.locator(".hero-copy > p, .hero-copy .eyebrow, .hero-signature"),
+  ).toHaveCount(0);
   await expect(page.locator(".support-statement p")).toContainText(
     "HK Tech 300",
   );
@@ -157,7 +160,9 @@ try {
   // Regression: truncation in trailing attribution must not reproduce the old blank page.
   served = html.slice(0, html.indexOf("<!-- THIRD-PARTY LICENCES") + 100);
   await page.goto("http://offline-preview.test/");
-  await expect(page.locator("h1")).toContainText("Coatings");
+  await expect(page.locator("h1")).toContainText(
+    "Advanced Fire Protection Solutions",
+  );
   // A genuinely incomplete executable script still presents useful static content.
   served = html.slice(0, html.indexOf("<script>") + 100);
   await page.goto("http://offline-preview.test/");

@@ -662,6 +662,20 @@ function SupportStatement() {
     </section>
   );
 }
+function BusinessHeading({ level = "h2" }: { level?: "h1" | "h2" }) {
+  const { lang } = useLang();
+  const Heading = level;
+  return (
+    <Heading className="business-headings">
+      {businessAreas.map((business) => (
+        <span className="business-heading-line" key={business.id}>
+          <Check size={26} strokeWidth={2} aria-hidden="true" />
+          <span>{business.title[lang]}</span>
+        </span>
+      ))}
+    </Heading>
+  );
+}
 function Home() {
   const { lang, t } = useLang();
   return (
@@ -669,15 +683,7 @@ function Home() {
       <section className="home-hero">
         <div className="container hero-inner">
           <div className="hero-copy">
-            <Eyebrow>
-              {t("卓界科技 / 产品与咨询", "ADVANCED COMPOSITES STUDIO")}
-            </Eyebrow>
-            <h1>
-              {t("防火涂层材料", "Coatings")}
-              <br />
-              <em>{t("工程咨询", "Consultancy")}</em>
-            </h1>
-            <p>{company.overview[lang]}</p>
+            <BusinessHeading level="h1" />
             <div className="hero-actions">
               <Link className="button" to="/products">
                 {t("了解涂层产品", "Explore the coating")}
@@ -688,9 +694,6 @@ function Home() {
                 <ArrowRight size={17} />
               </Link>
             </div>
-            <span className="hero-signature">
-              ADVANCED COMPOSITES STUDIO LIMITED
-            </span>
           </div>
           <div className="hero-visual">
             <SourceImage id={1} className="subject-right" priority />
@@ -1227,14 +1230,7 @@ function About() {
             <p className="business-introduction">
               {company.businessIntroduction[lang]}
             </p>
-            <h2 className="business-headings">
-              {businessAreas.map((business) => (
-                <span className="business-heading-line" key={business.id}>
-                  <Check size={26} strokeWidth={2} aria-hidden="true" />
-                  <span>{business.title[lang]}</span>
-                </span>
-              ))}
-            </h2>
+            <BusinessHeading />
             <Link to="/about#contact" className="button">
               {t("联系我们", "Contact us")}
               <ArrowUpRight size={18} />

@@ -49,6 +49,23 @@ for (const locale of ["zh", "en"]) {
             ? "本公司获 HK Tech 300 种子基金及香港科技园公司（HKSTP）Ideation Programme 支持。"
             : "Our company is supported by HK Tech 300 Seed Fund and Hong Kong Science and Technology Parks Corporation (HKSTP) Ideation Programme",
         );
+        await expect(page.locator(".business-heading-line > span")).toHaveText(
+          locale === "zh"
+            ? ["先进防火技术解决方案", "复合材料开发", "工程咨询"]
+            : [
+                "Advanced Fire Protection Solutions",
+                "Composite Materials Development",
+                "Engineering Consultancy",
+              ],
+        );
+      }
+      if (route === "/") {
+        await expect(
+          page.locator(".hero-copy > p, .hero-copy .eyebrow, .hero-signature"),
+        ).toHaveCount(0);
+        await expect(
+          page.locator("h1 .business-heading-line > svg"),
+        ).toHaveCount(3);
       }
       if (route === "/products") {
         await expect(page.locator(".product-name")).toHaveText(
@@ -122,7 +139,9 @@ test("company naming and bilingual navigation persist across reload", async ({
     "Advanced Composites Studio Limited",
   );
   await page.getByRole("button", { name: "Switch to English" }).click();
-  await expect(page.locator("h1")).toContainText("Coatings");
+  await expect(page.locator("h1")).toContainText(
+    "Advanced Fire Protection Solutions",
+  );
   await page
     .getByRole("navigation", { name: "Main navigation" })
     .getByRole("link", { name: "Company", exact: true })

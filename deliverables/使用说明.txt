@@ -3,7 +3,7 @@
 
 用电脑上的 Chrome 或 Edge 打开 website-preview.html。
 已包含中英文六页、六张产品图片、图片放大、网页内技术参数查看。
-两项业务：FireCoat-X™ ThermaClear™ 涂层产品销售（下方小标题 Therma Clear）；材料工程、结构工程与防火工程咨询。
+业务范围：先进防火技术解决方案、复合材料开发与工程咨询。涂层产品为 FireCoat-X™ ThermaClear™（下方小标题 Therma Clear）；工程咨询涵盖材料、结构与防火工程。
 联系邮箱：info@acs-x.com。地址按用户提供的商业登记证整理，电话继续留空。
 产品信息来自六张产品图，咨询方向与联系资料来自用户补充。旧示例产品与数据已删除。
 
@@ -21,3 +21,5 @@
 最新 Logo：已统一换为用户后续提供的木纹右侧、金属纹理 ACS 字母版本，页眉、页脚、公司介绍及浏览器图标一致。离线文件也包含新版原图。
 
 最新业务文案：先进防火技术解决方案 / Advanced Fire Protection Solutions、复合材料开发 / Composite Materials Development、工程咨询 / Engineering Consultancy。关于页使用勾选大标题，不带句末标点；引导语为“卓界科技有限公司的业务范围包括：” / “The business areas of ACS include:”，不写业务数量。
+
+首页最新调整：大标题使用上述带勾的业务名称，去掉标题区域的眉题、说明段落及公司英文签名，保留业务按钮，中英文一致。
