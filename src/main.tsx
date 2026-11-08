@@ -17,6 +17,7 @@ import {
   ArrowUpRight,
   Building2,
   ChevronDown,
+  Check,
   Download,
   Expand,
   FileText,
@@ -605,17 +606,14 @@ function PageIntro({
 function BusinessCards() {
   const { lang, t } = useLang();
   return (
-    <div
-      className="business-grid"
-      aria-label={t("两项业务", "Our two business areas")}
-    >
+    <div className="business-grid" aria-label={t("业务范围", "Business areas")}>
       {businessAreas.map((business) => (
         <article className="business-card" key={business.id}>
-          <span className="small-label">
-            {t("业务", "BUSINESS")} / {business.number}
-          </span>
+          <span className="small-label">{t("业务范围", "BUSINESS AREA")}</span>
           <h3>{business.title[lang]}</h3>
-          <span className="business-subtitle">{business.subtitle[lang]}</span>
+          {business.subtitle[lang] && (
+            <span className="business-subtitle">{business.subtitle[lang]}</span>
+          )}
           {business.id === "coatings" && (
             <span className="product-subtitle">{company.productSubtitle}</span>
           )}
@@ -711,7 +709,7 @@ function Home() {
         <div className="container">
           <div className="section-heading">
             <div>
-              <Eyebrow>{t("两项业务", "OUR BUSINESS")}</Eyebrow>
+              <Eyebrow>{t("业务范围", "OUR BUSINESS")}</Eyebrow>
               <h2>{t("产品与服务，清晰连接。", "Products and expertise.")}</h2>
             </div>
           </div>
@@ -1226,12 +1224,17 @@ function About() {
         <div className="container about-grid">
           <div className="about-copy">
             <Eyebrow>{t("我们的业务", "OUR BUSINESS")}</Eyebrow>
-            <h2>
-              {t("防火涂层材料，", "Fire protection coatings.")}
-              <br />
-              {t("工程咨询。", "Engineering consultancy.")}
+            <p className="business-introduction">
+              {company.businessIntroduction[lang]}
+            </p>
+            <h2 className="business-headings">
+              {businessAreas.map((business) => (
+                <span className="business-heading-line" key={business.id}>
+                  <Check size={26} strokeWidth={2} aria-hidden="true" />
+                  <span>{business.title[lang]}</span>
+                </span>
+              ))}
             </h2>
-            <p>{company.overview[lang]}</p>
             <Link to="/about#contact" className="button">
               {t("联系我们", "Contact us")}
               <ArrowUpRight size={18} />
@@ -1336,10 +1339,7 @@ function App() {
       .querySelector('meta[name="description"]')
       ?.setAttribute(
         "content",
-        t(
-          `卓界科技有限公司提供 ${company.product} 透明防火涂层产品，以及材料工程、结构工程和防火工程咨询服务。`,
-          `Advanced Composites Studio Limited supplies ${company.product} transparent fire protection coatings and consultancy in materials engineering, structural engineering and fire engineering.`,
-        ),
+        `${company.name[lang]} · ${company.overview[lang]} ${company.product}`,
       );
   }, [lang, location.pathname, t]);
   return (

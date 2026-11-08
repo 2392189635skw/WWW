@@ -19,3 +19,5 @@
 2026年11月8日更新：点击“防火涂层材料”展开产品介绍、技术与性能和应用领域；“工程咨询”是并列入口。手机端先打开导航，再展开防火涂层材料。公司介绍旁的图片已换成 ACS Logo。
 
 最新 Logo：已统一换为用户后续提供的木纹右侧、金属纹理 ACS 字母版本，页眉、页脚、公司介绍及浏览器图标一致。离线文件也包含新版原图。
+
+最新业务文案：先进防火技术解决方案 / Advanced Fire Protection Solutions、复合材料开发 / Composite Materials Development、工程咨询 / Engineering Consultancy。关于页使用勾选大标题，不带句末标点；引导语为“卓界科技有限公司的业务范围包括：” / “The business areas of ACS include:”，不写业务数量。

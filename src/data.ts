@@ -1,6 +1,15 @@
 export type Lang = "zh" | "en";
 export type Localized = { zh: string; en: string };
 const productName = "FireCoat-X™ ThermaClear™";
+const businessTitles = [
+  { zh: "先进防火技术解决方案", en: "Advanced Fire Protection Solutions" },
+  { zh: "复合材料开发", en: "Composite Materials Development" },
+  { zh: "工程咨询", en: "Engineering Consultancy" },
+];
+const businessIntroduction = {
+  zh: "卓界科技有限公司的业务范围包括：",
+  en: "The business areas of ACS include:",
+};
 export const company = {
   name: { zh: "卓界科技有限公司", en: "Advanced Composites Studio Limited" },
   englishName: "Advanced Composites Studio Limited",
@@ -9,12 +18,13 @@ export const company = {
   productSubtitle: "Therma Clear",
   tagline: { zh: "透明防火材料", en: "Transparent Fireproof Material" },
   businessTagline: {
-    zh: "防火涂层材料与工程咨询",
-    en: "Fire Protection Coatings & Engineering Consultancy",
+    zh: businessTitles.map((item) => item.zh).join(" · "),
+    en: businessTitles.map((item) => item.en).join(" · "),
   },
+  businessIntroduction,
   overview: {
-    zh: `卓界科技有限公司开展两项业务：${productName} 透明防火涂层产品销售，以及材料工程、结构工程和防火工程咨询服务。`,
-    en: `Advanced Composites Studio Limited has two business areas: the sale of ${productName} transparent fire protection coatings, and consultancy in materials engineering, structural engineering and fire engineering.`,
+    zh: `${businessIntroduction.zh}${businessTitles[0].zh}、${businessTitles[1].zh}与${businessTitles[2].zh}。`,
+    en: `${businessIntroduction.en} ${businessTitles[0].en}, ${businessTitles[1].en} and ${businessTitles[2].en}.`,
   },
   introduction: {
     zh: `${productName} 将透明外观与防火保护相结合，形成保留基材色彩与纹理的保护层。遇火后，涂层迅速膨胀并形成隔热炭层。`,
@@ -28,8 +38,7 @@ export const company = {
 export const businessAreas = [
   {
     id: "coatings",
-    number: "01",
-    title: { zh: "防火涂层材料", en: "Fire Protection Coatings" },
+    title: businessTitles[0],
     subtitle: {
       zh: productName,
       en: productName,
@@ -42,9 +51,19 @@ export const businessAreas = [
     linkLabel: { zh: "了解涂层产品", en: "Explore the coating" },
   },
   {
+    id: "materials-development",
+    title: businessTitles[1],
+    subtitle: { zh: "", en: "" },
+    description: {
+      zh: "欢迎联系我们，沟通复合材料开发的具体需求。",
+      en: "Contact us to discuss your composite materials development requirements.",
+    },
+    to: "/about#contact",
+    linkLabel: { zh: "咨询材料开发", en: "Discuss materials development" },
+  },
+  {
     id: "consulting",
-    number: "02",
-    title: { zh: "工程咨询服务", en: "Engineering Consultancy" },
+    title: businessTitles[2],
     subtitle: {
       zh: "材料工程 · 结构工程 · 防火工程",
       en: "Materials · Structures · Fire engineering",

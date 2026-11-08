@@ -80,6 +80,14 @@ try {
     "src",
     /^data:image\/png;base64,/,
   );
+  await expect(page.locator(".business-introduction")).toHaveText(
+    "卓界科技有限公司的业务范围包括：",
+  );
+  await expect(page.locator(".business-heading-line > span")).toHaveText([
+    "先进防火技术解决方案",
+    "复合材料开发",
+    "工程咨询",
+  ]);
   await expect(page.locator('[data-contact="phone"] dd')).toBeEmpty();
   await expect(page.locator('[data-contact="email"] a')).toHaveAttribute(
     "href",
@@ -157,7 +165,7 @@ try {
   await expect(page.locator("h1")).toHaveText("卓界科技有限公司");
   expect(errors).toEqual([]);
   console.log(
-    "Standalone company preview passed: six pages, two business areas, six embedded images, image viewer, in-page technical data, language persistence, mobile navigation, company contact details with blank phone and truncated-file regressions. Network disabled.",
+    "Standalone company preview passed: six pages, updated business statements, six embedded product images, company logo, image viewer, in-page technical data, language persistence, mobile navigation, company contact details with blank phone and truncated-file regressions. Network disabled.",
   );
 } finally {
   await browser.close();

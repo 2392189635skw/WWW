@@ -14,7 +14,7 @@
 
 1. 使用现有 `/workspace/WWW`，不创建 worktree（除非用户明确要求）。先读 `PROJECT_STATUS.md` 和 `CONTENT_SOURCES.md`，检查 Git 状态并保留已有修改。
 2. 当前公司名是**卓界科技有限公司 / Advanced Composites Studio Limited**。不再使用此前的“防火材料”临时品牌、虚构 SF/CF/WF 产品或旧下载资料。
-3. 网站现有两项业务：FireCoat-X™ ThermaClear™ 涂层产品销售（其下小标题 Therma Clear）；材料工程、结构工程和防火工程咨询。产品依据六张图及用户后续补充，咨询方向由用户明确提供，文案精简，不虚构资质或案例。联系邮箱为 `info@acs-x.com`，地址按用户登记证整理：Flat E15, 10/F, Wong King Industrial Building, 2–4 Tai Yau Street, San Po Kong, Kowloon, Hong Kong。电话继续留空，不推断区号或号码。
+3. 最新业务名称为：先进防火技术解决方案 / Advanced Fire Protection Solutions；复合材料开发 / Composite Materials Development；工程咨询 / Engineering Consultancy。关于页引导语用“卓界科技有限公司的业务范围包括：” / “The business areas of ACS include:”，其下的大标题逐项加勾，不带句末标点；业务介绍不再写“两项/三项”或“two/three business areas”等数量。产品仍为 FireCoat-X™ ThermaClear™，小标题 Therma Clear；咨询方向仍是材料工程、结构工程和防火工程。复合材料开发以业务卡片和联系入口呈现，尚无详细材料方案或独立页面，不补造案例或能力指标。联系邮箱为 info@acs-x.com，地址按用户登记证整理：Flat E15, 10/F, Wong King Industrial Building, 2–4 Tai Yau Street, San Po Kong, Kowloon, Hong Kong。电话继续留空。
 4. 产品、咨询、联系信息与数字集中在 `src/data.ts`。页面为 `src/main.tsx`，新增咨询路径 `/consulting`，联系方式在 `/about#contact`。样式为 `src/styles.css`。六张压缩 WebP 位于 `public/images/`，原始 PNG 位于 `/workspace/reference-materials/advanced-composites-studio/`。
 5. 依赖缺失：`npm ci --no-audit --no-fund --cache /workspace/.npm-cache`；开发：`npm run dev`（5173）；构建：`npm run build`；浏览器检查：`npm test`。先检查服务是否已启动，不终止未知进程。
 6. 修改产品数据后生成摘要：`node scripts/export-data.mjs | python3 scripts/generate-documents.py`，ReportLab 在此环境已有。不要把摘要称为检测报告。
@@ -29,4 +29,4 @@
 
 当前 Logo 使用 2026-11-08 用户最新上传的 `微信图片_20261108010111_514_3.zip`（`file_000000009074820b83f634f846718150`），无需再索取图片。公司 Logo 为 `public/images/acs-logo-21700456.png`，1254×1254 PNG，右侧为木纹、ACS 字母带金属纹理，保留原始字节；页眉、页脚、公司介绍、favicon 和离线预览均统一使用。旧 A 标识、favicon.svg 及上一版 `acs-logo.png` 已从公开资产中删除。来源 ZIP、原图和校验清单保存在 `/workspace/reference-materials/advanced-composites-studio/brand/20261108/`。产品全名为 `FireCoat-X™ ThermaClear™`，下方小标题为 `Therma Clear`。首页及关于页保留用户给出的英文支持说明与中文翻译。更新仍按已授权的 GitHub main → Cloudflare 流程发布，推送成功与线上部署成功需明确区分。
 
-2026-11-08 导航层级：顶层为首页、防火涂层材料、工程咨询、关于卓界；两项业务“防火涂层材料”和“工程咨询”并列。产品介绍、技术与性能、应用领域三页属于防火涂层材料子菜单，沿用原网址，不重新创建页面。`coatingNavigation` 用于子菜单及页脚分组，扁平的 `navigation` 仍用于页面标题元数据，不代表顶层菜单。桌面点击父按钮展开，手机在主菜单内展开；支持 Escape 关闭并返回按钮焦点、点击外部关闭、选中子页高亮父项、跳转后收起。关于页 `.company-logo-panel` 使用公司 Logo，不能恢复为产品图或产品资料查看器。
+2026-11-08 导航层级：顶层为首页、防火涂层材料、工程咨询、关于卓界；“防火涂层材料”和“工程咨询”是并列入口。产品介绍、技术与性能、应用领域三页属于防火涂层材料子菜单，沿用原网址，不重新创建页面。`coatingNavigation` 用于子菜单及页脚分组，扁平的 `navigation` 仍用于页面标题元数据，不代表顶层菜单。桌面点击父按钮展开，手机在主菜单内展开；支持 Escape 关闭并返回按钮焦点、点击外部关闭、选中子页高亮父项、跳转后收起。关于页 `.company-logo-panel` 使用公司 Logo，不能恢复为产品图或产品资料查看器。

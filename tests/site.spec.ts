@@ -64,6 +64,23 @@ for (const locale of ["zh", "en"]) {
           "/images/acs-logo-21700456.png",
         );
         await expect(page.locator(".about-grid .source-image")).toHaveCount(0);
+        await expect(page.locator(".business-introduction")).toHaveText(
+          locale === "zh"
+            ? "卓界科技有限公司的业务范围包括："
+            : "The business areas of ACS include:",
+        );
+        await expect(page.locator(".business-heading-line > span")).toHaveText(
+          locale === "zh"
+            ? ["先进防火技术解决方案", "复合材料开发", "工程咨询"]
+            : [
+                "Advanced Fire Protection Solutions",
+                "Composite Materials Development",
+                "Engineering Consultancy",
+              ],
+        );
+        await expect(page.locator(".business-heading-line > svg")).toHaveCount(
+          3,
+        );
       }
       for (const img of await page.locator("main img").all()) {
         await img.scrollIntoViewIfNeeded();
@@ -233,16 +250,22 @@ test("contact uses the supplied company email and registered address while phone
   await expect(page.locator('a[href^="tel:"]')).toHaveCount(0);
   await expect(page.locator("body")).not.toContainText(".example");
 });
-test("both business entrances work and engineering consultancy leads to the company contact", async ({
+test("business entrances work and engineering consultancy leads to the company contact", async ({
   page,
 }) => {
   await page.goto("/");
   const businesses = page.locator("#businesses");
-  await expect(businesses.locator("article")).toHaveCount(2);
+  await expect(businesses.locator("article")).toHaveCount(3);
   await businesses
     .getByRole("link", { name: "了解涂层产品", exact: true })
     .click();
   await expect(page).toHaveURL(/\/products$/);
+  await page.goBack();
+  await businesses
+    .getByRole("link", { name: "咨询材料开发", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/about#contact$/);
+  await expect(page.locator('[data-contact="email"]')).toBeInViewport();
   await page.goBack();
   await businesses
     .getByRole("link", { name: "了解工程咨询", exact: true })

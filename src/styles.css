@@ -2531,7 +2531,7 @@ h3 {
 }
 .business-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 22px;
 }
 .business-card {
@@ -2546,7 +2546,7 @@ h3 {
   background: #eef2eb;
 }
 .business-card h3 {
-  font-size: 28px;
+  font-size: 25px;
   line-height: 1.35;
   margin-top: 24px;
 }
@@ -2694,6 +2694,9 @@ h3 {
   color: var(--ink);
 }
 @media (min-width: 641px) and (max-width: 1000px) {
+  .business-grid {
+    grid-template-columns: 1fr;
+  }
   .footer-main {
     flex-direction: column;
     align-items: stretch;
@@ -2759,6 +2762,24 @@ h3 {
 }
 .menu-toggle.icon-button {
   display: none;
+}
+.about-copy .business-headings {
+  display: grid;
+  gap: 14px;
+  font-size: clamp(24px, 2.1vw, 32px);
+  line-height: 1.5;
+  letter-spacing: -0.4px;
+}
+.business-heading-line {
+  display: grid;
+  grid-template-columns: 1em minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+}
+.business-heading-line > svg {
+  width: 1em;
+  height: 1em;
+  margin-top: 0.24em;
 }
 @media (max-width: 850px) {
   .menu-toggle.icon-button {
