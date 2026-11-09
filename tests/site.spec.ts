@@ -171,7 +171,7 @@ test("technical figures keep the source substrate conditions and remove invented
   await expect(
     page.getByRole("row", { name: /纸板防火与隔热保护/ }),
   ).toContainText("1mm 纸板");
-  await expect(page.getByRole("row", { name: /透光率/ })).toContainText(">80%");
+  await expect(page.getByRole("row", { name: /透光率/ })).toContainText(">65%");
   await expect(page.getByRole("row", { name: /附着力/ })).toContainText(
     ">1.25 MPa",
   );

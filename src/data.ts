@@ -144,9 +144,10 @@ export const features = [
     source: [4, 6],
   },
 ];
+// Light transmittance updated by the user on 2026-11-09, superseding source image 3.
 export const metrics = [
   {
-    value: ">80%",
+    value: ">65%",
     label: { zh: "透光率", en: "Light transmittance" },
     source: 3,
   },
@@ -161,7 +162,7 @@ export const metrics = [
 export const technicalData = [
   {
     label: { zh: "透光率", en: "Light transmittance" },
-    value: ">80%",
+    value: ">65%",
     condition: { zh: "透明涂层", en: "Transparent coating" },
     source: 3,
   },
@@ -330,8 +331,8 @@ export const sourceSlides = [
   },
 ];
 export const sourceNote = {
-  zh: "数据整理自所提供的产品图文资料；保护时间对应资料中标明的基材与厚度。",
-  en: "Figures are taken from the supplied product materials. Protection times refer to the substrates and thicknesses stated in those materials.",
+  zh: "数据依据产品图文资料及最新产品参数整理；保护时间对应资料中标明的基材与厚度。",
+  en: "Figures reflect the product materials and updated product specifications. Protection times refer to the substrates and thicknesses stated in those materials.",
 };
 
 // Supplementary observation supplied by the user on 2026-11-03.
